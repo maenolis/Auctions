@@ -1,0 +1,27 @@
+var myApp = angular
+	.module('app', [
+		'ngRoute',
+		'angular-growl',
+		'appCtrls'
+	]).config(['$routeProvider', 'growlProvider',
+	function($routeProvider, growlProvider) {
+		$routeProvider.
+			when('/home', {
+				templateUrl: 'templates/home.html',
+				controller: 'homeCtrl'
+			}).
+			when('/auctions', {
+				templateUrl: 'templates/auctions.html',
+				controller: 'auctionsCtrl'
+			}).
+			when('/messages', {
+				templateUrl: 'templates/messages.html',
+				controller: 'messagesCtrl'
+			}).
+			otherwise({
+				redirectTo: '/home'
+			});
+		growlProvider.onlyUniqueMessages(false);
+}])
+
+myApp.value("newMessages", "0");

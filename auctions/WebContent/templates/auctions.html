@@ -1,0 +1,32 @@
+<div class="container">
+	<h1>auctions template</h1>
+</div>
+
+<div class="container-fluid  col-md-5">
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr class="row">
+				<td>#</td>
+				<td>By</td>
+				<td>Category</td>
+				<td>Product</td>
+				<td>Start Date</td>
+				<td>End Date</td>
+				<td>Buy Price</td>
+				<td>Current bid</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="row" ng-repeat="auction in auctions | orderBy:'-endDate'">
+				<td>{{$index + 1}}</td>
+				<td><a href="#">{{auction.placedBy}}</a></td>
+				<td><a href="#">{{auction.category}}</a></td>
+				<td><a href="#">{{auction.name}}</a></td>
+				<td><a href="#">{{auction.startDate | date:'shortDate'}}</a></td>
+				<td><a href="#">{{auction.endDate | date:'shortDate'}}</a></td>
+				<td><a href="#">{{auction.buyPrice}}</a></td>
+				<td><a href="#">{{auction.currentBid}}</a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

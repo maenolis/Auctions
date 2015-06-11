@@ -1,0 +1,26 @@
+<div class="container">
+	<h1>new Auction Message</h1>
+</div>
+
+
+
+
+
+<div class="container" ng-controller="userCtrl">
+		<p>Hello {{User.user()}}</p>
+		<div data-ng-include data-src="'templates/header.html'"></div>
+</div>
+
+
+
+<div class="container">
+	<form class="form-new-message" ng-submit="sendMessage()" ng-controller="newMessageCtrl">
+		<label for="message" class="sr-only">description</label>
+			<textarea ng-model="newMessage" id="newMessage" class="form-control" placeholder="Message" rows="6" required autofocus></textarea>
+		<div class="container col-md-1">
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+		</div>
+	</form>
+
+</div>
+<!-- /container -->

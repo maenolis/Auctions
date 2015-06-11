@@ -1,0 +1,23 @@
+{
+	"message1": {
+		"sender": "kostas",
+		"text": "agios andreas",
+		"date": "12/11/2005"
+	},
+	"message2": {
+		"sender": "takis",
+		"text": "agios minas",
+		"date": "11/12/2005"
+	},
+	"message3": {
+		"sender": "jared",
+		"text": "agios dionisios",
+		"date": "11/11/2005"
+	},
+	"message4": {
+		"sender": "koula",
+		"text": "agios gewrgios",
+		"date": "09/11/2005"
+	}
+	
+}

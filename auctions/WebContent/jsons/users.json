@@ -1,0 +1,18 @@
+{
+	"user1": {
+		"email": "abc@hotmail.com",
+		"id": "12345678"
+	},
+	"user2": {
+		"email": "abcd@hotmail.com",
+		"id": "87654321"
+	},
+	"user3": {
+		"email": "operator@hotmail.com",
+		"id": "21122112"
+	},
+	"user4": {
+		"email": "eks@hotmail.com",
+		"id": "eks01"
+	}
+}

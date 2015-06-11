@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="app">
+	<head ng-controller="titleCtrl">
+		<link rel="shortcut icon" href="images/favicon.ico" />
+		<title> {{ Page.title() }} </title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="bootstrap/css/signin.css" rel="stylesheet">
+		<link href="bootstrap/css/sticky-footer.css" rel="stylesheet">
+		<link href="growl/build/angular-growl.min.css" rel="stylesheet">
+		<script src="angular/angular.js"></script>
+		<script src="angular/angular-route.js"></script>
+		<script src="angular/angular-cookies.js"></script>
+		<script src="growl/build/angular-growl.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/appCtrls.js"></script>
+
+	</head>
+
+	<body ng-controller="notifyCtrl">
+	
+		
+		<div class="container" ng-controller="userCtrl">
+			<p>Hello {{User.user()}}</p>
+			<div data-ng-include data-src="'templates/header.html'"></div>
+		</div>
+		
+		<div ng-view></div>
+		
+		<div growl></div>
+		<div class="container">
+			<button ng-click="showInfo()">Info</button>
+		</div>
+		
+		<div data-ng-include data-src="'templates/footer.html'"></div>
+		
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files 
+				as needed -->
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		
+
+	</body>
+</html>
