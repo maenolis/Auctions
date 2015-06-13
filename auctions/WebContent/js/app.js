@@ -78,8 +78,9 @@ myApp.factory('LoginService', function ($http, $cookieStore, $location, User) {
 				.success(function (data) {
 					console.log("server!!! " + data.userName + " " + data.message);
 				});*/
-			$http.post('/auctions/Login', {name: "devora", surName: "boba"})
+			$http.post('/auctions/rest/Login', user)
 				.success(function (data) {
+					console.log(data);
 					console.log("sessionId = " + data.id);
 					$cookieStore.put("sessionId", data.id);
 					if ($cookieStore.get("test")) {
