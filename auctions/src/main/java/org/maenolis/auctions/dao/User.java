@@ -10,8 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 @XmlRootElement
-@Entity(name="newUser")
+@Entity(name="User")
 public class User {
 
 	@Id
@@ -51,6 +57,12 @@ public class User {
 	
 	@Column(name = "taxRegistrationNumber")
 	private String taxRegistrationNumber;
+	
+	@Column(name = "latitude")
+	private float latitude;
+	
+	@Column(name = "longtitude")
+	private float longtitude;
 
 	public int getId() {
 		return id;
@@ -148,26 +160,80 @@ public class User {
 		this.taxRegistrationNumber = taxRegistrationNumber;
 	}
 	
+	public float getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(float latitude) {
+		this.latitude = latitude;
+	}
+
+	public float getLongtitude() {
+		return longtitude;
+	}
+
+	public void setLongtitude(float longtitude) {
+		this.longtitude = longtitude;
+	}
+
 	public User(String username, String firstName, String lastName,
 			String email, String password, String country, String town,
 			String address, String telephone, String postalCode,
-			String taxRegistrationNumber) {
+			String taxRegistrationNumber, float latitude, float longtitude) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.password = password;
+		this.password = encryptSHA256(password);
 		this.country = country;
 		this.town = town;
 		this.address = address;
 		this.telephone = telephone;
 		this.postalCode = postalCode;
 		this.taxRegistrationNumber = taxRegistrationNumber;
+		this.latitude = latitude;
+		this.longtitude = longtitude;
+	}
+	
+	public User(User user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		this.username = user.username;
+		this.firstName = user.firstName;
+		this.lastName = user.lastName;
+		this.email = user.email;
+		this.password = encryptSHA256(user.password);
+		this.country = user.country;
+		this.town = user.town;
+		this.address = user.address;
+		this.telephone = user.telephone;
+		this.postalCode = user.postalCode;
+		this.taxRegistrationNumber = user.taxRegistrationNumber;
+		this.latitude = user.latitude;
+		this.longtitude = user.longtitude;
 	}
 	
 	public User() {
 		
+	}
+	
+	public static User getUser(String email) {
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx;
+		tx = session.beginTransaction();
+
+		String hql = "From User Where email=:email";
+		Query query = session.createQuery(hql).setParameter("email", email);
+		User retUser = (User) query.uniqueResult();
+
+		tx.commit();
+		session.close();
+		factory.close();
+
+		return retUser;
 	}
 	
 	public static String encryptSHA256(String key) throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -186,24 +252,24 @@ public class User {
 	}
 	
 	public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		String s1 = "66554444";
-		String s2 = "99887766";
-		String s3 = "66554444";
 		
-		if (encryptSHA256(s1).compareTo(encryptSHA256(s2)) == 0) {
-			System.out.println("s1 = s2");
-		} else {
-			System.out.println("s1 != s2");
-		}
+		String s1 = "rr";
+		String s2 = "rr";
 		
-		if (encryptSHA256(s1).compareTo(encryptSHA256(s3)) == 0) {
-			System.out.println("s1 = s3");
-		} else {
-			System.out.println("s1 != s3");
-		}
+		System.out.println(s1.equals(s2));
+		System.out.println("rr".equals("r"));
+		System.out.println("rr".equals("rrR"));
 		
-		System.out.println(encryptSHA256(s1));
-		System.out.println(encryptSHA256(s2));
-		System.out.println(encryptSHA256(s3));
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", country=" + country + ", town=" + town + ", address="
+				+ address + ", telephone=" + telephone + ", postalCode="
+				+ postalCode + ", taxRegistrationNumber="
+				+ taxRegistrationNumber + ", latitude=" + latitude
+				+ ", longtitude=" + longtitude + "]";
 	}
 }
