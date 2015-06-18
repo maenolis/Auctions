@@ -54,7 +54,8 @@ myApp.factory('User', function () {
 		setUser: function (newUser) { user = newUser; },
 		isLogged: function () { return isLogged; },
 		setIsLogged: function (newValue) { isLogged = newValue; },
-		clear: function () { user = 'no user';isLogged = false; }
+		clear: function () { user = 'no user';isLogged = false; },
+		name: function () { return user; }
 	}
 });
 
@@ -62,31 +63,14 @@ myApp.factory('LoginService', function ($http, $cookieStore, $location, User) {
 	return {
 		login: function(user) {
 			console.log("LoginService!!! " + user.email + " " + user.password);
-			/*var storedUser = $http.get('jsons/users.json')
-				.success(function (data) {
-					if (user.email === data.email && user.password === data.password) {
-						$cookieStore.put("userEmail", user.email);
-						$cookieStore.put("userPassword", user.password);
-						User.setIsLogged(true);
-						User.setUser(user.email);
-						$state.go('http://www.google.gr', {});
-					} else {
-						location.path('../welcome.html');
-					}
-				});*/
-			/*var storedUser = $http.get('/auctions/Login')
-				.success(function (data) {
-					console.log("server!!! " + data.userName + " " + data.message);
-				});*/
 			$http.post('/auctions/rest/Login', user)
 				.success(function (data) {
-					console.log(data);
-					console.log("sessionId = " + data.id);
-					$cookieStore.put("sessionId", data.id);
-					if ($cookieStore.get("test")) {
-						console.log("undef defed!!!!");
+					
+					if (data) {
+						console.log("success");
+						console.log(data);
 					} else {
-						console.log("undef undefed!!!!");
+						console.log("login failure!");
 					}
 				});
 		}
@@ -109,10 +93,20 @@ myApp.factory('SignupService', function ($http, $cookieStore, $location, User) {
 						location.path('../welcome.html');
 					}
 				});*/
-			$http.post('/auctions/SignUp', user)
+			$http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" +
+				user.address + ", " + user.town + " " + user.postalCode + ", " + user.country)
 				.success(function (data) {
-					console.log("signup called succesfully!");
-				})
+					user.longtitude = data["results"][0]["geometry"]["location"]["lng"];
+					user.latitude = data["results"][0]["geometry"]["location"]["lat"];
+					$http.post('/auctions/rest/SignUp', user)
+						.success(function (data2) {
+							console.log("signup called succesfully!");
+							console.log(user);
+							console.log(data2);
+							User.setUser(data2.username);
+							User.setIsLogged(true);
+						});
+				});
 		}
 	}
 });
