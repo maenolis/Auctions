@@ -3,11 +3,13 @@ package org.maenolis.auctions.dao;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.Query;
@@ -17,175 +19,233 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 @XmlRootElement
-@Entity(name="User")
+@Entity(name = "User")
 public class User {
 
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
 	private int id;
-	
+
 	@Column(name = "username")
 	private String username;
-	
+
 	@Column(name = "firstName")
 	private String firstName;
-	
+
 	@Column(name = "lastName")
 	private String lastName;
-	
+
 	@Column(name = "email")
 	private String email;
-	
+
 	@Column(name = "password")
 	private String password;
 
 	@Column(name = "country")
 	private String country;
-	
+
 	@Column(name = "town")
 	private String town;
-	
+
 	@Column(name = "address")
 	private String address;
-	
+
 	@Column(name = "telephone")
 	private String telephone;
-	
+
 	@Column(name = "postalCode")
 	private String postalCode;
-	
+
 	@Column(name = "taxRegistrationNumber")
 	private String taxRegistrationNumber;
-	
+
 	@Column(name = "latitude")
 	private float latitude;
-	
+
 	@Column(name = "longtitude")
 	private float longtitude;
 
+	@OneToMany(mappedBy = "sender")
+	private Set<Message> sentMessages;
+
+	@OneToMany(mappedBy = "receiver")
+	private Set<Message> receivedMessages;
+
 	public int getId() {
+
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(final int id) {
+
 		this.id = id;
 	}
 
 	public String getUsername() {
+
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public void setUsername(final String username) {
+
 		this.username = username;
 	}
 
 	public String getFirstName() {
+
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(final String firstName) {
+
 		this.firstName = firstName;
 	}
 
 	public String getLastName() {
+
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(final String lastName) {
+
 		this.lastName = lastName;
 	}
 
 	public String getPassword() {
+
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
+
 		this.password = password;
 	}
 
 	public String getEmail() {
+
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
+
 		this.email = email;
 	}
 
 	public String getCountry() {
+
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(final String country) {
+
 		this.country = country;
 	}
 
 	public String getTown() {
+
 		return town;
 	}
 
-	public void setTown(String town) {
+	public void setTown(final String town) {
+
 		this.town = town;
 	}
 
 	public String getAddress() {
+
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(final String address) {
+
 		this.address = address;
 	}
 
 	public String getTelephone() {
+
 		return telephone;
 	}
 
-	public void setTelephone(String telephone) {
+	public void setTelephone(final String telephone) {
+
 		this.telephone = telephone;
 	}
 
 	public String getPostalCode() {
+
 		return postalCode;
 	}
 
-	public void setPostalCode(String postalCode) {
+	public void setPostalCode(final String postalCode) {
+
 		this.postalCode = postalCode;
 	}
 
 	public String getTaxRegistrationNumber() {
+
 		return taxRegistrationNumber;
 	}
 
-	public void setTaxRegistrationNumber(String taxRegistrationNumber) {
+	public void setTaxRegistrationNumber(final String taxRegistrationNumber) {
+
 		this.taxRegistrationNumber = taxRegistrationNumber;
 	}
-	
+
 	public float getLatitude() {
+
 		return latitude;
 	}
 
-	public void setLatitude(float latitude) {
+	public void setLatitude(final float latitude) {
+
 		this.latitude = latitude;
 	}
 
 	public float getLongtitude() {
+
 		return longtitude;
 	}
 
-	public void setLongtitude(float longtitude) {
+	public void setLongtitude(final float longtitude) {
+
 		this.longtitude = longtitude;
 	}
 
-	public User(String username, String firstName, String lastName,
-			String email, String password, String country, String town,
-			String address, String telephone, String postalCode,
-			String taxRegistrationNumber, float latitude, float longtitude) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		
+	public Set<Message> getSentMessages() {
+
+		return sentMessages;
+	}
+
+	public void setSentMessages(final Set<Message> sentMessages) {
+
+		this.sentMessages = sentMessages;
+	}
+
+	public Set<Message> getReceivedMessages() {
+
+		return receivedMessages;
+	}
+
+	public void setReceivedMessages(final Set<Message> receivedMessages) {
+
+		this.receivedMessages = receivedMessages;
+	}
+
+	public User(final int id, final String username, final String firstName,
+			final String lastName, final String email, final String password,
+			final String country, final String town, final String address,
+			final String telephone, final String postalCode,
+			final String taxRegistrationNumber, final float latitude,
+			final float longtitude, final Set<Message> sentMessages,
+			final Set<Message> receivedMessages) {
+		super();
+		this.id = id;
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.password = encryptSHA256(password);
+		this.password = password;
 		this.country = country;
 		this.town = town;
 		this.address = address;
@@ -194,9 +254,13 @@ public class User {
 		this.taxRegistrationNumber = taxRegistrationNumber;
 		this.latitude = latitude;
 		this.longtitude = longtitude;
+		this.sentMessages = sentMessages;
+		this.receivedMessages = receivedMessages;
 	}
-	
-	public User(User user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+	public User(final User user) throws NoSuchAlgorithmException,
+			UnsupportedEncodingException {
+
 		this.username = user.username;
 		this.firstName = user.firstName;
 		this.lastName = user.lastName;
@@ -211,12 +275,12 @@ public class User {
 		this.latitude = user.latitude;
 		this.longtitude = user.longtitude;
 	}
-	
+
 	public User() {
-		
+
 	}
-	
-	public static User getUser(String email) {
+
+	public static User getUser(final String email) {
 
 		@SuppressWarnings("deprecation")
 		SessionFactory factory = new Configuration().configure()
@@ -235,8 +299,10 @@ public class User {
 
 		return retUser;
 	}
-	
-	public static String encryptSHA256(String key) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+	public static String encryptSHA256(final String key)
+			throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
 		md.update(key.getBytes("UTF-8"));
 		byte hash[] = md.digest();
@@ -250,26 +316,5 @@ public class User {
 		}
 		return sb.toString();
 	}
-	
-	public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		
-		String s1 = "rr";
-		String s2 = "rr";
-		
-		System.out.println(s1.equals(s2));
-		System.out.println("rr".equals("r"));
-		System.out.println("rr".equals("rrR"));
-		
-	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", firstName="
-				+ firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", country=" + country + ", town=" + town + ", address="
-				+ address + ", telephone=" + telephone + ", postalCode="
-				+ postalCode + ", taxRegistrationNumber="
-				+ taxRegistrationNumber + ", latitude=" + latitude
-				+ ", longtitude=" + longtitude + "]";
-	}
 }
