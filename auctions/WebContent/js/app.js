@@ -110,3 +110,16 @@ myApp.factory('SignupService', function ($http, $cookieStore, $location, User) {
 		}
 	}
 });
+
+myApp.factory('NewAuctionService', function ($http, $cookieStore, $location) {
+	return {
+		newAuction: function(auction) {
+			console.log("NewAuctionService!!! " + auction.productName);
+				$http.post('/auctions/rest/NewAuction', auction)
+					.success(function (data2) {
+						console.log("newAuction called succesfully!");
+						console.log(data2);
+					});
+				}
+		}
+});

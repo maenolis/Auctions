@@ -119,9 +119,28 @@ myApp.controller('newMessageCtrl', ['$scope', '$http', 'Page',
 	}
 ]);
 
-myApp.controller('newAuctionCtrl', ['$scope', '$http', 'Page',
-	function ($scope, $http, Page) {
+myApp.controller('newAuctionCtrl', ['$scope', '$http', 'Page', 'NewAuctionService',
+	function ($scope, $http, Page, NewAuctionService) {
 		Page.setTitle("newAuction");
+		$scope.newAuction = function () {
+			var auction = {
+				productName: $scope.productName,
+				categories: $scope.categories,
+				buyPrice: $scope.buyPrice,
+				firstBid:$scope.firstBid,
+				startTime:$scope.startTime,
+				endTime: $scope.endTime,
+				description: $scope.description
+			}
+			NewAuctionService.newAuction(auction);
+			$scope.productName = "";
+			$scope.categories = "";
+			$scope.buyPrice = "";
+			$scope.firstBid = "";
+			$scope.startTime = "";
+			$scope.endTime = "";
+			$scope.description = "";
+		}
 	}
 ]);
 
