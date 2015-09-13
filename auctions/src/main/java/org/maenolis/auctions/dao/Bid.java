@@ -10,6 +10,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 @XmlRootElement
 @Entity(name = "Bid")
 public class Bid {
@@ -40,6 +46,26 @@ public class Bid {
 
 	public Bid() {
 
+	}
+
+	public static Bid getBid(final int id) {
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx;
+		tx = session.beginTransaction();
+
+		String hql = "From Bid Where id=:id";
+		Query query = session.createQuery(hql).setParameter("id", id);
+		Bid retBid = (Bid) query.uniqueResult();
+
+		tx.commit();
+		session.close();
+		factory.close();
+
+		return retBid;
 	}
 
 	public int getId() {

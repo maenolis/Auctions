@@ -10,6 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 @Entity(name = "Auction")
 public class Auction {
 
@@ -61,6 +67,27 @@ public class Auction {
 	}
 
 	public Auction() {
+
+	}
+
+	public static Auction getAuction(final int id) {
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx;
+		tx = session.beginTransaction();
+
+		String hql = "From Auction Where id=:id";
+		Query query = session.createQuery(hql).setParameter("id", id);
+		Auction retAuction = (Auction) query.uniqueResult();
+
+		tx.commit();
+		session.close();
+		factory.close();
+
+		return retAuction;
 	}
 
 	public int getId() {

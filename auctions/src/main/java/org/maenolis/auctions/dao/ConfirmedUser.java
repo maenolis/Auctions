@@ -6,6 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 @XmlRootElement
 @Entity(name = "ConfirmedUser")
 public class ConfirmedUser extends User {
@@ -48,6 +54,26 @@ public class ConfirmedUser extends User {
 
 	public ConfirmedUser() {
 
+	}
+
+	public static ConfirmedUser getConfirmedUser(final int id) {
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx;
+		tx = session.beginTransaction();
+
+		String hql = "From ConfirmedUser Where id=:id";
+		Query query = session.createQuery(hql).setParameter("id", id);
+		ConfirmedUser retConfirmedUser = (ConfirmedUser) query.uniqueResult();
+
+		tx.commit();
+		session.close();
+		factory.close();
+
+		return retConfirmedUser;
 	}
 
 	@Override
