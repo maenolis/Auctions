@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.Auction;
+import org.maenolis.auctions.dao.ConfirmedUser;
 
 @Path("/NewAuction")
 public class NewAuctionService {
@@ -28,7 +29,13 @@ public class NewAuctionService {
 			session = factory.openSession();
 			Transaction tx;
 			tx = session.beginTransaction();
-			session.save(auction);
+			// session.save(auction);
+			Auction a = new Auction();
+			ConfirmedUser c = new ConfirmedUser();
+			session.save(c);
+			a.setOwner(c);
+			System.out.println(a);
+			session.save(a);
 			tx.commit();
 		} catch (Exception e) {
 			System.err.print("During transaction received error : "
@@ -37,5 +44,4 @@ public class NewAuctionService {
 			session.close();
 		}
 	}
-
 }

@@ -28,19 +28,18 @@ public class ConfirmedUser extends User {
 	@OneToMany(mappedBy = "bidder")
 	private Set<Bid> bids;
 
-	public ConfirmedUser(final int id, String username, final String firstName,
-			final String lastName, final String email, final String password,
-			final String country, final String town, final String address,
-			final String telephone, final String postalCode,
-			final String taxRegistrationNumber, final float latitude,
-			final float longtitude, final String username2,
+	public ConfirmedUser(final int id, final String username,
+			final String firstName, final String lastName, final String email,
+			final String password, final String country, final String town,
+			final String address, final String telephone,
+			final String postalCode, final String taxRegistrationNumber,
+			final float latitude, final float longtitude,
 			final String sessionId, final Set<Message> sentMessages,
 			final Set<Message> receivedMessages,
 			final Set<Auction> ownedAuctions, final Set<Bid> bids) {
 		super(id, username, firstName, lastName, email, password, country,
 				town, address, telephone, postalCode, taxRegistrationNumber,
 				latitude, longtitude);
-		username = username2;
 		this.sessionId = sessionId;
 		this.sentMessages = sentMessages;
 		this.receivedMessages = receivedMessages;
@@ -63,6 +62,26 @@ public class ConfirmedUser extends User {
 
 		String hql = "From ConfirmedUser Where id=:id";
 		Query query = session.createQuery(hql).setParameter("id", id);
+		ConfirmedUser retConfirmedUser = (ConfirmedUser) query.uniqueResult();
+
+		tx.commit();
+		session.close();
+		factory.close();
+
+		return retConfirmedUser;
+	}
+
+	public static ConfirmedUser getConfirmedUser(final String email) {
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx;
+		tx = session.beginTransaction();
+
+		String hql = "From ConfirmedUser Where email=:email";
+		Query query = session.createQuery(hql).setParameter("email", email);
 		ConfirmedUser retConfirmedUser = (ConfirmedUser) query.uniqueResult();
 
 		tx.commit();

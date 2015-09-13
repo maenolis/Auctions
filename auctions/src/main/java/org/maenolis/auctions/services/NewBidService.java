@@ -10,7 +10,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.maenolis.auctions.dao.Auction;
 import org.maenolis.auctions.dao.Bid;
 
 @Path("/NewBid")
@@ -19,7 +18,7 @@ public class NewBidService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void newBid(final Auction auction, final Bid bid) {
+	public void newBid(/* final Auction auction, */final Bid bid) {
 
 		Session session = null;
 		try {
