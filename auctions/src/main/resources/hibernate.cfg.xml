@@ -28,10 +28,10 @@
 
 		<!-- mappings for annotated classes
 		<mapping class="uk.org.adamretter.org.uk.someapp.web.orm.generated.Customer" />
-		<mapping class="uk.org.adamretter.org.uk.someapp.web.orm.generated.Order" />
+		<mapping class="uk.org.adamretter.org.uk.someapp.web.orm.generated.Order" /> -->
 		
-		<mapping class="org.maenolis.auctions.dao.User" /> -->
 		<mapping class="org.maenolis.auctions.dao.User" />
+		<mapping class="org.maenolis.auctions.dao.ConfirmedUser" />
 		<mapping class="org.maenolis.auctions.dao.Message" />
 		<mapping class="org.maenolis.auctions.dao.Bid" />
 		<mapping class="org.maenolis.auctions.dao.Auction" />
