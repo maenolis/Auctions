@@ -26,8 +26,10 @@ public class LoginService {
 		User confirmedUser = User.getUser(user.getEmail());
 		if (confirmedUser.getPassword().equals(
 				User.encryptSHA256(user.getPassword()))) {
-			return new ConfirmedUser(confirmedUser.getUsername(), request
-					.getSession().getId());
+			ConfirmedUser retUser = new ConfirmedUser();
+			retUser.setUsername(confirmedUser.getUsername());
+			retUser.setSessionId(request.getSession().getId());
+			return retUser;
 		}
 
 		return null;

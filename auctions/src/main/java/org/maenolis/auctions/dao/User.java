@@ -3,13 +3,11 @@ package org.maenolis.auctions.dao;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.Query;
@@ -66,179 +64,12 @@ public class User {
 	@Column(name = "longtitude")
 	private float longtitude;
 
-	@OneToMany(mappedBy = "sender")
-	private Set<Message> sentMessages;
-
-	@OneToMany(mappedBy = "receiver")
-	private Set<Message> receivedMessages;
-
-	public int getId() {
-
-		return id;
-	}
-
-	public void setId(final int id) {
-
-		this.id = id;
-	}
-
-	public String getUsername() {
-
-		return username;
-	}
-
-	public void setUsername(final String username) {
-
-		this.username = username;
-	}
-
-	public String getFirstName() {
-
-		return firstName;
-	}
-
-	public void setFirstName(final String firstName) {
-
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-
-		return lastName;
-	}
-
-	public void setLastName(final String lastName) {
-
-		this.lastName = lastName;
-	}
-
-	public String getPassword() {
-
-		return password;
-	}
-
-	public void setPassword(final String password) {
-
-		this.password = password;
-	}
-
-	public String getEmail() {
-
-		return email;
-	}
-
-	public void setEmail(final String email) {
-
-		this.email = email;
-	}
-
-	public String getCountry() {
-
-		return country;
-	}
-
-	public void setCountry(final String country) {
-
-		this.country = country;
-	}
-
-	public String getTown() {
-
-		return town;
-	}
-
-	public void setTown(final String town) {
-
-		this.town = town;
-	}
-
-	public String getAddress() {
-
-		return address;
-	}
-
-	public void setAddress(final String address) {
-
-		this.address = address;
-	}
-
-	public String getTelephone() {
-
-		return telephone;
-	}
-
-	public void setTelephone(final String telephone) {
-
-		this.telephone = telephone;
-	}
-
-	public String getPostalCode() {
-
-		return postalCode;
-	}
-
-	public void setPostalCode(final String postalCode) {
-
-		this.postalCode = postalCode;
-	}
-
-	public String getTaxRegistrationNumber() {
-
-		return taxRegistrationNumber;
-	}
-
-	public void setTaxRegistrationNumber(final String taxRegistrationNumber) {
-
-		this.taxRegistrationNumber = taxRegistrationNumber;
-	}
-
-	public float getLatitude() {
-
-		return latitude;
-	}
-
-	public void setLatitude(final float latitude) {
-
-		this.latitude = latitude;
-	}
-
-	public float getLongtitude() {
-
-		return longtitude;
-	}
-
-	public void setLongtitude(final float longtitude) {
-
-		this.longtitude = longtitude;
-	}
-
-	public Set<Message> getSentMessages() {
-
-		return sentMessages;
-	}
-
-	public void setSentMessages(final Set<Message> sentMessages) {
-
-		this.sentMessages = sentMessages;
-	}
-
-	public Set<Message> getReceivedMessages() {
-
-		return receivedMessages;
-	}
-
-	public void setReceivedMessages(final Set<Message> receivedMessages) {
-
-		this.receivedMessages = receivedMessages;
-	}
-
 	public User(final int id, final String username, final String firstName,
 			final String lastName, final String email, final String password,
 			final String country, final String town, final String address,
 			final String telephone, final String postalCode,
 			final String taxRegistrationNumber, final float latitude,
-			final float longtitude, final Set<Message> sentMessages,
-			final Set<Message> receivedMessages) {
+			final float longtitude) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -254,26 +85,6 @@ public class User {
 		this.taxRegistrationNumber = taxRegistrationNumber;
 		this.latitude = latitude;
 		this.longtitude = longtitude;
-		this.sentMessages = sentMessages;
-		this.receivedMessages = receivedMessages;
-	}
-
-	public User(final User user) throws NoSuchAlgorithmException,
-			UnsupportedEncodingException {
-
-		this.username = user.username;
-		this.firstName = user.firstName;
-		this.lastName = user.lastName;
-		this.email = user.email;
-		this.password = encryptSHA256(user.password);
-		this.country = user.country;
-		this.town = user.town;
-		this.address = user.address;
-		this.telephone = user.telephone;
-		this.postalCode = user.postalCode;
-		this.taxRegistrationNumber = user.taxRegistrationNumber;
-		this.latitude = user.latitude;
-		this.longtitude = user.longtitude;
 	}
 
 	public User() {
@@ -315,6 +126,153 @@ public class User {
 			sb.append(hex);
 		}
 		return sb.toString();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(final int id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(final String username) {
+		this.username = username;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(final String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(final String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(final String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(final String password) {
+		this.password = password;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(final String country) {
+		this.country = country;
+	}
+
+	public String getTown() {
+		return town;
+	}
+
+	public void setTown(final String town) {
+		this.town = town;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(final String address) {
+		this.address = address;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(final String telephone) {
+		this.telephone = telephone;
+	}
+
+	public String getPostalCode() {
+		return postalCode;
+	}
+
+	public void setPostalCode(final String postalCode) {
+		this.postalCode = postalCode;
+	}
+
+	public String getTaxRegistrationNumber() {
+		return taxRegistrationNumber;
+	}
+
+	public void setTaxRegistrationNumber(final String taxRegistrationNumber) {
+		this.taxRegistrationNumber = taxRegistrationNumber;
+	}
+
+	public float getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(final float latitude) {
+		this.latitude = latitude;
+	}
+
+	public float getLongtitude() {
+		return longtitude;
+	}
+
+	public void setLongtitude(final float longtitude) {
+		this.longtitude = longtitude;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("User [id=");
+		builder.append(id);
+		builder.append(", username=");
+		builder.append(username);
+		builder.append(", firstName=");
+		builder.append(firstName);
+		builder.append(", lastName=");
+		builder.append(lastName);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", password=");
+		builder.append(password);
+		builder.append(", country=");
+		builder.append(country);
+		builder.append(", town=");
+		builder.append(town);
+		builder.append(", address=");
+		builder.append(address);
+		builder.append(", telephone=");
+		builder.append(telephone);
+		builder.append(", postalCode=");
+		builder.append(postalCode);
+		builder.append(", taxRegistrationNumber=");
+		builder.append(taxRegistrationNumber);
+		builder.append(", latitude=");
+		builder.append(latitude);
+		builder.append(", longtitude=");
+		builder.append(longtitude);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }
