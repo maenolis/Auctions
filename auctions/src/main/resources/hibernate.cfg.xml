@@ -33,6 +33,8 @@
 		<mapping class="org.maenolis.auctions.dao.User" /> -->
 		<mapping class="org.maenolis.auctions.dao.User" />
 		<mapping class="org.maenolis.auctions.dao.Message" />
+		<mapping class="org.maenolis.auctions.dao.Bid" />
+		<mapping class="org.maenolis.auctions.dao.Auction" />
 
 	</session-factory>
 </hibernate-configuration>
