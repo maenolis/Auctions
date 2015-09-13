@@ -4,7 +4,6 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -12,11 +11,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-@XmlRootElement
 @Entity(name = "ConfirmedUser")
 public class ConfirmedUser extends User {
-
-	private String username;
 
 	private String sessionId;
 
@@ -76,16 +72,6 @@ public class ConfirmedUser extends User {
 		return retConfirmedUser;
 	}
 
-	@Override
-	public String getUsername() {
-		return username;
-	}
-
-	@Override
-	public void setUsername(final String username) {
-		this.username = username;
-	}
-
 	public String getSessionId() {
 		return sessionId;
 	}
@@ -130,7 +116,6 @@ public class ConfirmedUser extends User {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("ConfirmedUser [username=");
-		builder.append(username);
 		builder.append(", sessionId=");
 		builder.append(sessionId);
 		builder.append(", sentMessages=");
