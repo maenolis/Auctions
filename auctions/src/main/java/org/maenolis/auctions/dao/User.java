@@ -66,6 +66,9 @@ public class User {
 	@Column(name = "longtitude")
 	private float longtitude;
 
+	@Column(name = "confirmed")
+	private boolean confirmed;
+
 	@OneToMany(mappedBy = "sender")
 	private Set<Message> sentMessages;
 
@@ -83,7 +86,8 @@ public class User {
 			final String country, final String town, final String address,
 			final String telephone, final String postalCode,
 			final String taxRegistrationNumber, final float latitude,
-			final float longtitude, final Set<Message> sentMessages,
+			final float longtitude, final boolean confirmed,
+			final Set<Message> sentMessages,
 			final Set<Message> receivedMessages,
 			final Set<Auction> ownedAuctions, final Set<Bid> bids) {
 		super();
@@ -101,6 +105,7 @@ public class User {
 		this.taxRegistrationNumber = taxRegistrationNumber;
 		this.latitude = latitude;
 		this.longtitude = longtitude;
+		this.confirmed = confirmed;
 		this.sentMessages = sentMessages;
 		this.receivedMessages = receivedMessages;
 		this.ownedAuctions = ownedAuctions;
@@ -292,6 +297,14 @@ public class User {
 		this.bids = bids;
 	}
 
+	public boolean isConfirmed() {
+		return confirmed;
+	}
+
+	public void setConfirmed(final boolean confirmed) {
+		this.confirmed = confirmed;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -323,6 +336,8 @@ public class User {
 		builder.append(latitude);
 		builder.append(", longtitude=");
 		builder.append(longtitude);
+		builder.append(", confirmed=");
+		builder.append(confirmed);
 		builder.append(", sentMessages=");
 		builder.append(sentMessages);
 		builder.append(", receivedMessages=");
