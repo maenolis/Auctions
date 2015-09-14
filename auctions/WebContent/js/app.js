@@ -32,6 +32,10 @@ var myApp = angular
 				templateUrl: 'templates/newMessage.html',
 				controller: 'newMessageCtrl'
 			}).
+			when('/newBid', {
+				templateUrl: 'templates/newBid.html',
+				controller: 'newBidCtrl'
+			}).
 			otherwise({
 				redirectTo: '/home'
 			});
@@ -120,6 +124,32 @@ myApp.factory('NewAuctionService', function ($http, $cookieStore, $location) {
 						console.log("newAuction called succesfully!");
 						console.log(data2);
 					});
-				}
 		}
+	}
+});
+
+myApp.factory('NewMessageService', function ($http, $cookieStore, $location) {
+	return {
+		newMessage: function(message) {
+			console.log("NewMessageService!!! " + message.messageText);
+				$http.post('/auctions/rest/NewMessage', message)
+					.success(function (data) {
+						console.log("newMessage called succesfully!");
+						console.log(data);
+					});
+		}
+	}
+});
+
+myApp.factory('NewBidService', function ($http, $cookieStore, $location) {
+	return {
+		newBid: function(bid) {
+			console.log("NewBidService!!! " + bid.ammount);
+				$http.post('/auctions/rest/NewBid', bid)
+					.success(function (data) {
+						console.log("newBid called succesfully!");
+						console.log(data);
+					});
+		}
+	}
 });

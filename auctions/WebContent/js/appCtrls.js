@@ -109,13 +109,16 @@ myApp.controller('messagesCtrl', ['$scope', '$http', 'Page',
 	}
 ]);
 
-myApp.controller('newMessageCtrl', ['$scope', '$http', 'Page',
-	function ($scope, $http, Page) {
+myApp.controller('newMessageCtrl', ['$scope', '$http', 'Page', 'NewMessageService',
+	function ($scope, $http, Page, NewMessageService) {
 		Page.setTitle("New Message");
-		/*$http.get().success(function(data) {
-				
+		$scope.newMessage = function () {
+			var message = {
+				messageText: $scope.messageText
 			}
-		);*/
+			NewMessageService.newMessage(message);
+			$scope.messageText = "";
+		}
 	}
 ]);
 
@@ -140,6 +143,19 @@ myApp.controller('newAuctionCtrl', ['$scope', '$http', 'Page', 'NewAuctionServic
 			$scope.startTime = "";
 			$scope.endTime = "";
 			$scope.description = "";
+		}
+	}
+]);
+
+myApp.controller('newBidCtrl', ['$scope', '$http', 'Page', 'NewBidService',
+	function ($scope, $http, Page, NewBidService) {
+		Page.setTitle("newBid");
+		$scope.newBid = function () {
+			var bid = {
+				ammount: $scope.ammount
+			}
+			NewBidService.newBid(bid);
+			$scope.bid = "";
 		}
 	}
 ]);
