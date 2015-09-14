@@ -67,7 +67,7 @@ public class User {
 	private float longtitude;
 
 	@Column(name = "confirmed")
-	private boolean confirmed;
+	private boolean confirmed = false;
 
 	@OneToMany(mappedBy = "sender")
 	private Set<Message> sentMessages;
