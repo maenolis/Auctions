@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.Bid;
+import org.maenolis.auctions.dao.User;
 
 @Path("/NewBid")
 public class NewBidService {
@@ -18,7 +19,7 @@ public class NewBidService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void newBid(/* final Auction auction, */final Bid bid) {
+	public void newBid(final Bid bid) {
 
 		Session session = null;
 		try {
@@ -28,6 +29,10 @@ public class NewBidService {
 			session = factory.openSession();
 			Transaction tx;
 			tx = session.beginTransaction();
+			User c1 = new User();
+			c1.setFirstName("kostasmarinamazi");
+			session.save(c1);
+			bid.setBidder(c1);
 			session.save(bid);
 			tx.commit();
 		} catch (Exception e) {

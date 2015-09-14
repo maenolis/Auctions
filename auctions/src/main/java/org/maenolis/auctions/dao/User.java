@@ -3,12 +3,14 @@ package org.maenolis.auctions.dao;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,7 +18,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-@MappedSuperclass
+@Entity
+@Table(name = "User")
 public class User {
 
 	@Id
@@ -63,12 +66,26 @@ public class User {
 	@Column(name = "longtitude")
 	private float longtitude;
 
+	@OneToMany(mappedBy = "sender")
+	private Set<Message> sentMessages;
+
+	@OneToMany(mappedBy = "receiver")
+	private Set<Message> receivedMessages;
+
+	@OneToMany(mappedBy = "owner")
+	private Set<Auction> ownedAuctions;
+
+	@OneToMany(mappedBy = "bidder")
+	private Set<Bid> bids;
+
 	public User(final int id, final String username, final String firstName,
 			final String lastName, final String email, final String password,
 			final String country, final String town, final String address,
 			final String telephone, final String postalCode,
 			final String taxRegistrationNumber, final float latitude,
-			final float longtitude) {
+			final float longtitude, final Set<Message> sentMessages,
+			final Set<Message> receivedMessages,
+			final Set<Auction> ownedAuctions, final Set<Bid> bids) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -84,6 +101,10 @@ public class User {
 		this.taxRegistrationNumber = taxRegistrationNumber;
 		this.latitude = latitude;
 		this.longtitude = longtitude;
+		this.sentMessages = sentMessages;
+		this.receivedMessages = receivedMessages;
+		this.ownedAuctions = ownedAuctions;
+		this.bids = bids;
 	}
 
 	public User() {
@@ -239,6 +260,38 @@ public class User {
 		this.longtitude = longtitude;
 	}
 
+	public Set<Message> getSentMessages() {
+		return sentMessages;
+	}
+
+	public void setSentMessages(final Set<Message> sentMessages) {
+		this.sentMessages = sentMessages;
+	}
+
+	public Set<Message> getReceivedMessages() {
+		return receivedMessages;
+	}
+
+	public void setReceivedMessages(final Set<Message> receivedMessages) {
+		this.receivedMessages = receivedMessages;
+	}
+
+	public Set<Auction> getOwnedAuctions() {
+		return ownedAuctions;
+	}
+
+	public void setOwnedAuctions(final Set<Auction> ownedAuctions) {
+		this.ownedAuctions = ownedAuctions;
+	}
+
+	public Set<Bid> getBids() {
+		return bids;
+	}
+
+	public void setBids(final Set<Bid> bids) {
+		this.bids = bids;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -270,6 +323,14 @@ public class User {
 		builder.append(latitude);
 		builder.append(", longtitude=");
 		builder.append(longtitude);
+		builder.append(", sentMessages=");
+		builder.append(sentMessages);
+		builder.append(", receivedMessages=");
+		builder.append(receivedMessages);
+		builder.append(", ownedAuctions=");
+		builder.append(ownedAuctions);
+		builder.append(", bids=");
+		builder.append(bids);
 		builder.append("]");
 		return builder.toString();
 	}

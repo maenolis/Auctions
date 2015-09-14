@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.Message;
+import org.maenolis.auctions.dao.User;
 
 @Path("/NewMessage")
 public class NewMessageService {
@@ -20,6 +21,7 @@ public class NewMessageService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void newMessage(final Message message) {
 
+		System.out.println(">>> newMessage received: " + message);
 		Session session = null;
 		try {
 			@SuppressWarnings("deprecation")
@@ -28,6 +30,17 @@ public class NewMessageService {
 			session = factory.openSession();
 			Transaction tx;
 			tx = session.beginTransaction();
+			User c1 = new User();
+			c1.setFirstName("kostas");
+			session.save(c1);
+
+			User c2 = new User();
+			c2.setFirstName("matina");
+			session.save(c2);
+
+			message.setReceiver(c2);
+			message.setSender(c1);
+			System.out.println(">>> Message: " + message);
 			session.save(message);
 			tx.commit();
 		} catch (Exception e) {

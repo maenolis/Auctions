@@ -21,22 +21,22 @@ public class Message {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "message")
-	private String message;
+	@Column(name = "messageText")
+	private String messageText;
 
 	@ManyToOne
 	@JoinColumn(name = "sender_id", referencedColumnName = "id", nullable = false)
-	private ConfirmedUser sender;
+	private User sender;
 
 	@ManyToOne
 	@JoinColumn(name = "receiver_id", referencedColumnName = "id", nullable = false)
-	private ConfirmedUser receiver;
+	private User receiver;
 
-	public Message(final int id, final String message,
-			final ConfirmedUser sender, final ConfirmedUser receiver) {
+	public Message(final int id, final String messageText, final User sender,
+			final User receiver) {
 		super();
 		this.id = id;
-		this.message = message;
+		this.messageText = messageText;
 		this.sender = sender;
 		this.receiver = receiver;
 	}
@@ -73,27 +73,27 @@ public class Message {
 		this.id = id;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getMessageText() {
+		return messageText;
 	}
 
-	public void setMessage(final String message) {
-		this.message = message;
+	public void setMessageText(final String messageText) {
+		this.messageText = messageText;
 	}
 
-	public ConfirmedUser getSender() {
+	public User getSender() {
 		return sender;
 	}
 
-	public void setSender(final ConfirmedUser sender) {
+	public void setSender(final User sender) {
 		this.sender = sender;
 	}
 
-	public ConfirmedUser getReceiver() {
+	public User getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(final ConfirmedUser receiver) {
+	public void setReceiver(final User receiver) {
 		this.receiver = receiver;
 	}
 
@@ -102,8 +102,8 @@ public class Message {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Message [id=");
 		builder.append(id);
-		builder.append(", message=");
-		builder.append(message);
+		builder.append(", messageText=");
+		builder.append(messageText);
 		builder.append(", sender=");
 		builder.append(sender);
 		builder.append(", receiver=");

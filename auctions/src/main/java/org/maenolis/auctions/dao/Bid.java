@@ -25,7 +25,7 @@ public class Bid {
 
 	@ManyToOne
 	@JoinColumn(name = "bidder_id", referencedColumnName = "id", nullable = false)
-	private ConfirmedUser bidder;
+	private User bidder;
 
 	@Column(name = "time")
 	private Date time;
@@ -33,7 +33,7 @@ public class Bid {
 	@Column(name = "ammount")
 	private float ammount;
 
-	public Bid(final int id, final ConfirmedUser bidder, final Date time,
+	public Bid(final int id, final User bidder, final Date time,
 			final float ammount) {
 		super();
 		this.id = id;
@@ -74,11 +74,11 @@ public class Bid {
 		this.id = id;
 	}
 
-	public ConfirmedUser getBidder() {
+	public User getBidder() {
 		return bidder;
 	}
 
-	public void setBidder(final ConfirmedUser bidder) {
+	public void setBidder(final User bidder) {
 		this.bidder = bidder;
 	}
 

@@ -47,13 +47,12 @@ public class Auction {
 
 	@ManyToOne
 	@JoinColumn(name = "owner", referencedColumnName = "id", nullable = false)
-	private ConfirmedUser owner;
+	private User owner;
 
 	public Auction(final int id, final String productName,
 			final ArrayList<String> categories, final float buyPrice,
 			final float firstBid, final Date startTimeDate,
-			final Date endTimeDate, final String description,
-			final ConfirmedUser owner) {
+			final Date endTimeDate, final String description, final User owner) {
 		super();
 		this.id = id;
 		this.productName = productName;
@@ -154,11 +153,11 @@ public class Auction {
 		this.description = description;
 	}
 
-	public ConfirmedUser getOwner() {
+	public User getOwner() {
 		return owner;
 	}
 
-	public void setOwner(final ConfirmedUser owner) {
+	public void setOwner(final User owner) {
 		this.owner = owner;
 	}
 

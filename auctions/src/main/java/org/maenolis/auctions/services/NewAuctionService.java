@@ -11,7 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.Auction;
-import org.maenolis.auctions.dao.ConfirmedUser;
+import org.maenolis.auctions.dao.User;
 
 @Path("/NewAuction")
 public class NewAuctionService {
@@ -31,7 +31,7 @@ public class NewAuctionService {
 			tx = session.beginTransaction();
 			// session.save(auction);
 			Auction a = new Auction();
-			ConfirmedUser c = new ConfirmedUser();
+			User c = new User();
 			session.save(c);
 			a.setOwner(c);
 			System.out.println(a);
