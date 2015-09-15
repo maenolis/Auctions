@@ -26,13 +26,14 @@
 					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Menu
 						<span class="caret"></span>
 					</a>
-						<ul class="dropdown-menu" role="menu">
+						<ul ng-hide={{!User.isLogged()}} class="dropdown-menu" role="menu" ng-controller="logoutCtrl">
 							<li>
 								<a href="#/newAuction">New auction</a>
 							</li>
 							<li>
-								<a>logout</a>
+									<button type="button" class="btn btn-link" ng-click="logout()">logout</button>
 							</li>
+							
 							<!-- <li>
 								<a href="#">Something else here</a>
 							</li>

@@ -2,9 +2,9 @@
 	<h1>home template</h1>
 </div>
 
-
+<div data-ng-include data-src="'templates/header.html'"></div>
 
 <div class="container" ng-controller="userCtrl">
 		<p>Hello {{User.user()}}</p>
-		<div data-ng-include data-src="'templates/header.html'"></div>
+		
 </div>
