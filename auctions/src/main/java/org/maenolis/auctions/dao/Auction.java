@@ -2,6 +2,7 @@ package org.maenolis.auctions.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -48,6 +50,9 @@ public class Auction {
 	@ManyToOne
 	@JoinColumn(name = "owner", referencedColumnName = "id", nullable = false)
 	private User owner;
+
+	@OneToMany(mappedBy = "auction")
+	private Set<Bid> bids;
 
 	public Auction(final int id, final String productName,
 			final ArrayList<String> categories, final float buyPrice,

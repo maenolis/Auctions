@@ -27,17 +27,22 @@ public class Bid {
 	@JoinColumn(name = "bidder_id", referencedColumnName = "id", nullable = false)
 	private User bidder;
 
+	@ManyToOne
+	@JoinColumn(name = "auction_id", referencedColumnName = "id", nullable = false)
+	private Auction auction;
+
 	@Column(name = "time")
 	private Date time;
 
 	@Column(name = "ammount")
 	private float ammount;
 
-	public Bid(final int id, final User bidder, final Date time,
-			final float ammount) {
+	public Bid(final int id, final User bidder, final Auction auction,
+			final Date time, final float ammount) {
 		super();
 		this.id = id;
 		this.bidder = bidder;
+		this.auction = auction;
 		this.time = time;
 		this.ammount = ammount;
 	}
@@ -98,6 +103,14 @@ public class Bid {
 		this.ammount = ammount;
 	}
 
+	public Auction getAuction() {
+		return auction;
+	}
+
+	public void setAuction(final Auction auction) {
+		this.auction = auction;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -105,6 +118,8 @@ public class Bid {
 		builder.append(id);
 		builder.append(", bidder=");
 		builder.append(bidder);
+		builder.append(", auction=");
+		builder.append(auction);
 		builder.append(", time=");
 		builder.append(time);
 		builder.append(", ammount=");
