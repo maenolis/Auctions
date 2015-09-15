@@ -22,6 +22,17 @@ myApp.controller('loginCtrl', ['$scope', 'Page', 'LoginService', 'User',
 		}
 }]);
 
+myApp.controller('logoutCtrl', ['$scope', 'Page', 'LogoutService', 'User',
+	function($scope, Page, LogoutService, User){
+		$scope.User = User;
+		$scope.logout = function () {
+			var user = {
+				
+			}
+			LogoutService.login(user);
+		}
+}]);
+
 myApp.controller('signupCtrl', ['$scope', 'Page', 'SignupService', 'User', 'growl',
 	function($scope, Page, SignupService, User, growl){
 		$scope.User = User;
@@ -84,11 +95,13 @@ myApp.controller('homeCtrl', ['$scope', 'Page', 'User',
 		Page.setTitle("home");
 		User.setUser("maenolis");
 		User.setIsLogged(true);
+		$scope.User = User;
 		//console.log("logged : " + User.IsLogged());
 }]);
 
-myApp.controller('auctionsCtrl', ['$scope', '$http', 'Page',
-	function ($scope, $http, Page) {
+myApp.controller('auctionsCtrl', ['$scope', '$http', 'Page', 'User',
+	function ($scope, $http, Page, User) {
+		$scope.User = User;
 		Page.setTitle("auctions");
 		$http.get('jsons/auctions.json').success(function(data) {
 				$scope.auctions = toArray(data);
@@ -98,8 +111,9 @@ myApp.controller('auctionsCtrl', ['$scope', '$http', 'Page',
 	}
 ]);
 
-myApp.controller('messagesCtrl', ['$scope', '$http', 'Page',
-	function ($scope, $http, Page) {
+myApp.controller('messagesCtrl', ['$scope', '$http', 'Page', 'User',
+	function ($scope, $http, Page, User) {
+		$scope.User = User;
 		Page.setTitle("messages");
 		$http.get('jsons/messages.json').success(function(data) {
 				$scope.messages = toArray(data);

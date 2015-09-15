@@ -54,12 +54,12 @@ myApp.factory('User', function () {
 	var user = 'no user';
 	var isLogged = false;
 	return {
-		user: function () { return user; },
-		setUser: function (newUser) { user = newUser; },
-		isLogged: function () { return isLogged; },
-		setIsLogged: function (newValue) { isLogged = newValue; },
-		clear: function () { user = 'no user';isLogged = false; },
-		name: function () { return user; }
+		user: function () { console.log("user " + user); return user; },
+		setUser: function (newUser) { console.log("setUser " + newUser); user = newUser; },
+		isLogged: function () { console.log("isLogged " + isLogged); return isLogged; },
+		setIsLogged: function (newValue) { console.log("setIsLogged " + newValue); isLogged = newValue; },
+		clear: function () { console.log("clear "); user = 'no user';isLogged = false; },
+		name: function () { console.log("name " + user); return user; }
 	}
 });
 
@@ -76,6 +76,29 @@ myApp.factory('LoginService', function ($http, $cookieStore, $location, User) {
 					} else {
 						console.log("login failure!");
 					}
+				});
+		}
+	}
+});
+
+myApp.factory('LogoutService', function ($http, $cookies, $location, User) {
+	return {
+		login: function() {
+			console.log("LogoutService!!!");
+			User.clear();
+			$cookies.skata = "aposkata";
+			$http.post('/auctions/rest/Logout')
+				.success(function (data) {
+					
+					if (data) {
+						console.log("logout not null!!");
+						console.log(data);
+					} else {
+						console.log("logout success 2!");
+					}
+					var path = $location.path();
+					console.log(path);
+					$location.path('/auctions');
 				});
 		}
 	}
