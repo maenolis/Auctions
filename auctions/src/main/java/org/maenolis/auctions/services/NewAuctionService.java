@@ -21,6 +21,8 @@ public class NewAuctionService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void newAuction(final Auction auction) {
 
+		System.out.println("NewAuctionService received : " + auction);
+
 		Session session = null;
 		try {
 			@SuppressWarnings("deprecation")

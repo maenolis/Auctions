@@ -1,7 +1,5 @@
 package org.maenolis.auctions.dao;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -30,7 +28,7 @@ public class Auction {
 	private String productName;
 
 	@Column(name = "Categories")
-	private ArrayList<String> categories;
+	private String categories;
 
 	@Column(name = "buyPrice")
 	private float buyPrice;
@@ -38,11 +36,11 @@ public class Auction {
 	@Column(name = "firstBid")
 	private float firstBid;
 
-	@Column(name = "startTimeDate")
-	private Date startTimeDate;
+	@Column(name = "startTime")
+	private String startTime;
 
-	@Column(name = "endTimeDate")
-	private Date endTimeDate;
+	@Column(name = "endTime")
+	private String endTime;
 
 	@Column(name = "description")
 	private String description;
@@ -55,17 +53,17 @@ public class Auction {
 	private Set<Bid> bids;
 
 	public Auction(final int id, final String productName,
-			final ArrayList<String> categories, final float buyPrice,
-			final float firstBid, final Date startTimeDate,
-			final Date endTimeDate, final String description, final User owner) {
+			final String categories, final float buyPrice,
+			final float firstBid, final String startTime, final String endTime,
+			final String description, final User owner) {
 		super();
 		this.id = id;
 		this.productName = productName;
 		this.categories = categories;
 		this.buyPrice = buyPrice;
 		this.firstBid = firstBid;
-		this.startTimeDate = startTimeDate;
-		this.endTimeDate = endTimeDate;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.description = description;
 		this.owner = owner;
 	}
@@ -110,11 +108,11 @@ public class Auction {
 		this.productName = productName;
 	}
 
-	public ArrayList<String> getCategories() {
+	public String getCategories() {
 		return categories;
 	}
 
-	public void setCategories(final ArrayList<String> categories) {
+	public void setCategories(final String categories) {
 		this.categories = categories;
 	}
 
@@ -134,20 +132,20 @@ public class Auction {
 		this.firstBid = firstBid;
 	}
 
-	public Date getStartTimeDate() {
-		return startTimeDate;
+	public String getStartTime() {
+		return startTime;
 	}
 
-	public void setStartTimeDate(final Date startTimeDate) {
-		this.startTimeDate = startTimeDate;
+	public void setStartTime(final String startTime) {
+		this.startTime = startTime;
 	}
 
-	public Date getEndTimeDate() {
-		return endTimeDate;
+	public String getEndTime() {
+		return endTime;
 	}
 
-	public void setEndTimeDate(final Date endTimeDate) {
-		this.endTimeDate = endTimeDate;
+	public void setEndTime(final String endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getDescription() {
@@ -179,10 +177,10 @@ public class Auction {
 		builder.append(buyPrice);
 		builder.append(", firstBid=");
 		builder.append(firstBid);
-		builder.append(", startTimeDate=");
-		builder.append(startTimeDate);
-		builder.append(", endTimeDate=");
-		builder.append(endTimeDate);
+		builder.append(", startTime=");
+		builder.append(startTime);
+		builder.append(", endTime=");
+		builder.append(endTime);
 		builder.append(", description=");
 		builder.append(description);
 		builder.append(", owner=");

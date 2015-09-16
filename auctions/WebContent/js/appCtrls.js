@@ -104,8 +104,10 @@ myApp.controller('auctionsCtrl', ['$scope', '$http', 'Page', 'User',
 		$scope.User = User;
 		Page.setTitle("auctions");
 		$http.get('jsons/auctions.json').success(function(data) {
-				$scope.auctions = toArray(data);
-				dateCorrection($scope.auctions);
+			console.log(data);
+			$scope.auctions = toArray(data);
+			console.log($scope.auctions);
+			dateCorrection($scope.auctions);
 			}
 		);
 	}
@@ -117,7 +119,7 @@ myApp.controller('messagesCtrl', ['$scope', '$http', 'Page', 'User',
 		Page.setTitle("messages");
 		$http.get('jsons/messages.json').success(function(data) {
 				$scope.messages = toArray(data);
-				dateCorrection($scope.messages);
+				//dateCorrection($scope.messages);
 			}
 		);
 	}
@@ -195,7 +197,7 @@ myApp.controller('messageCtrl', ['$scope', '$location', 'Page', 'User', function
 
 myApp.controller('userPageCtrl', ['$scope', '$location', 'Page', 'User', function($scope, $location, Page, User){
 	console.log("UserPage ctrl!");
-	Page.setTitle("User");
+	Page.setTitle("User");home
 	$scope.User = User;
 }]);
 

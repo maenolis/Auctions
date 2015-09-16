@@ -16,4 +16,6 @@ public class PropertyProvider {
 
 	public static final String USERID = "userId";
 
+	public static final String DATEFORMAT = "dd-MM-yyyy hh:mm:ss";
+
 }
