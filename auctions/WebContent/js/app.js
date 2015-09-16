@@ -36,6 +36,18 @@ var myApp = angular
 				templateUrl: 'templates/newBid.html',
 				controller: 'newBidCtrl'
 			}).
+			when('/message', {
+				templateUrl: 'templates/message.html',
+				controller: 'messageCtrl'
+			}).
+			when('/auction', {
+				templateUrl: 'templates/auction.html',
+				controller: 'auctionCtrl'
+			}).
+			when('/user', {
+				templateUrl: 'templates/user.html',
+				controller: 'userPageCtrl'
+			}).
 			otherwise({
 				redirectTo: '/home'
 			});
@@ -54,12 +66,12 @@ myApp.factory('User', function () {
 	var user = 'no user';
 	var isLogged = false;
 	return {
-		user: function () { console.log("user " + user); return user; },
-		setUser: function (newUser) { console.log("setUser " + newUser); user = newUser; },
-		isLogged: function () { console.log("isLogged " + isLogged); return isLogged; },
-		setIsLogged: function (newValue) { console.log("setIsLogged " + newValue); isLogged = newValue; },
-		clear: function () { console.log("clear "); user = 'no user';isLogged = false; },
-		name: function () { console.log("name " + user); return user; }
+		user: function () { /*console.log("user " + user);*/ return user; },
+		setUser: function (newUser) { /*console.log("setUser " + newUser);*/ user = newUser; },
+		isLogged: function () { /*console.log("isLogged " + isLogged);*/ return isLogged; },
+		setIsLogged: function (newValue) { /*console.log("setIsLogged " + newValue);*/ isLogged = newValue; },
+		clear: function () { /*console.log("clear ");*/ user = 'no user';isLogged = false; },
+		name: function () { /*console.log("name " + user);*/ return user; }
 	}
 });
 

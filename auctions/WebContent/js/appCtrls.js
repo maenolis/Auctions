@@ -174,10 +174,29 @@ myApp.controller('newBidCtrl', ['$scope', '$http', 'Page', 'NewBidService',
 	}
 ]);
 
-myApp.controller('getClassCtrl', ['$scope', '$location', function($scope, $location){
+myApp.controller('getClassCtrl', ['$scope', '$location', 'Page', function($scope, $location){
 	$scope.isActive = function (viewLocation) {
 		return viewLocation == $location.path();
 	}
+}]);
+
+myApp.controller('auctionCtrl', ['$scope', '$location', 'Page', 'User', function($scope, $location, Page, User){
+	console.log("Auction ctrl!");
+	Page.setTitle("Auction");
+	$scope.User = User;
+}]);
+
+myApp.controller('messageCtrl', ['$scope', '$location', 'Page', 'User', function($scope, $location, Page, User){
+	console.log("Message ctrl!");
+	Page.setTitle("Message");
+	$scope.User = User;
+	$scope.User.setUser("Manolis message")
+}]);
+
+myApp.controller('userPageCtrl', ['$scope', '$location', 'Page', 'User', function($scope, $location, Page, User){
+	console.log("UserPage ctrl!");
+	Page.setTitle("User");
+	$scope.User = User;
 }]);
 
 myApp.controller('notifyCtrl', ['$scope', 'growl',
