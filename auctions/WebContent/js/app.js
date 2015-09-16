@@ -92,6 +92,7 @@ myApp.factory('LogoutService', function ($http, $cookies, $location, User) {
 					
 					if (data) {
 						console.log("logout not null!!");
+						console.log("logout success 1!");
 						console.log(data);
 					} else {
 						console.log("logout success 2!");

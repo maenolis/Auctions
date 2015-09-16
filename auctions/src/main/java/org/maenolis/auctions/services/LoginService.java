@@ -22,7 +22,7 @@ public class LoginService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void login(@Context final HttpServletRequest request,
+	public LoginRetObject login(@Context final HttpServletRequest request,
 			@Context final HttpServletResponse response, final User user)
 			throws IOException, NoSuchAlgorithmException {
 
@@ -44,6 +44,6 @@ public class LoginService {
 					confirmedUser.getUsername());
 		}
 
-		// return loginRetObject;
+		return loginRetObject;
 	}
 }
