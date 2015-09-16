@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.LoginRetObject;
 
 @Path("/Login")
 public class LoginService {

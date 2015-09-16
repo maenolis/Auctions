@@ -1,4 +1,4 @@
-package org.maenolis.auctions.services;
+package org.maenolis.auctions.services.retObj;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
