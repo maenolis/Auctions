@@ -37,6 +37,7 @@ public class LoginService {
 
 			loginRetObject.setStatus(PropertyProvider.OK);
 			loginRetObject.setUsername(confirmedUser.getUsername());
+			loginRetObject.setId(confirmedUser.getId());
 			System.out.println("retJson : " + loginRetObject);
 			request.getSession().setAttribute(PropertyProvider.USERID,
 					confirmedUser.getId());
