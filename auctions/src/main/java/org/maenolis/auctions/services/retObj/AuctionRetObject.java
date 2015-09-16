@@ -1,7 +1,6 @@
 package org.maenolis.auctions.services.retObj;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -20,17 +19,16 @@ public class AuctionRetObject {
 
 	private float firstBid;
 
-	private Date startTimeDate;
+	private String startTime;
 
-	private Date endTimeDate;
+	private String endTime;
 
 	private String description;
 
 	public AuctionRetObject(final String status, final int id,
 			final String productName, final ArrayList<String> categories,
-			final float buyPrice, final float firstBid,
-			final Date startTimeDate, final Date endTimeDate,
-			final String description) {
+			final float buyPrice, final float firstBid, final String startTime,
+			final String endTime, final String description) {
 		super();
 		this.status = status;
 		this.id = id;
@@ -38,8 +36,8 @@ public class AuctionRetObject {
 		this.categories = categories;
 		this.buyPrice = buyPrice;
 		this.firstBid = firstBid;
-		this.startTimeDate = startTimeDate;
-		this.endTimeDate = endTimeDate;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.description = description;
 	}
 
@@ -95,20 +93,20 @@ public class AuctionRetObject {
 		this.firstBid = firstBid;
 	}
 
-	public Date getStartTimeDate() {
-		return startTimeDate;
+	public String getStartTime() {
+		return startTime;
 	}
 
-	public void setStartTimeDate(final Date startTimeDate) {
-		this.startTimeDate = startTimeDate;
+	public void setStartTime(final String startTime) {
+		this.startTime = startTime;
 	}
 
-	public Date getEndTimeDate() {
-		return endTimeDate;
+	public String getEndTime() {
+		return endTime;
 	}
 
-	public void setEndTimeDate(final Date endTimeDate) {
-		this.endTimeDate = endTimeDate;
+	public void setEndTime(final String endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getDescription() {
@@ -134,10 +132,10 @@ public class AuctionRetObject {
 		builder.append(buyPrice);
 		builder.append(", firstBid=");
 		builder.append(firstBid);
-		builder.append(", startTimeDate=");
-		builder.append(startTimeDate);
-		builder.append(", endTimeDate=");
-		builder.append(endTimeDate);
+		builder.append(", startTime=");
+		builder.append(startTime);
+		builder.append(", endTime=");
+		builder.append(endTime);
 		builder.append(", description=");
 		builder.append(description);
 		builder.append("]");
