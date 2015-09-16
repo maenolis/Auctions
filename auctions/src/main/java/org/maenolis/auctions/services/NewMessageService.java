@@ -1,9 +1,11 @@
 package org.maenolis.auctions.services;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Session;
@@ -12,6 +14,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.Message;
 import org.maenolis.auctions.dao.User;
+import org.maenolis.auctions.services.literals.PropertyProvider;
 
 @Path("/NewMessage")
 public class NewMessageService {
@@ -19,9 +22,22 @@ public class NewMessageService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void newMessage(final Message message) {
+	public void newMessage(final Message message,
+			@Context final HttpServletRequest request) {
 
 		System.out.println(">>> newMessage received: " + message);
+
+		if (request.getSession().getAttribute(PropertyProvider.USERNAME) != null) {
+			System.out.println("username "
+					+ request.getSession().getAttribute(
+							PropertyProvider.USERNAME));
+		}
+		if (request.getSession().getAttribute(PropertyProvider.USERID) != null) {
+			System.out.println("userId "
+					+ request.getSession()
+							.getAttribute(PropertyProvider.USERID));
+		}
+
 		Session session = null;
 		try {
 			@SuppressWarnings("deprecation")
