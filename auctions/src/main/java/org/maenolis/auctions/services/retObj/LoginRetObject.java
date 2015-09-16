@@ -9,10 +9,14 @@ public class LoginRetObject {
 
 	private String username;
 
-	public LoginRetObject(final String status, final String username) {
+	private int id;
+
+	public LoginRetObject(final String status, final String username,
+			final int id) {
 
 		this.status = status;
 		this.username = username;
+		this.id = id;
 	}
 
 	public LoginRetObject() {
@@ -35,6 +39,14 @@ public class LoginRetObject {
 		this.username = username;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(final int id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -42,7 +54,10 @@ public class LoginRetObject {
 		builder.append(status);
 		builder.append(", username=");
 		builder.append(username);
+		builder.append(", id=");
+		builder.append(id);
 		builder.append("]");
 		return builder.toString();
 	}
+
 }
