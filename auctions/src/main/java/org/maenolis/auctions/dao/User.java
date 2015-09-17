@@ -187,6 +187,27 @@ public class User {
 		return retList;
 	}
 
+	public static List<User> getAllUsers() {
+		List<User> retList = new ArrayList<User>();
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+
+		String hql = "From User";
+		Query query = session.createQuery(hql);
+
+		for (Object obj : query.list()) {
+			retList.add((User) obj);
+		}
+
+		session.close();
+		factory.close();
+
+		return retList;
+	}
+
 	public static String encryptSHA256(final String key)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
