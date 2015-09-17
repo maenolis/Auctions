@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.retObj.LogoutRetObject;
+import org.maenolis.auctions.userManagement.UserState;
 
 @Path("/Logout")
 public class LogoutService {

@@ -1,4 +1,4 @@
-package org.maenolis.auctions.services;
+package org.maenolis.auctions.userManagement;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

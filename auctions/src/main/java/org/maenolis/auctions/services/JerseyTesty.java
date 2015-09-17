@@ -14,6 +14,7 @@ import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.MessageRetObject;
+import org.maenolis.auctions.services.retObj.UserRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
 
 @Path("/test")
@@ -49,6 +50,20 @@ public class JerseyTesty {
 		}
 		ListWrapper<MessageRetObject> ret = new ListWrapper<MessageRetObject>(
 				list);
+		return ret;
+
+	}
+
+	@Path("/users")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListWrapper<UserRetObject> getterUsers() {
+
+		List<UserRetObject> list = User.getAllUsers();
+
+		ListWrapper<UserRetObject> ret = new ListWrapper<UserRetObject>(list);
+		System.out.println("size list : " + list.size());
+		System.out.println("wrapper size list : " + ret.getItems().size());
 		return ret;
 
 	}
