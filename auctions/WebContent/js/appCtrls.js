@@ -103,13 +103,23 @@ myApp.controller('auctionsCtrl', ['$scope', '$http', 'Page', 'User',
 	function ($scope, $http, Page, User) {
 		$scope.User = User;
 		Page.setTitle("auctions");
-		$http.get('jsons/auctions.json').success(function(data) {
+		/*$http.get('jsons/auctions.json').success(function(data) {
 			console.log(data);
 			$scope.auctions = toArray(data);
 			console.log($scope.auctions);
 			dateCorrection($scope.auctions);
-			}
-		);
+			}*/
+			
+		$http.get('/auctions/rest/test/auctions')
+			.then(function(response) {
+				console.log(response);
+				console.log(response.data.auctionRetObject[0].description);
+				$scope.auctions = response.data.auctionRetObject;
+				dateCorrection($scope.auctions);
+			}, function(response){
+				console.log(response);
+			});
+		
 	}
 ]);
 
@@ -218,8 +228,13 @@ function toArray(jsonObj) {
 
 function dateCorrection(array) {
 	
+	var myDateArray = "2008-03-02 33:33:33".split(/[-: ]/);
+	
+	var myDateArray;
 	for (var i in array) {
-		array[i].startDate = new Date(array[i].startDate);
-		array[i].endDate = new Date(array[i].endDate);
+		myDateArray = array[i].startTime.split(/[-: ]/);
+		array[i].startTime = new Date(myDateArray[2], myDateArray[1] - 1, myDateArray[0], myDateArray[3], myDateArray[4], myDateArray[5], 0);
+		myDateArray = array[i].endTime.split(/[-: ]/);
+		array[i].endTime = new Date(myDateArray[2], myDateArray[1] - 1, myDateArray[0], myDateArray[3], myDateArray[4], myDateArray[5], 0);
 	}
 }

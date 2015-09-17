@@ -1,5 +1,8 @@
 package org.maenolis.auctions.dao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,6 +19,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.AuctionRetObject;
 
 @Entity(name = "Auction")
 public class Auction {
@@ -91,6 +96,44 @@ public class Auction {
 		factory.close();
 
 		return retAuction;
+	}
+
+	public static AuctionRetObject transformToRetObject(final Auction auction) {
+		AuctionRetObject ret = new AuctionRetObject();
+		ret.setBuyPrice(auction.getBuyPrice());
+		ret.setCategories(Arrays.asList(auction.getCategories().split(",")));
+		ret.setDescription(auction.getDescription());
+		ret.setEndTime(auction.getEndTime());
+		ret.setFirstBid(auction.getFirstBid());
+		ret.setId(auction.getId());
+		ret.setOwnerId(auction.getOwner().getId());
+		ret.setOwnerName(auction.getOwner().getFirstName() + " "
+				+ auction.getOwner().getLastName());
+		ret.setProductName(auction.getProductName());
+		ret.setStartTime(auction.getStartTime());
+		ret.setStatus(PropertyProvider.OK);
+		return ret;
+	}
+
+	public static List<AuctionRetObject> getAllAuctions() {
+		List<AuctionRetObject> retList = new ArrayList<AuctionRetObject>();
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+
+		String hql = "From Auction";
+		Query query = session.createQuery(hql);
+
+		for (Object obj : query.list()) {
+			retList.add(transformToRetObject((Auction) obj));
+		}
+
+		session.close();
+		factory.close();
+
+		return retList;
 	}
 
 	public int getId() {
