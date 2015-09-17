@@ -1,7 +1,10 @@
 package org.maenolis.auctions.dao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +32,9 @@ public class Auction {
 	@GeneratedValue
 	@Column(name = "id")
 	private int id;
+
+	@Column(name = "alive")
+	private boolean alive;
 
 	@Column(name = "productName")
 	private String productName;
@@ -72,6 +78,7 @@ public class Auction {
 		this.endTime = endTime;
 		this.description = description;
 		this.owner = owner;
+		this.alive = true;
 	}
 
 	public Auction() {
@@ -217,6 +224,23 @@ public class Auction {
 
 	public void setBids(final Set<Bid> bids) {
 		this.bids = bids;
+	}
+
+	public boolean isAlive() {
+
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat(PropertyProvider.DATEFORMAT);
+		boolean isPassed = true;
+		try {
+			isPassed = sdf.parse(getEndTime()).after(cal.getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return alive && isPassed;
+	}
+
+	public void setAlive(final boolean alive) {
+		this.alive = alive;
 	}
 
 	public Bid getCurrentBid() {
