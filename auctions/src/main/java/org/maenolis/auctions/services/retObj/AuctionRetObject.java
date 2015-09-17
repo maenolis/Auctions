@@ -1,6 +1,7 @@
 package org.maenolis.auctions.services.retObj;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,7 +18,7 @@ public class AuctionRetObject {
 
 	private String productName;
 
-	private ArrayList<String> categories;
+	private List<String> categories;
 
 	private float buyPrice;
 
@@ -77,11 +78,11 @@ public class AuctionRetObject {
 		this.productName = productName;
 	}
 
-	public ArrayList<String> getCategories() {
+	public List<String> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(final ArrayList<String> categories) {
+	public void setCategories(final List<String> categories) {
 		this.categories = categories;
 	}
 

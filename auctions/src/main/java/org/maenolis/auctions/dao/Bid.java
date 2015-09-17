@@ -14,6 +14,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.BidRetObject;
 
 @Entity(name = "Bid")
 public class Bid {
@@ -69,6 +71,19 @@ public class Bid {
 		factory.close();
 
 		return retBid;
+	}
+
+	public static BidRetObject transformToRetObject(final Bid bid) {
+		BidRetObject ret = new BidRetObject();
+		ret.setAmmount(bid.getAmmount());
+		ret.setAuction_id(bid.getAuction().getId());
+		ret.setBidder_id(bid.getBidder().getId());
+		ret.setBidderName(bid.getBidder().getFirstName() + " "
+				+ bid.getBidder().getLastName());
+		ret.setId(bid.getId());
+		ret.setStatus(PropertyProvider.OK);
+		ret.setTime(bid.getTime());
+		return ret;
 	}
 
 	public int getId() {

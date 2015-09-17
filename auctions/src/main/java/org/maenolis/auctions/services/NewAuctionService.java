@@ -32,12 +32,12 @@ public class NewAuctionService {
 			Transaction tx;
 			tx = session.beginTransaction();
 			// session.save(auction);
-			Auction a = new Auction();
+			// Auction a = new Auction();
 			User c = new User();
 			session.save(c);
-			a.setOwner(c);
-			System.out.println(a);
-			session.save(a);
+			auction.setOwner(c);
+			System.out.println(auction);
+			session.save(auction);
 			tx.commit();
 		} catch (Exception e) {
 			System.err.print("During transaction received error : "

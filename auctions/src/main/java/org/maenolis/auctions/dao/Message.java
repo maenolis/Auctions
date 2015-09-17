@@ -12,6 +12,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.MessageRetObject;
 
 @Entity(name = "Message")
 public class Message {
@@ -63,6 +65,21 @@ public class Message {
 		factory.close();
 
 		return retMessage;
+	}
+
+	public static MessageRetObject transformToRetObject(final Message message) {
+		MessageRetObject ret = new MessageRetObject();
+		ret.setId(message.getId());
+		ret.setMessageText(message.getMessageText());
+		ret.setReceiver_id(message.getReceiver().getId());
+		ret.setReceiverName(message.getReceiver().getFirstName() + " "
+				+ message.getReceiver().getLastName());
+		ret.setSender_id(message.getSender().getId());
+		ret.setSenderName(message.getSender().getFirstName() + " "
+				+ message.getSender().getLastName());
+		ret.setStatus(PropertyProvider.OK);
+		return ret;
+
 	}
 
 	public int getId() {
