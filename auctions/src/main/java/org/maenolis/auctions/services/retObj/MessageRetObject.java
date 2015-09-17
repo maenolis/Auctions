@@ -2,6 +2,8 @@ package org.maenolis.auctions.services.retObj;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.maenolis.auctions.services.literals.PropertyProvider;
+
 @XmlRootElement
 public class MessageRetObject {
 
@@ -27,6 +29,7 @@ public class MessageRetObject {
 
 	public MessageRetObject() {
 		super();
+		this.status = PropertyProvider.NOK;
 	}
 
 	public String getStatus() {

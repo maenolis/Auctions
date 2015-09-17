@@ -43,6 +43,7 @@ public class AuctionRetObject {
 
 	public AuctionRetObject() {
 		super();
+		this.categories = new ArrayList<String>();
 	}
 
 	public String getStatus() {
