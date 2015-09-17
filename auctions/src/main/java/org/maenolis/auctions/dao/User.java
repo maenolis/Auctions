@@ -3,10 +3,13 @@ package org.maenolis.auctions.dao;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -69,16 +72,16 @@ public class User {
 	@Column(name = "confirmed")
 	private boolean confirmed = false;
 
-	@OneToMany(mappedBy = "sender")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sender")
 	private Set<Message> sentMessages;
 
-	@OneToMany(mappedBy = "receiver")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "receiver")
 	private Set<Message> receivedMessages;
 
-	@OneToMany(mappedBy = "owner")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
 	private Set<Auction> ownedAuctions;
 
-	@OneToMany(mappedBy = "bidder")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "bidder")
 	private Set<Bid> bids;
 
 	public User(final int id, final String username, final String firstName,
@@ -134,6 +137,54 @@ public class User {
 		factory.close();
 
 		return retUser;
+	}
+
+	public static User getUser(final int id) {
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx;
+		tx = session.beginTransaction();
+
+		String hql = "From User Where id=:id";
+		Query query = session.createQuery(hql).setParameter("id", id);
+		User retUser = (User) query.uniqueResult();
+
+		tx.commit();
+		session.close();
+		factory.close();
+
+		return retUser;
+	}
+
+	public static List<Message> getUserSentMessages(final int userid) {
+		User user = getUser(userid);
+		List<Message> retList = new ArrayList<Message>();
+		for (Object messageObj : user.getSentMessages().toArray()) {
+			retList.add((Message) messageObj);
+		}
+		return retList;
+
+	}
+
+	public static List<Message> getUserReceivedMessages(final int userid) {
+		User user = getUser(userid);
+		List<Message> retList = new ArrayList<Message>();
+		for (Object messageObj : user.getReceivedMessages().toArray()) {
+			retList.add((Message) messageObj);
+		}
+		return retList;
+	}
+
+	public static List<Auction> getUserAuctions(final int userid) {
+		User user = getUser(userid);
+		List<Auction> retList = new ArrayList<Auction>();
+		for (Object auctionObj : user.getOwnedAuctions().toArray()) {
+			retList.add((Auction) auctionObj);
+		}
+		return retList;
 	}
 
 	public static String encryptSHA256(final String key)

@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -49,7 +50,7 @@ public class Auction {
 	@JoinColumn(name = "owner", referencedColumnName = "id", nullable = false)
 	private User owner;
 
-	@OneToMany(mappedBy = "auction")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "auction")
 	private Set<Bid> bids;
 
 	public Auction(final int id, final String productName,
