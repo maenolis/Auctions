@@ -14,7 +14,7 @@ import org.maenolis.auctions.dao.Auction;
 import org.maenolis.auctions.dao.User;
 
 @Path("/NewAuction")
-public class NewAuctionService {
+public class AuctionService {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

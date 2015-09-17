@@ -13,30 +13,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.Message;
-import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.MessageRetObject;
 
 @Path("/NewMessage")
-public class NewMessageService {
+public class MessageService {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void newMessage(final Message message,
+	public void newMessage(final MessageRetObject message,
 			@Context final HttpServletRequest request) {
-
-		System.out.println(">>> newMessage received: " + message);
-
-		if (request.getSession().getAttribute(PropertyProvider.USERNAME) != null) {
-			System.out.println("username "
-					+ request.getSession().getAttribute(
-							PropertyProvider.USERNAME));
-		}
-		if (request.getSession().getAttribute(PropertyProvider.USERID) != null) {
-			System.out.println("userId "
-					+ request.getSession()
-							.getAttribute(PropertyProvider.USERID));
-		}
 
 		Session session = null;
 		try {
@@ -46,18 +33,10 @@ public class NewMessageService {
 			session = factory.openSession();
 			Transaction tx;
 			tx = session.beginTransaction();
-			User c1 = new User();
-			c1.setFirstName("kostas");
-			session.save(c1);
 
-			User c2 = new User();
-			c2.setFirstName("matina");
-			session.save(c2);
-
-			message.setReceiver(c2);
-			message.setSender(c1);
-			System.out.println(">>> Message: " + message);
-			session.save(message);
+			message.setSenderId((int) request.getSession().getAttribute(
+					PropertyProvider.USERID));
+			session.save(new Message(message));
 			tx.commit();
 		} catch (Exception e) {
 			System.err.print("During transaction received error : "

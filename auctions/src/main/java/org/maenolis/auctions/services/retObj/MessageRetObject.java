@@ -11,28 +11,31 @@ public class MessageRetObject {
 
 	private int id;
 
-	private int sender_id;
+	private int senderId;
 
 	private String senderName;
 
-	private int receiver_id;
+	private int receiverId;
 
 	private String receiverName;
 
 	private String messageText;
 
+	private String time;
+
 	public MessageRetObject(final String status, final int id,
-			final int sender_id, final String senderName,
-			final int receiver_id, final String receiverName,
-			final String messageText) {
+			final int senderId, final String senderName, final int receiverId,
+			final String receiverName, final String messageText,
+			final String time) {
 		super();
 		this.status = status;
 		this.id = id;
-		this.sender_id = sender_id;
+		this.senderId = senderId;
 		this.senderName = senderName;
-		this.receiver_id = receiver_id;
+		this.receiverId = receiverId;
 		this.receiverName = receiverName;
 		this.messageText = messageText;
+		this.time = time;
 	}
 
 	public MessageRetObject() {
@@ -48,20 +51,20 @@ public class MessageRetObject {
 		this.status = status;
 	}
 
-	public int getSender_id() {
-		return sender_id;
+	public int getSenderId() {
+		return senderId;
 	}
 
-	public void setSender_id(final int sender_id) {
-		this.sender_id = sender_id;
+	public void setSenderId(final int senderId) {
+		this.senderId = senderId;
 	}
 
-	public int getReceiver_id() {
-		return receiver_id;
+	public int getReceiverId() {
+		return receiverId;
 	}
 
-	public void setReceiver_id(final int receiver_id) {
-		this.receiver_id = receiver_id;
+	public void setReceiverId(final int receiverId) {
+		this.receiverId = receiverId;
 	}
 
 	public String getMessageText() {
@@ -96,6 +99,14 @@ public class MessageRetObject {
 		this.receiverName = receiverName;
 	}
 
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(final String time) {
+		this.time = time;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -104,15 +115,17 @@ public class MessageRetObject {
 		builder.append(", id=");
 		builder.append(id);
 		builder.append(", sender_id=");
-		builder.append(sender_id);
+		builder.append(senderId);
 		builder.append(", senderName=");
 		builder.append(senderName);
 		builder.append(", receiver_id=");
-		builder.append(receiver_id);
+		builder.append(receiverId);
 		builder.append(", receiverName=");
 		builder.append(receiverName);
 		builder.append(", messageText=");
 		builder.append(messageText);
+		builder.append(", time=");
+		builder.append(time);
 		builder.append("]");
 		return builder.toString();
 	}

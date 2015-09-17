@@ -1,5 +1,8 @@
 package org.maenolis.auctions.dao;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +29,9 @@ public class Message {
 	@Column(name = "messageText")
 	private String messageText;
 
+	@Column(name = "time")
+	private String time;
+
 	@ManyToOne
 	@JoinColumn(name = "sender_id", referencedColumnName = "id", nullable = false)
 	private User sender;
@@ -34,13 +40,24 @@ public class Message {
 	@JoinColumn(name = "receiver_id", referencedColumnName = "id", nullable = false)
 	private User receiver;
 
-	public Message(final int id, final String messageText, final User sender,
-			final User receiver) {
+	public Message(final int id, final String messageText, final String time,
+			final User sender, final User receiver) {
 		super();
 		this.id = id;
 		this.messageText = messageText;
+		this.time = time;
 		this.sender = sender;
 		this.receiver = receiver;
+	}
+
+	public Message(final MessageRetObject message) {
+		super();
+		this.messageText = message.getMessageText();
+		this.receiver = User.getUser(message.getReceiverId());
+		this.sender = User.getUser(message.getSenderId());
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		this.time = sdf.format(cal.getTime());
 	}
 
 	public Message() {
@@ -71,13 +88,14 @@ public class Message {
 		MessageRetObject ret = new MessageRetObject();
 		ret.setId(message.getId());
 		ret.setMessageText(message.getMessageText());
-		ret.setReceiver_id(message.getReceiver().getId());
+		ret.setReceiverId(message.getReceiver().getId());
 		ret.setReceiverName(message.getReceiver().getFirstName() + " "
 				+ message.getReceiver().getLastName());
-		ret.setSender_id(message.getSender().getId());
+		ret.setSenderId(message.getSender().getId());
 		ret.setSenderName(message.getSender().getFirstName() + " "
 				+ message.getSender().getLastName());
 		ret.setStatus(PropertyProvider.OK);
+		ret.setTime(message.getTime());
 		return ret;
 
 	}
@@ -114,6 +132,14 @@ public class Message {
 		this.receiver = receiver;
 	}
 
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(final String time) {
+		this.time = time;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -121,6 +147,12 @@ public class Message {
 		builder.append(id);
 		builder.append(", messageText=");
 		builder.append(messageText);
+		builder.append(", time=");
+		builder.append(time);
+		builder.append(", sender=");
+		builder.append(sender);
+		builder.append(", receiver=");
+		builder.append(receiver);
 		builder.append("]");
 		return builder.toString();
 	}

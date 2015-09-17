@@ -43,8 +43,8 @@ public class JerseyTesty {
 			MessageRetObject message = new MessageRetObject();
 			message.setId(mess.getId());
 			message.setMessageText(mess.getMessageText());
-			message.setReceiver_id(mess.getReceiver().getId());
-			message.setSender_id(mess.getSender().getId());
+			message.setReceiverId(mess.getReceiver().getId());
+			message.setSenderId(mess.getSender().getId());
 			message.setStatus(PropertyProvider.OK);
 			list.add(message);
 		}

@@ -1,7 +1,9 @@
 package org.maenolis.auctions.services;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.retObj.UserRetObject;
@@ -10,9 +12,9 @@ import org.maenolis.auctions.services.retObj.UserRetObject;
 public class UserService {
 
 	@Path("/confirm")
-	@GET
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
 	public String confirm(final UserRetObject user) {
-
-		return User.confirm(4);
+		return User.confirm(user.getId());
 	}
 }
