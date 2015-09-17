@@ -13,18 +13,26 @@ public class MessageRetObject {
 
 	private int sender_id;
 
+	private String senderName;
+
 	private int receiver_id;
+
+	private String receiverName;
 
 	private String messageText;
 
-	public MessageRetObject(final String status, final int sender_id,
-			final int receiver_id, final String messageText, final int id) {
+	public MessageRetObject(final String status, final int id,
+			final int sender_id, final String senderName,
+			final int receiver_id, final String receiverName,
+			final String messageText) {
 		super();
 		this.status = status;
-		this.sender_id = sender_id;
-		this.receiver_id = receiver_id;
-		this.messageText = messageText;
 		this.id = id;
+		this.sender_id = sender_id;
+		this.senderName = senderName;
+		this.receiver_id = receiver_id;
+		this.receiverName = receiverName;
+		this.messageText = messageText;
 	}
 
 	public MessageRetObject() {
@@ -72,6 +80,22 @@ public class MessageRetObject {
 		this.id = id;
 	}
 
+	public String getSenderName() {
+		return senderName;
+	}
+
+	public void setSenderName(final String senderName) {
+		this.senderName = senderName;
+	}
+
+	public String getReceiverName() {
+		return receiverName;
+	}
+
+	public void setReceiverName(final String receiverName) {
+		this.receiverName = receiverName;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -81,8 +105,12 @@ public class MessageRetObject {
 		builder.append(id);
 		builder.append(", sender_id=");
 		builder.append(sender_id);
+		builder.append(", senderName=");
+		builder.append(senderName);
 		builder.append(", receiver_id=");
 		builder.append(receiver_id);
+		builder.append(", receiverName=");
+		builder.append(receiverName);
 		builder.append(", messageText=");
 		builder.append(messageText);
 		builder.append("]");

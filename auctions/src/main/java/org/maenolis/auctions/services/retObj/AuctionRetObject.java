@@ -11,6 +11,10 @@ public class AuctionRetObject {
 
 	private int id;
 
+	private int ownerId;
+
+	private String ownerName;
+
 	private String productName;
 
 	private ArrayList<String> categories;
@@ -26,12 +30,15 @@ public class AuctionRetObject {
 	private String description;
 
 	public AuctionRetObject(final String status, final int id,
+			final int ownerId, final String ownerName,
 			final String productName, final ArrayList<String> categories,
 			final float buyPrice, final float firstBid, final String startTime,
 			final String endTime, final String description) {
 		super();
 		this.status = status;
 		this.id = id;
+		this.ownerId = ownerId;
+		this.ownerName = ownerName;
 		this.productName = productName;
 		this.categories = categories;
 		this.buyPrice = buyPrice;
@@ -118,6 +125,22 @@ public class AuctionRetObject {
 		this.description = description;
 	}
 
+	public int getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(final int ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(final String ownerName) {
+		this.ownerName = ownerName;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -125,6 +148,10 @@ public class AuctionRetObject {
 		builder.append(status);
 		builder.append(", id=");
 		builder.append(id);
+		builder.append(", ownerId=");
+		builder.append(ownerId);
+		builder.append(", ownerName=");
+		builder.append(ownerName);
 		builder.append(", productName=");
 		builder.append(productName);
 		builder.append(", categories=");
@@ -142,4 +169,5 @@ public class AuctionRetObject {
 		builder.append("]");
 		return builder.toString();
 	}
+
 }

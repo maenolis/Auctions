@@ -13,6 +13,8 @@ public class BidRetObject {
 
 	private int bidder_id;
 
+	private String bidderName;
+
 	private int auction_id;
 
 	private Date time;
@@ -20,11 +22,13 @@ public class BidRetObject {
 	private float ammount;
 
 	public BidRetObject(final String status, final int id, final int bidder_id,
-			final int auction_id, final Date time, final float ammount) {
+			final String bidderName, final int auction_id, final Date time,
+			final float ammount) {
 		super();
 		this.status = status;
 		this.id = id;
 		this.bidder_id = bidder_id;
+		this.bidderName = bidderName;
 		this.auction_id = auction_id;
 		this.time = time;
 		this.ammount = ammount;
@@ -82,6 +86,14 @@ public class BidRetObject {
 		this.ammount = ammount;
 	}
 
+	public String getBidderName() {
+		return bidderName;
+	}
+
+	public void setBidderName(final String bidderName) {
+		this.bidderName = bidderName;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -91,6 +103,8 @@ public class BidRetObject {
 		builder.append(id);
 		builder.append(", bidder_id=");
 		builder.append(bidder_id);
+		builder.append(", bidderName=");
+		builder.append(bidderName);
 		builder.append(", auction_id=");
 		builder.append(auction_id);
 		builder.append(", time=");
@@ -100,4 +114,5 @@ public class BidRetObject {
 		builder.append("]");
 		return builder.toString();
 	}
+
 }
