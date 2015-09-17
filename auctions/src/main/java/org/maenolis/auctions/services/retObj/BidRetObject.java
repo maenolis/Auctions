@@ -1,7 +1,5 @@
 package org.maenolis.auctions.services.retObj;
 
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -17,12 +15,12 @@ public class BidRetObject {
 
 	private int auction_id;
 
-	private Date time;
+	private String time;
 
 	private float ammount;
 
 	public BidRetObject(final String status, final int id, final int bidder_id,
-			final String bidderName, final int auction_id, final Date time,
+			final String bidderName, final int auction_id, final String time,
 			final float ammount) {
 		super();
 		this.status = status;
@@ -70,11 +68,11 @@ public class BidRetObject {
 		this.auction_id = auction_id;
 	}
 
-	public Date getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(final Date time) {
+	public void setTime(final String time) {
 		this.time = time;
 	}
 

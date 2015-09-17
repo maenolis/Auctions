@@ -112,6 +112,9 @@ public class Auction {
 		ret.setProductName(auction.getProductName());
 		ret.setStartTime(auction.getStartTime());
 		ret.setStatus(PropertyProvider.OK);
+		if (auction.getCurrentBid() != null) {
+			ret.setCurrentBid(auction.getCurrentBid().getAmmount());
+		}
 		return ret;
 	}
 
@@ -206,6 +209,22 @@ public class Auction {
 
 	public void setOwner(final User owner) {
 		this.owner = owner;
+	}
+
+	public Set<Bid> getBids() {
+		return bids;
+	}
+
+	public void setBids(final Set<Bid> bids) {
+		this.bids = bids;
+	}
+
+	public Bid getCurrentBid() {
+		if (getBids() != null && getBids().toArray().length > 0) {
+			Arrays.sort(getBids().toArray());
+			return (Bid) getBids().toArray()[getBids().toArray().length - 1];
+		}
+		return null;
 	}
 
 	@Override

@@ -24,6 +24,8 @@ public class AuctionRetObject {
 
 	private float firstBid;
 
+	private float currentBid;
+
 	private String startTime;
 
 	private String endTime;
@@ -32,9 +34,10 @@ public class AuctionRetObject {
 
 	public AuctionRetObject(final String status, final int id,
 			final int ownerId, final String ownerName,
-			final String productName, final ArrayList<String> categories,
-			final float buyPrice, final float firstBid, final String startTime,
-			final String endTime, final String description) {
+			final String productName, final List<String> categories,
+			final float buyPrice, final float firstBid, final float currentBid,
+			final String startTime, final String endTime,
+			final String description) {
 		super();
 		this.status = status;
 		this.id = id;
@@ -44,6 +47,7 @@ public class AuctionRetObject {
 		this.categories = categories;
 		this.buyPrice = buyPrice;
 		this.firstBid = firstBid;
+		this.currentBid = currentBid;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.description = description;
@@ -142,6 +146,14 @@ public class AuctionRetObject {
 		this.ownerName = ownerName;
 	}
 
+	public float getCurrentBid() {
+		return currentBid;
+	}
+
+	public void setCurrentBid(final float currentBid) {
+		this.currentBid = currentBid;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -161,6 +173,8 @@ public class AuctionRetObject {
 		builder.append(buyPrice);
 		builder.append(", firstBid=");
 		builder.append(firstBid);
+		builder.append(", currentBid=");
+		builder.append(currentBid);
 		builder.append(", startTime=");
 		builder.append(startTime);
 		builder.append(", endTime=");

@@ -1,6 +1,7 @@
 package org.maenolis.auctions.dao;
 
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +19,7 @@ import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.BidRetObject;
 
 @Entity(name = "Bid")
-public class Bid {
+public class Bid implements Comparable<Bid> {
 
 	@Id
 	@GeneratedValue
@@ -34,13 +35,13 @@ public class Bid {
 	private Auction auction;
 
 	@Column(name = "time")
-	private Date time;
+	private String time;
 
 	@Column(name = "ammount")
 	private float ammount;
 
 	public Bid(final int id, final User bidder, final Auction auction,
-			final Date time, final float ammount) {
+			final String time, final float ammount) {
 		super();
 		this.id = id;
 		this.bidder = bidder;
@@ -102,11 +103,11 @@ public class Bid {
 		this.bidder = bidder;
 	}
 
-	public Date getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(final Date time) {
+	public void setTime(final String time) {
 		this.time = time;
 	}
 
@@ -139,4 +140,19 @@ public class Bid {
 		return builder.toString();
 	}
 
+	@Override
+	public int compareTo(final Bid bid) {
+		SimpleDateFormat sdf = new SimpleDateFormat(PropertyProvider.DATEFORMAT);
+		int ret = 0;
+		try {
+			if (sdf.parse(getTime()).before(sdf.parse(bid.getTime()))) {
+				ret = -1;
+			} else {
+				ret = 1;
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
 }
