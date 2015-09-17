@@ -20,6 +20,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.UserRetObject;
 
 @Entity
 @Table(name = "User")
@@ -162,6 +164,9 @@ public class User {
 	public static List<Message> getUserSentMessages(final int userid) {
 		User user = getUser(userid);
 		List<Message> retList = new ArrayList<Message>();
+		if (user.getSentMessages() == null) {
+			return retList;
+		}
 		for (Object messageObj : user.getSentMessages().toArray()) {
 			retList.add((Message) messageObj);
 		}
@@ -172,6 +177,9 @@ public class User {
 	public static List<Message> getUserReceivedMessages(final int userid) {
 		User user = getUser(userid);
 		List<Message> retList = new ArrayList<Message>();
+		if (user.getReceivedMessages() == null) {
+			return retList;
+		}
 		for (Object messageObj : user.getReceivedMessages().toArray()) {
 			retList.add((Message) messageObj);
 		}
@@ -181,14 +189,17 @@ public class User {
 	public static List<Auction> getUserAuctions(final int userid) {
 		User user = getUser(userid);
 		List<Auction> retList = new ArrayList<Auction>();
+		if (user.getOwnedAuctions() == null) {
+			return retList;
+		}
 		for (Object auctionObj : user.getOwnedAuctions().toArray()) {
 			retList.add((Auction) auctionObj);
 		}
 		return retList;
 	}
 
-	public static List<User> getAllUsers() {
-		List<User> retList = new ArrayList<User>();
+	public static List<UserRetObject> getAllUsers() {
+		List<UserRetObject> retList = new ArrayList<UserRetObject>();
 
 		@SuppressWarnings("deprecation")
 		SessionFactory factory = new Configuration().configure()
@@ -199,13 +210,61 @@ public class User {
 		Query query = session.createQuery(hql);
 
 		for (Object obj : query.list()) {
-			retList.add((User) obj);
+			retList.add(transformToRetObject((User) obj));
 		}
+
+		// System.out.println(retList.get(0));
 
 		session.close();
 		factory.close();
 
 		return retList;
+	}
+
+	public static String confirm(final int id) {
+
+		String ret = PropertyProvider.OK;
+		try {
+			@SuppressWarnings("deprecation")
+			SessionFactory factory = new Configuration().configure()
+					.buildSessionFactory();
+			Session session = factory.openSession();
+			Transaction tx;
+			tx = session.beginTransaction();
+
+			String hql = "From User Where id=:id";
+			Query query = session.createQuery(hql).setParameter("id", id);
+			User retUser = (User) query.uniqueResult();
+
+			retUser.setConfirmed(true);
+			session.save(retUser);
+			tx.commit();
+			session.close();
+			factory.close();
+		} catch (Exception e) {
+			System.err.println("Error while retrieving User with id : " + id);
+			ret = PropertyProvider.NOK;
+		}
+		return ret;
+	}
+
+	public static UserRetObject transformToRetObject(final User user) {
+		UserRetObject ret = new UserRetObject();
+		ret.setAddress(user.getAddress());
+		ret.setConfirmed(user.isConfirmed());
+		ret.setCountry(user.getCountry());
+		ret.setEmail(user.getEmail());
+		ret.setFirstName(user.getFirstName());
+		ret.setId(user.getId());
+		ret.setLastName(user.getLastName());
+		ret.setLatitude(user.getLatitude());
+		ret.setLongtitude(user.getLongtitude());
+		ret.setPostalCode(user.getPostalCode());
+		ret.setTaxRegistrationNumber(user.getTaxRegistrationNumber());
+		ret.setTelephone(user.getTelephone());
+		ret.setTown(user.getTown());
+		ret.setUsername(user.getUsername());
+		return ret;
 	}
 
 	public static String encryptSHA256(final String key)
@@ -410,14 +469,6 @@ public class User {
 		builder.append(longtitude);
 		builder.append(", confirmed=");
 		builder.append(confirmed);
-		builder.append(", sentMessages=");
-		builder.append(sentMessages);
-		builder.append(", receivedMessages=");
-		builder.append(receivedMessages);
-		builder.append(", ownedAuctions=");
-		builder.append(ownedAuctions);
-		builder.append(", bids=");
-		builder.append(bids);
 		builder.append("]");
 		return builder.toString();
 	}

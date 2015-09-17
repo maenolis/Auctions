@@ -227,8 +227,6 @@ public class Auction {
 		builder.append(endTime);
 		builder.append(", description=");
 		builder.append(description);
-		builder.append(", owner=");
-		builder.append(owner);
 		builder.append("]");
 		return builder.toString();
 	}

@@ -121,10 +121,6 @@ public class Message {
 		builder.append(id);
 		builder.append(", messageText=");
 		builder.append(messageText);
-		builder.append(", sender=");
-		builder.append(sender);
-		builder.append(", receiver=");
-		builder.append(receiver);
 		builder.append("]");
 		return builder.toString();
 	}

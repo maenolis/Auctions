@@ -131,10 +131,6 @@ public class Bid {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Bid [id=");
 		builder.append(id);
-		builder.append(", bidder=");
-		builder.append(bidder);
-		builder.append(", auction=");
-		builder.append(auction);
 		builder.append(", time=");
 		builder.append(time);
 		builder.append(", ammount=");
