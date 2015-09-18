@@ -24,6 +24,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
+import org.maenolis.auctions.services.retObj.BidRetObject;
 
 @Entity(name = "Auction")
 public class Auction {
@@ -165,6 +166,15 @@ public class Auction {
 		session.close();
 		factory.close();
 
+		return retList;
+	}
+
+	public static List<BidRetObject> getBids(final int id) {
+		Auction auction = Auction.getAuction(id);
+		List<BidRetObject> retList = new ArrayList<BidRetObject>();
+		for (Bid bid : auction.getBids()) {
+			retList.add(Bid.transformToRetObject(bid));
+		}
 		return retList;
 	}
 

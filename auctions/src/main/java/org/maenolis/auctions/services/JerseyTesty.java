@@ -2,14 +2,17 @@ package org.maenolis.auctions.services;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.maenolis.auctions.dao.Auction;
 import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
+import org.maenolis.auctions.services.retObj.BidRetObject;
 import org.maenolis.auctions.services.retObj.MessageRetObject;
 import org.maenolis.auctions.services.retObj.UserRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
@@ -69,6 +72,21 @@ public class JerseyTesty {
 
 		ListWrapper<MessageRetObject> ret = new ListWrapper<MessageRetObject>(
 				list);
+		return ret;
+
+	}
+
+	@Path("/bids")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListWrapper<BidRetObject> getBidsForAuction(
+			final AuctionRetObject auction,
+			@Context final HttpServletRequest request) {
+
+		System.out.println("/from");
+		List<BidRetObject> list = Auction.getBids(auction.getId());
+
+		ListWrapper<BidRetObject> ret = new ListWrapper<BidRetObject>(list);
 		return ret;
 
 	}

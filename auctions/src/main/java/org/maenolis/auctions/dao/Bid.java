@@ -27,11 +27,11 @@ public class Bid implements Comparable<Bid> {
 	private int id;
 
 	@ManyToOne
-	@JoinColumn(name = "bidder_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "bidderId", referencedColumnName = "id", nullable = false)
 	private User bidder;
 
 	@ManyToOne
-	@JoinColumn(name = "auction_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "auctionId", referencedColumnName = "id", nullable = false)
 	private Auction auction;
 
 	@Column(name = "time")

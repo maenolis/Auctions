@@ -6,6 +6,7 @@
 
 <div class="container" ng-controller="auctionCtrl">
 
+	<!-- Auction -->
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr class="row">
@@ -43,11 +44,23 @@
 			<tr class="row">
 				<td>description: {{auction.description}}</td>
 			</tr>
-			
-			
-			
-			<tr class="row">
-				<td><button ng-click="bid(auction)">reply</button></td>
-			</tr>
 		</tbody>
+	</table>
+	
+	<!-- Bids -->
+	<table ng-hide="auction.id != user.id" class="table table-striped table-hover">
+		<thead>
+			<tr class="row">
+				<td>Bids for: {{auction.productName}}</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="row" ng-repeat="bid in bids | orderBy:'-time'">
+				<td>id: {{bid.id}}</td>
+				<td>bidderId: {{bid.bidderId}}</td>
+				<td>bidderName: {{bid.bidderName}}</td>
+				<td>auctionId: {{bid.auctionId}}</td>
+				<td>time: {{bid.time}}</td>
+				<td>ammount: {{bid.ammount}}</td>
+			</tr>
 	</table>

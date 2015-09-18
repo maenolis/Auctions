@@ -9,11 +9,11 @@ public class BidRetObject {
 
 	private int id;
 
-	private int bidder_id;
+	private int bidderId;
 
 	private String bidderName;
 
-	private int auction_id;
+	private int auctionId;
 
 	private String time;
 
@@ -25,9 +25,9 @@ public class BidRetObject {
 		super();
 		this.status = status;
 		this.id = id;
-		this.bidder_id = bidder_id;
+		this.bidderId = bidder_id;
 		this.bidderName = bidderName;
-		this.auction_id = auction_id;
+		this.auctionId = auction_id;
 		this.time = time;
 		this.ammount = ammount;
 	}
@@ -53,19 +53,19 @@ public class BidRetObject {
 	}
 
 	public int getBidder_id() {
-		return bidder_id;
+		return bidderId;
 	}
 
 	public void setBidder_id(final int bidder_id) {
-		this.bidder_id = bidder_id;
+		this.bidderId = bidder_id;
 	}
 
 	public int getAuction_id() {
-		return auction_id;
+		return auctionId;
 	}
 
 	public void setAuction_id(final int auction_id) {
-		this.auction_id = auction_id;
+		this.auctionId = auction_id;
 	}
 
 	public String getTime() {
@@ -100,11 +100,11 @@ public class BidRetObject {
 		builder.append(", id=");
 		builder.append(id);
 		builder.append(", bidder_id=");
-		builder.append(bidder_id);
+		builder.append(bidderId);
 		builder.append(", bidderName=");
 		builder.append(bidderName);
 		builder.append(", auction_id=");
-		builder.append(auction_id);
+		builder.append(auctionId);
 		builder.append(", time=");
 		builder.append(time);
 		builder.append(", ammount=");

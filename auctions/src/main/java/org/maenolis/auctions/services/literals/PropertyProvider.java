@@ -18,4 +18,6 @@ public class PropertyProvider {
 
 	public static final String DATEFORMAT = "dd-MM-yyyy hh:mm:ss";
 
+	public static final String ADMINEMAIL = "admin@auctions.com";
+
 }

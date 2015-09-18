@@ -338,6 +338,10 @@ public class User {
 		return sb.toString();
 	}
 
+	public boolean isAdmin() {
+		return getEmail() == PropertyProvider.ADMINEMAIL;
+	}
+
 	public int getId() {
 		return id;
 	}
