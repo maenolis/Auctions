@@ -10,43 +10,64 @@
 			<tr class="row">
 				<td>User</td>
 			</tr>
-		<thead>
+		</thead>
 		<tbody>
 			<tr class="row">
-				{{user.id}}
+				<td>id: {{user.id}}</td>
 			</tr>
 			<tr class="row">
-				{{user.username}}
+				<td>username: {{user.username}}</td>
 			</tr>
 			<tr class="row">
-				{{user.firstName}}
+				<td>first name: {{user.firstName}}</td>
 			</tr>
 			<tr class="row">
-				{{user.lastName}}
+				<td><input ng-model="newFirstName" type="text" id="newFirstName" class="form-control" placeholder="newFirstName" required autofocus></td>
 			</tr>
 			<tr class="row">
-				{{user.email}}
+				<td>last name: {{user.lastName}}</td>
 			</tr>
 			<tr class="row">
-				{{user.country}}
+				<td><input ng-model="newLastName" type="text" id="newLastName" class="form-control" placeholder="newLastName" required autofocus></td>
 			</tr>
 			<tr class="row">
-				{{user.town}}
+				<td>email: {{user.email}}</td>
 			</tr>
 			<tr class="row">
-				{{user.address}}
+				<td>country: {{user.country}}</td>
 			</tr>
 			<tr class="row">
-				{{user.telephone}}
+				<td><input ng-model="newCountry" type="text" id="newCountry" class="form-control" placeholder="newCountry" required autofocus></td>
 			</tr>
 			<tr class="row">
-				{{user.postalCode}}
+				<td>town: {{user.town}}</td>
 			</tr>
 			<tr class="row">
-				{{user.taxRegistrationNumber}}
+				<td><input ng-model="newTown" type="text" id="newTown" class="form-control" placeholder="newTown" required autofocus></td>
 			</tr>
 			<tr class="row">
-				<td><button ng-click="reply(message)">reply</button></td>
+				<td>address: {{user.address}}</td>
+			</tr>
+			<tr class="row">
+				<td><input ng-model="newAddress" type="text" id="newAddress" class="form-control" placeholder="newAddress" required autofocus></td>
+			</tr>
+			<tr class="row">
+				<td>telephone: {{user.telephone}}</td>
+			</tr>
+			<tr class="row">
+				<td><input ng-model="newTelephone" type="text" id="newTelephone" class="form-control" placeholder="newTelephone" required autofocus></td>
+			</tr>
+			<tr class="row">
+				<td>postal code: {{user.postalCode}}</td>
+			</tr>
+			<tr class="row">
+				<td><input ng-model="newPostalCode" type="text" id="newPostalCode" class="form-control" placeholder="newPostalCode" required autofocus></td>
+			</tr>
+			<tr class="row">
+				<td>tax registration number: {{user.taxRegistrationNumber}}</td>
+			</tr>
+			<tr class="row">
+				<td><button ng-click="update(user)">update</button></td>
 			</tr>
 		</tbody>
 	</table>

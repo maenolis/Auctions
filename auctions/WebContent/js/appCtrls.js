@@ -90,13 +90,15 @@ myApp.controller('userCtrl', ['$rootScope', '$scope', '$http', 'User',
 		$http.get("/auctions/rest/User/get")
 			.success(function (response) {
 				console.log(response);
-				if (response.data.status == "nok") {
+				if (response.status == "nok") {
 					console.log("not a user.");
 				} else {
-					$scope.user = response.data;
+					$scope.user = response;
 				}
-				
 			});
+		$scope.update = function (user) {
+			console.log("update worx.");	
+		}
 }]);
 
 myApp.controller('homeCtrl', ['$scope', 'Page', 'User',
@@ -107,8 +109,8 @@ myApp.controller('homeCtrl', ['$scope', 'Page', 'User',
 		$scope.User = User;
 }]);
 
-myApp.controller('auctionsCtrl', ['$scope', '$http', 'Page', 'User',
-	function ($scope, $http, Page, User) {
+myApp.controller('auctionsCtrl', ['$rootScope', '$scope', '$http', '$location', 'Page', 'User',
+	function ($rootScope, $scope, $http, $location, Page, User) {
 		$scope.User = User;
 		Page.setTitle("auctions");
 		
@@ -126,6 +128,8 @@ myApp.controller('auctionsCtrl', ['$scope', '$http', 'Page', 'User',
 			$scope.openAuction = function (auction) {
 				console.log("openAuction worx");
 				console.log(auction);
+				$rootScope.auction = auction;
+				$location.path("/auction");
 			}
 		
 	}
@@ -211,10 +215,16 @@ myApp.controller('getClassCtrl', ['$scope', '$location', 'Page', function($scope
 	}
 }]);
 
-myApp.controller('auctionCtrl', ['$scope', '$location', 'Page', 'User', function($scope, $location, Page, User){
-	console.log("Auction ctrl!");
-	Page.setTitle("Auction");
-	$scope.User = User;
+myApp.controller('auctionCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User',
+		function($rootScope, $scope, $location, Page, User){
+			console.log("Auction ctrl!");
+			Page.setTitle("Auction");
+			$scope.User = User;
+			$scope.auction = $rootScope.auction;
+			$scope.bid = function (auction) {
+				console.log("bid worx.");
+				console.log(auction);
+			}
 }]);
 
 myApp.controller('messageCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User',
@@ -232,7 +242,7 @@ myApp.controller('messageCtrl', ['$rootScope', '$scope', '$location', 'Page', 'U
 
 myApp.controller('userPageCtrl', ['$scope', '$location', 'Page', 'User', function($scope, $location, Page, User){
 	console.log("UserPage ctrl!");
-	Page.setTitle("User");home
+	Page.setTitle("User");
 	$scope.User = User;
 }]);
 
