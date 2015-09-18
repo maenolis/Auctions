@@ -488,7 +488,7 @@ public class User {
 	}
 
 	public boolean isAdmin() {
-		return getEmail() == PropertyProvider.ADMINEMAIL;
+		return getEmail().equalsIgnoreCase(PropertyProvider.ADMINEMAIL);
 	}
 
 	public int getId() {

@@ -36,8 +36,9 @@ public class UserService {
 	@Path("/confirm")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public String confirm(final UserRetObject user) {
-		return User.confirm(user.getId());
+	public UserRetObject confirm(final UserRetObject user) {
+		User.confirm(user.getId());
+		return user;
 	}
 
 	/**

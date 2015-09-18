@@ -366,16 +366,26 @@ myApp.controller('notifyCtrl', ['$scope', 'growl',
 
 myApp.controller('adminPanelCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User', '$http',
 	function($rootScope, $scope, $location, Page, User, $http){
+		
+		$http.get('/auctions/rest/Admin/isAdmin').success(function (response) {
+			console.log(response);
+			if (response.flag == false) {
+				$location.path('/auctions');
+			}
+		});
+		
 		Page.setTitle("Admin panel");
+		console.log("adminCtrl");
 		$scope.confirmUser = function (user) {
+			console.log(user);
 			$http.post('/auctions/rest/User/confirm', user).success(function (response) {
-				
+				console.log(response);
 			});
 		}
 		
 		$http.get('/auctions/rest/User/users').success(function (response) {
 			console.log(response);
-			$scope.users = response.data.userRetObject;
+			$scope.users = response.userRetObject;
 		});
 }]);
 

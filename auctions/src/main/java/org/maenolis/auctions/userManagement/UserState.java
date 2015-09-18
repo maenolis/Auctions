@@ -48,4 +48,8 @@ public class UserState {
 
 		return logoutRetObject;
 	}
+
+	public static int getId(final HttpSession session) {
+		return (int) session.getAttribute(PropertyProvider.USERID);
+	}
 }
