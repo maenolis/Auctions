@@ -53,6 +53,10 @@ var myApp = angular
 				templateUrl: 'templates/user.html',
 				controller: 'userPageCtrl'
 			}).
+			when('/adminPanel', {
+				templateUrl: 'templates/adminPanel.html',
+				controller: 'adminPanelCtrl'
+			}).
 			otherwise({
 				redirectTo: '/home'
 			});

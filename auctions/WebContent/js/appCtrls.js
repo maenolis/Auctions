@@ -364,6 +364,21 @@ myApp.controller('notifyCtrl', ['$scope', 'growl',
 		}
 }]);
 
+myApp.controller('adminPanelCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User', '$http',
+	function($rootScope, $scope, $location, Page, User, $http){
+		Page.setTitle("Admin panel");
+		$scope.confirmUser = function (user) {
+			$http.post('/auctions/rest/User/confirm', user).success(function (response) {
+				
+			});
+		}
+		
+		$http.get('/auctions/rest/User/users').success(function (response) {
+			console.log(response);
+			$scope.users = response.data.userRetObject;
+		});
+}]);
+
 function toArray(jsonObj) {
 	var array = []
 	for (var i in jsonObj) {

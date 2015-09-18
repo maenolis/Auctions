@@ -21,17 +21,16 @@
 		</thead>
 		<tbody>
 			<tr class="row" ng-repeat="auction in auctions | orderBy:'-endDate'">
-				<td><a href="#" class="btn">{{$index + 1}}</a></td>
-				<td><a href="#" class="btn">{{auction.ownerName}}</a></td>
-				<td><a href="#" class="btn">{{auction.categories}}</a></td>
-				<td><a href="#" class="btn">{{auction.productName}}</a></td>
-				<td><a href="#" class="btn">{{auction.startTime | date:'shortDate'}}</a></td>
-				<td><a href="#" class="btn">{{auction.endTime | date:'shortDate'}}</a></td>
-				<td><a href="#" class="btn">{{auction.buyPrice}}</a></td>
-				<td><a href="#" class="btn">{{auction.firstBid}}</a></td>
-				<td><a href="#" class="btn">{{auction.currentBid}}</a></td>
+				<td>{{$index + 1}}</a></td>
+				<td>{{auction.ownerName}}</a></td>
+				<td>{{auction.categories}}</a></td>
+				<td>{{auction.productName}}</a></td>
+				<td>{{auction.startTime | date:'shortDate'}}</a></td>
+				<td>{{auction.endTime | date:'shortDate'}}</a></td>
+				<td>{{auction.buyPrice}}</a></td>
+				<td>{{auction.firstBid}}</a></td>
+				<td>{{auction.currentBid}}</a></td>
 				<td><button ng-click="openAuction(auction)">openAuction</button></td>
-				
 			</tr>
 		</tbody>
 	</table>

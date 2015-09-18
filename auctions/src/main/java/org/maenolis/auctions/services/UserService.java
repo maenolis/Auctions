@@ -1,5 +1,7 @@
 package org.maenolis.auctions.services;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -16,6 +18,7 @@ import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.UserRetObject;
+import org.maenolis.auctions.services.wrapper.ListWrapper;
 
 /**
  * The Class UserService.
@@ -97,5 +100,23 @@ public class UserService {
 
 		return User.transformToRetObject(User.getUser((int) request
 				.getSession().getAttribute(PropertyProvider.USERID)));
+	}
+
+	/**
+	 * Gets the users.
+	 *
+	 * @return the users
+	 */
+	@Path("/users")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListWrapper<UserRetObject> getterUsers() {
+
+		List<UserRetObject> list = User.getAllUsers();
+
+		ListWrapper<UserRetObject> ret = new ListWrapper<UserRetObject>(list);
+
+		return ret;
+
 	}
 }

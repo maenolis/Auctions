@@ -17,8 +17,8 @@
 		<tbody>
 			<tr class="row" ng-repeat="message in messages | orderBy:'-date'">
 				<td>{{$index + 1}}</td>
-				<td><a href="#">{{message.senderName}}</a></td>
-				<td><a href="#">{{message.messageText}}</a></td>
+				<td>{{message.senderName}}</a></td>
+				<td>{{message.messageText}}</a></td>
 				<td>{{message.time | date:'shortDate'}}</td>
 				<td><button ng-click="reply(message)">reply</button></td>
 			</tr>
