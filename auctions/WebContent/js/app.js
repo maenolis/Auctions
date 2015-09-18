@@ -168,7 +168,7 @@ myApp.factory('NewMessageService', function ($http, $cookieStore, $location) {
 	return {
 		newMessage: function(message) {
 			console.log("NewMessageService!!! " + message.messageText);
-				$http.post('/auctions/rest/NewMessage', message)
+				$http.post('/auctions/rest/Message/new', message)
 					.success(function (data) {
 						console.log("newMessage called succesfully!");
 						console.log(data);

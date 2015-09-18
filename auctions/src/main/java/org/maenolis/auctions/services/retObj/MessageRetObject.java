@@ -2,6 +2,7 @@ package org.maenolis.auctions.services.retObj;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.maenolis.auctions.dao.Message;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 
 @XmlRootElement
@@ -36,6 +37,19 @@ public class MessageRetObject {
 		this.receiverName = receiverName;
 		this.messageText = messageText;
 		this.time = time;
+	}
+
+	public MessageRetObject(final Message message) {
+		this.status = PropertyProvider.OK;
+		this.id = message.getId();
+		this.senderId = message.getSender().getId();
+		this.senderName = message.getSender().getFirstName() + " "
+				+ message.getSender().getLastName();
+		this.receiverId = message.getReceiver().getId();
+		this.receiverName = message.getReceiver().getFirstName() + " "
+				+ message.getReceiver().getLastName();
+		this.messageText = message.getMessageText();
+		this.time = message.getTime();
 	}
 
 	public MessageRetObject() {

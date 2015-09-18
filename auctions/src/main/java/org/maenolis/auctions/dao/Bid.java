@@ -76,14 +76,16 @@ public class Bid implements Comparable<Bid> {
 
 	public static BidRetObject transformToRetObject(final Bid bid) {
 		BidRetObject ret = new BidRetObject();
-		ret.setAmmount(bid.getAmmount());
-		ret.setAuction_id(bid.getAuction().getId());
-		ret.setBidder_id(bid.getBidder().getId());
-		ret.setBidderName(bid.getBidder().getFirstName() + " "
-				+ bid.getBidder().getLastName());
-		ret.setId(bid.getId());
-		ret.setStatus(PropertyProvider.OK);
-		ret.setTime(bid.getTime());
+		if (bid != null) {
+			ret.setAmmount(bid.getAmmount());
+			ret.setAuction_id(bid.getAuction().getId());
+			ret.setBidder_id(bid.getBidder().getId());
+			ret.setBidderName(bid.getBidder().getFirstName() + " "
+					+ bid.getBidder().getLastName());
+			ret.setId(bid.getId());
+			ret.setStatus(PropertyProvider.OK);
+			ret.setTime(bid.getTime());
+		}
 		return ret;
 	}
 
@@ -128,19 +130,6 @@ public class Bid implements Comparable<Bid> {
 	}
 
 	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Bid [id=");
-		builder.append(id);
-		builder.append(", time=");
-		builder.append(time);
-		builder.append(", ammount=");
-		builder.append(ammount);
-		builder.append("]");
-		return builder.toString();
-	}
-
-	@Override
 	public int compareTo(final Bid bid) {
 		SimpleDateFormat sdf = new SimpleDateFormat(PropertyProvider.DATEFORMAT);
 		int ret = 0;
@@ -154,5 +143,18 @@ public class Bid implements Comparable<Bid> {
 			e.printStackTrace();
 		}
 		return ret;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Bid [id=");
+		builder.append(id);
+		builder.append(", time=");
+		builder.append(time);
+		builder.append(", ammount=");
+		builder.append(ammount);
+		builder.append("]");
+		return builder.toString();
 	}
 }

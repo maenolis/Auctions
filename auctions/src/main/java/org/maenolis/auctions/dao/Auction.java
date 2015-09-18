@@ -85,6 +85,26 @@ public class Auction {
 
 	}
 
+	public Auction(final AuctionRetObject auction) {
+		if (auction != null) {
+			this.id = auction.getId();
+			this.productName = auction.getProductName();
+			for (int i = 0; i < auction.getCategories().size(); i++) {
+				this.categories += auction.getCategories().get(i);
+				if (i < auction.getCategories().size() - 1) {
+					this.categories += ", ";
+				}
+			}
+			this.buyPrice = auction.getBuyPrice();
+			this.firstBid = auction.getFirstBid();
+			this.startTime = auction.getStartTime();
+			this.endTime = auction.getEndTime();
+			this.description = auction.getDescription();
+			this.owner = User.getUser(auction.getOwnerId());
+			this.alive = true;
+		}
+	}
+
 	public static Auction getAuction(final int id) {
 
 		@SuppressWarnings("deprecation")
@@ -107,20 +127,22 @@ public class Auction {
 
 	public static AuctionRetObject transformToRetObject(final Auction auction) {
 		AuctionRetObject ret = new AuctionRetObject();
-		ret.setBuyPrice(auction.getBuyPrice());
-		ret.setCategories(Arrays.asList(auction.getCategories().split(",")));
-		ret.setDescription(auction.getDescription());
-		ret.setEndTime(auction.getEndTime());
-		ret.setFirstBid(auction.getFirstBid());
-		ret.setId(auction.getId());
-		ret.setOwnerId(auction.getOwner().getId());
-		ret.setOwnerName(auction.getOwner().getFirstName() + " "
-				+ auction.getOwner().getLastName());
-		ret.setProductName(auction.getProductName());
-		ret.setStartTime(auction.getStartTime());
-		ret.setStatus(PropertyProvider.OK);
-		if (auction.getCurrentBid() != null) {
-			ret.setCurrentBid(auction.getCurrentBid().getAmmount());
+		if (auction != null) {
+			ret.setBuyPrice(auction.getBuyPrice());
+			ret.setCategories(Arrays.asList(auction.getCategories().split(",")));
+			ret.setDescription(auction.getDescription());
+			ret.setEndTime(auction.getEndTime());
+			ret.setFirstBid(auction.getFirstBid());
+			ret.setId(auction.getId());
+			ret.setOwnerId(auction.getOwner().getId());
+			ret.setOwnerName(auction.getOwner().getFirstName() + " "
+					+ auction.getOwner().getLastName());
+			ret.setProductName(auction.getProductName());
+			ret.setStartTime(auction.getStartTime());
+			ret.setStatus(PropertyProvider.OK);
+			if (auction.getCurrentBid() != null) {
+				ret.setCurrentBid(auction.getCurrentBid().getAmmount());
+			}
 		}
 		return ret;
 	}

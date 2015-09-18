@@ -1,6 +1,5 @@
 package org.maenolis.auctions.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -9,9 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.maenolis.auctions.dao.Auction;
-import org.maenolis.auctions.dao.Message;
 import org.maenolis.auctions.dao.User;
-import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.MessageRetObject;
 import org.maenolis.auctions.services.retObj.UserRetObject;
@@ -37,17 +34,8 @@ public class JerseyTesty {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListWrapper<MessageRetObject> getterMessages() {
 
-		List<MessageRetObject> list = new ArrayList<MessageRetObject>();
-		List<Message> messageList = User.getUserReceivedMessages(3);
-		for (Message mess : messageList) {
-			MessageRetObject message = new MessageRetObject();
-			message.setId(mess.getId());
-			message.setMessageText(mess.getMessageText());
-			message.setReceiverId(mess.getReceiver().getId());
-			message.setSenderId(mess.getSender().getId());
-			message.setStatus(PropertyProvider.OK);
-			list.add(message);
-		}
+		List<MessageRetObject> list = User.getUserReceivedMessages(4);
+
 		ListWrapper<MessageRetObject> ret = new ListWrapper<MessageRetObject>(
 				list);
 		return ret;
@@ -64,6 +52,23 @@ public class JerseyTesty {
 		ListWrapper<UserRetObject> ret = new ListWrapper<UserRetObject>(list);
 		System.out.println("size list : " + list.size());
 		System.out.println("wrapper size list : " + ret.getItems().size());
+		return ret;
+
+	}
+
+	@Path("/from")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListWrapper<MessageRetObject> getMessagesFromUser() {
+
+		// List<MessageRetObject> list = User.getUserReceivedMessagesFrom(
+		// message.getSenderId(), message.getReceiverId());
+
+		System.out.println("/from");
+		List<MessageRetObject> list = User.getUserReceivedMessagesFrom(7, 4);
+
+		ListWrapper<MessageRetObject> ret = new ListWrapper<MessageRetObject>(
+				list);
 		return ret;
 
 	}

@@ -84,10 +84,19 @@ myApp.controller('signupCtrl', ['$scope', 'Page', 'SignupService', 'User', 'grow
 		}
 }]);
 
-myApp.controller('userCtrl', ['$scope', 'User',
-	function($scope, User){
+myApp.controller('userCtrl', ['$rootScope', '$scope', '$http', 'User',
+	function($rootScope, $scope, $http, User){
 		$scope.User = User;
-		//console.log("logged : " + User.IsLogged());
+		$http.get("/auctions/rest/User/get")
+			.success(function (response) {
+				console.log(response);
+				if (response.data.status == "nok") {
+					console.log("not a user.");
+				} else {
+					$scope.user = response.data;
+				}
+				
+			});
 }]);
 
 myApp.controller('homeCtrl', ['$scope', 'Page', 'User',
@@ -96,42 +105,52 @@ myApp.controller('homeCtrl', ['$scope', 'Page', 'User',
 		User.setUser("maenolis");
 		User.setIsLogged(true);
 		$scope.User = User;
-		//console.log("logged : " + User.IsLogged());
 }]);
 
 myApp.controller('auctionsCtrl', ['$scope', '$http', 'Page', 'User',
 	function ($scope, $http, Page, User) {
 		$scope.User = User;
 		Page.setTitle("auctions");
-		/*$http.get('jsons/auctions.json').success(function(data) {
-			console.log(data);
-			$scope.auctions = toArray(data);
-			console.log($scope.auctions);
-			dateCorrection($scope.auctions);
-			}*/
+		
 			
 		$http.get('/auctions/rest/test/auctions')
 			.then(function(response) {
 				console.log(response);
 				console.log(response.data.auctionRetObject[0].description);
 				$scope.auctions = response.data.auctionRetObject;
-				dateCorrection($scope.auctions);
+				dateCorrection($scope.auctions, "auction");
 			}, function(response){
 				console.log(response);
 			});
 		
+			$scope.openAuction = function (auction) {
+				console.log("openAuction worx");
+				console.log(auction);
+			}
+		
 	}
 ]);
 
-myApp.controller('messagesCtrl', ['$scope', '$http', 'Page', 'User',
-	function ($scope, $http, Page, User) {
+myApp.controller('messagesCtrl', ['$rootScope', '$scope', '$http', 'Page', 'User', '$location',
+	function ($rootScope, $scope, $http, Page, User, $location) {
 		$scope.User = User;
 		Page.setTitle("messages");
-		$http.get('jsons/messages.json').success(function(data) {
-				$scope.messages = toArray(data);
-				//dateCorrection($scope.messages);
-			}
-		);
+		
+		$http.get('/auctions/rest/Message/all')
+		.then(function(response) {
+				console.log("RESPONSE");
+				console.log(response);
+				$scope.messages = response.data.messageRetObject;
+				dateCorrection($scope.messages, "message");
+				console.log($scope.messages);
+			}, function(response){
+				console.log(response);
+			});
+		
+		$scope.reply = function (message) {
+			$rootScope.message = message;
+			$location.path("/message");
+		}
 	}
 ]);
 
@@ -198,11 +217,17 @@ myApp.controller('auctionCtrl', ['$scope', '$location', 'Page', 'User', function
 	$scope.User = User;
 }]);
 
-myApp.controller('messageCtrl', ['$scope', '$location', 'Page', 'User', function($scope, $location, Page, User){
+myApp.controller('messageCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User',
+		function($rootScope, $scope, $location, Page, User){
 	console.log("Message ctrl!");
 	Page.setTitle("Message");
 	$scope.User = User;
-	$scope.User.setUser("Manolis message")
+	$scope.User.setUser("Manolis message");
+	$scope.message = $rootScope.message;
+	$scope.send = function (message) {
+		console.log("send");
+		console.log(message);
+	}
 }]);
 
 myApp.controller('userPageCtrl', ['$scope', '$location', 'Page', 'User', function($scope, $location, Page, User){
@@ -226,15 +251,22 @@ function toArray(jsonObj) {
 	return array;
 }
 
-function dateCorrection(array) {
-	
-	var myDateArray = "2008-03-02 33:33:33".split(/[-: ]/);
+function dateCorrection(array, type) {
 	
 	var myDateArray;
-	for (var i in array) {
-		myDateArray = array[i].startTime.split(/[-: ]/);
-		array[i].startTime = new Date(myDateArray[2], myDateArray[1] - 1, myDateArray[0], myDateArray[3], myDateArray[4], myDateArray[5], 0);
-		myDateArray = array[i].endTime.split(/[-: ]/);
-		array[i].endTime = new Date(myDateArray[2], myDateArray[1] - 1, myDateArray[0], myDateArray[3], myDateArray[4], myDateArray[5], 0);
+	
+	if (type == "auction") {
+		for (var i in array) {
+			myDateArray = array[i].startTime.split(/[-: ]/);
+			array[i].startTime = new Date(myDateArray[2], myDateArray[1] - 1, myDateArray[0], myDateArray[3], myDateArray[4], myDateArray[5], 0);
+			myDateArray = array[i].endTime.split(/[-: ]/);
+			array[i].endTime = new Date(myDateArray[2], myDateArray[1] - 1, myDateArray[0], myDateArray[3], myDateArray[4], myDateArray[5], 0);
+		}
+	} else if (type == "message") {
+		for (var i in array) {
+			myDateArray = array[i].time.split(/[-: ]/);
+			array[i].time = new Date(myDateArray[2], myDateArray[1] - 1, myDateArray[0], myDateArray[3], myDateArray[4], myDateArray[5], 0);
+		}
 	}
+	
 }

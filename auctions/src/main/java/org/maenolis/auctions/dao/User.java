@@ -21,6 +21,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.MessageRetObject;
 import org.maenolis.auctions.services.retObj.UserRetObject;
 
 @Entity
@@ -117,6 +118,26 @@ public class User {
 		this.bids = bids;
 	}
 
+	public User(final UserRetObject user) {
+
+		if (user != null) {
+			this.id = user.getId();
+			this.username = user.getUsername();
+			this.firstName = user.getFirstName();
+			this.lastName = user.getLastName();
+			this.email = user.getEmail();
+			this.country = user.getCountry();
+			this.town = user.getTown();
+			this.address = user.getAddress();
+			this.telephone = user.getTelephone();
+			this.postalCode = user.getPostalCode();
+			this.taxRegistrationNumber = user.getTaxRegistrationNumber();
+			this.latitude = user.getLatitude();
+			this.longtitude = user.getLongtitude();
+		}
+
+	}
+
 	public User() {
 
 	}
@@ -174,16 +195,46 @@ public class User {
 
 	}
 
-	public static List<Message> getUserReceivedMessages(final int userid) {
+	public static List<MessageRetObject> getUserReceivedMessages(
+			final int userid) {
 		User user = getUser(userid);
-		List<Message> retList = new ArrayList<Message>();
+		List<MessageRetObject> retList = new ArrayList<MessageRetObject>();
 		if (user.getReceivedMessages() == null) {
 			return retList;
 		}
 		for (Object messageObj : user.getReceivedMessages().toArray()) {
-			retList.add((Message) messageObj);
+			retList.add(new MessageRetObject((Message) messageObj));
 		}
 		return retList;
+	}
+
+	public static List<MessageRetObject> getUserReceivedMessagesFrom(
+			final int senderId, final int receiverId) {
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx;
+		tx = session.beginTransaction();
+
+		String hql = "From Message Where senderId=:senderId and receiverId=:receiverId";
+		Query query = session.createQuery(hql)
+				.setParameter("senderId", senderId)
+				.setParameter("receiverId", receiverId);
+
+		@SuppressWarnings("unchecked")
+		List<Message> retMessages = query.list();
+		tx.commit();
+		session.close();
+		factory.close();
+
+		List<MessageRetObject> retList = new ArrayList<MessageRetObject>();
+		for (Message message : retMessages) {
+			retList.add(new MessageRetObject(message));
+		}
+		return retList;
+
 	}
 
 	public static List<Auction> getUserAuctions(final int userid) {
@@ -250,20 +301,23 @@ public class User {
 
 	public static UserRetObject transformToRetObject(final User user) {
 		UserRetObject ret = new UserRetObject();
-		ret.setAddress(user.getAddress());
-		ret.setConfirmed(user.isConfirmed());
-		ret.setCountry(user.getCountry());
-		ret.setEmail(user.getEmail());
-		ret.setFirstName(user.getFirstName());
-		ret.setId(user.getId());
-		ret.setLastName(user.getLastName());
-		ret.setLatitude(user.getLatitude());
-		ret.setLongtitude(user.getLongtitude());
-		ret.setPostalCode(user.getPostalCode());
-		ret.setTaxRegistrationNumber(user.getTaxRegistrationNumber());
-		ret.setTelephone(user.getTelephone());
-		ret.setTown(user.getTown());
-		ret.setUsername(user.getUsername());
+		if (user != null) {
+			ret.setAddress(user.getAddress());
+			ret.setConfirmed(user.isConfirmed());
+			ret.setCountry(user.getCountry());
+			ret.setEmail(user.getEmail());
+			ret.setFirstName(user.getFirstName());
+			ret.setId(user.getId());
+			ret.setLastName(user.getLastName());
+			ret.setLatitude(user.getLatitude());
+			ret.setLongtitude(user.getLongtitude());
+			ret.setPostalCode(user.getPostalCode());
+			ret.setTaxRegistrationNumber(user.getTaxRegistrationNumber());
+			ret.setTelephone(user.getTelephone());
+			ret.setTown(user.getTown());
+			ret.setUsername(user.getUsername());
+			ret.setStatus(PropertyProvider.OK);
+		}
 		return ret;
 	}
 

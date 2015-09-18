@@ -33,6 +33,8 @@ public class UserRetObject {
 
 	private boolean confirmed;
 
+	private String status;
+
 	public UserRetObject(final int id, final String username,
 			final String firstName, final String lastName, final String email,
 			final String country, final String town, final String address,
@@ -205,6 +207,14 @@ public class UserRetObject {
 		builder.append(confirmed);
 		builder.append("]");
 		return builder.toString();
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(final String status) {
+		this.status = status;
 	}
 
 }

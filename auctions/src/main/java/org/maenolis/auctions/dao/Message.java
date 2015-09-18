@@ -33,11 +33,11 @@ public class Message {
 	private String time;
 
 	@ManyToOne
-	@JoinColumn(name = "sender_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "senderId", referencedColumnName = "id", nullable = false)
 	private User sender;
 
 	@ManyToOne
-	@JoinColumn(name = "receiver_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "receiverId", referencedColumnName = "id", nullable = false)
 	private User receiver;
 
 	public Message(final int id, final String messageText, final String time,
@@ -51,13 +51,14 @@ public class Message {
 	}
 
 	public Message(final MessageRetObject message) {
-		super();
-		this.messageText = message.getMessageText();
-		this.receiver = User.getUser(message.getReceiverId());
-		this.sender = User.getUser(message.getSenderId());
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		this.time = sdf.format(cal.getTime());
+		if (message != null) {
+			this.messageText = message.getMessageText();
+			this.receiver = User.getUser(message.getReceiverId());
+			this.sender = User.getUser(message.getSenderId());
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			this.time = sdf.format(cal.getTime());
+		}
 	}
 
 	public Message() {
@@ -86,16 +87,18 @@ public class Message {
 
 	public static MessageRetObject transformToRetObject(final Message message) {
 		MessageRetObject ret = new MessageRetObject();
-		ret.setId(message.getId());
-		ret.setMessageText(message.getMessageText());
-		ret.setReceiverId(message.getReceiver().getId());
-		ret.setReceiverName(message.getReceiver().getFirstName() + " "
-				+ message.getReceiver().getLastName());
-		ret.setSenderId(message.getSender().getId());
-		ret.setSenderName(message.getSender().getFirstName() + " "
-				+ message.getSender().getLastName());
-		ret.setStatus(PropertyProvider.OK);
-		ret.setTime(message.getTime());
+		if (message != null) {
+			ret.setId(message.getId());
+			ret.setMessageText(message.getMessageText());
+			ret.setReceiverId(message.getReceiver().getId());
+			ret.setReceiverName(message.getReceiver().getFirstName() + " "
+					+ message.getReceiver().getLastName());
+			ret.setSenderId(message.getSender().getId());
+			ret.setSenderName(message.getSender().getFirstName() + " "
+					+ message.getSender().getLastName());
+			ret.setStatus(PropertyProvider.OK);
+			ret.setTime(message.getTime());
+		}
 		return ret;
 
 	}
