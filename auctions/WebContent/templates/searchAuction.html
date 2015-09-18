@@ -1,0 +1,35 @@
+<div class="container">
+	<h1>search Auction template</h1>
+</div>
+
+<div data-ng-include data-src="'templates/header.html'"></div>
+
+
+<div class="container">
+	<form class="form-search-auction" ng-submit="searchAuction()" ng-controller="auctionCtrl">
+		<h2 class="form-search-auction-heading">Please enter your criteria</h2>
+		<label for="product-name" class="sr-only">product-name</label>
+			<input ng-model="searchProductName" type="text" id="searchProductName" class="form-control" placeholder="Product name" autofocus>
+		<label for="category" class="sr-only">categories</label>
+			<input ng-model="searchCategories" type="text" id="searchCategories" class="form-control" placeholder="Categories (separate with comma)" autofocus>
+		<label for="searchBuyPriceLow" class="sr-only">buy-price from</label>
+			<input ng-model="searchBuyPriceLow" type="text" id="searchBuyPriceLow" class="form-control" placeholder="Buy-price from" autofocus>
+		<label for="searchBuyPriceHigh" class="sr-only">buy-price to</label>
+			<input ng-model="searchBuyPriceHigh" type="text" id="searchBuyPriceHigh" class="form-control" placeholder="Buy-price to" autofocus>
+		<label for="searchFirstBidLow" class="sr-only">first-bid from</label>
+			<input ng-model="searchFirstBidLow" type="text" id="searchFirstBidLow" class="form-control" placeholder="First bid from" autofocus>
+		<label for="searchFirstBidHigh" class="sr-only">first-bid to</label>
+			<input ng-model="searchFirstBidHigh" type="text" id="searchFirstBidHigh" class="form-control" placeholder="First bid to" autofocus>
+		<label for="searchDescription" class="sr-only">description</label>
+			<input ng-model="searchDescription" id="searchDescription" class="form-control" placeholder="Description" autofocus></input>
+		<label for="searchTown" class="sr-only">Town</label>
+			<input ng-model="searchTown" id="searchTown" class="form-control" placeholder="Town" autofocus></input>
+		<label for="searchCountry" class="sr-only">Country</label>
+			<input ng-model="searchCountry" id="searchCountry" class="form-control" placeholder="Country" autofocus></input>
+		<div class="container col-md-1">
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+		</div>
+	</form>
+
+</div>
+	<!-- /container -->

@@ -114,16 +114,25 @@ myApp.controller('auctionsCtrl', ['$rootScope', '$scope', '$http', '$location', 
 		$scope.User = User;
 		Page.setTitle("auctions");
 		
-			
-		$http.get('/auctions/rest/test/auctions')
+		if ($rootScope.search && $rootScope.searched && $rootScope.searched == true) {
+			$http.post('/auctions/rest/Auction/search', $rootScope.search).success(function (response) {
+				console.log(response);
+				$scope.auctions = response.auctionRetObject;
+				dateCorrection($scope.auctions, "auction");
+			});
+			$rootScope.search = {};
+			$rootScope.searched = false;
+		} else {
+			$http.get('/auctions/rest/Auction/all')
 			.then(function(response) {
 				console.log(response);
-				console.log(response.data.auctionRetObject[0].description);
 				$scope.auctions = response.data.auctionRetObject;
 				dateCorrection($scope.auctions, "auction");
 			}, function(response){
 				console.log(response);
 			});
+		}
+		
 		
 			$scope.openAuction = function (auction) {
 				console.log("openAuction worx");
@@ -215,15 +224,116 @@ myApp.controller('getClassCtrl', ['$scope', '$location', 'Page', function($scope
 	}
 }]);
 
-myApp.controller('auctionCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User',
-		function($rootScope, $scope, $location, Page, User){
+myApp.controller('auctionCtrl', ['$rootScope', '$scope', '$location', '$http', 'Page', 'User', 'growl',
+		function($rootScope, $scope, $location, $http, Page, User, growl){
 			console.log("Auction ctrl!");
 			Page.setTitle("Auction");
-			$scope.User = User;
+			
 			$scope.auction = $rootScope.auction;
-			$scope.bid = function (auction) {
+			$scope.map = { center: { latitude: 38, longitude: 23 }, zoom: 12 };
+				$scope.marker = {
+				id: 0,
+				coords: {
+					latitude: auction.lat,
+					longitude: auction.lon
+				},
+				options: { draggable: true },
+				events: {
+					dragend: function (marker, eventName, args) {
+						$log.log('marker dragend');
+						var lat = marker.getPosition().lat();
+						var lon = marker.getPosition().lng();
+						$log.log(lat);
+						$log.log(lon);
+
+						$scope.marker.options = {
+							draggable: true,
+							labelContent: "lat: " + $scope.marker.coords.latitude + ' ' + 'lon: ' + $scope.marker.coords.longitude,
+							labelAnchor: "100 0",
+							labelClass: "marker-labels"
+						};
+					}
+				}
+			};
+			$scope.newBid = function (auction) {
 				console.log("bid worx.");
 				console.log(auction);
+			}
+			$http.post('/auctions/rest/Bid/bids', $scope.auction).success(function (response) {
+				console.log(response);
+				$scope.bids = response.bidRetObject;
+				dateCorrection($scope.bids, "bid");
+			});
+			
+			$scope.searchAuction = function() {
+				var search = {};
+				search.productName = $scope.searchProductName;
+				search.categories = $scope.searchCategories;
+				search.buyPriceLow = $scope.searchBuyPriceLow;
+				search.buyPriceHigh = $scope.searchBuyPriceHigh;
+				search.firstBidLow = $scope.searchFirstBidLow;
+				search.firstBidHigh = $scope.searchFirstBidHigh;
+				search.description = $scope.searchDescription;
+				search.town = $scope.searchTown;
+				search.country = $scope.searchCountry;
+				
+				var correct = true;
+				if (search.buyPriceLow < 0) {
+					$scope.searchBuyPriceLow = "";
+					growl.info("searchBuyPriceLow must be positive.", {title: "form check!"});
+				}
+				if (search.buyPriceHigh < 0) {
+					$scope.searchBuyPriceHigh = "";
+					growl.info("searchBuyPriceHigh must be positive.", {title: "form check!"});
+				}
+				if (search.buyPriceHigh < search.buyPriceLow) {
+					$scope.searchBuyPriceHigh = "";
+					$scope.searchBuyPriceLow = "";
+					growl.info("searchBuyPriceHigh must be greater than searchBuyPriceLow.", {title: "form check!"});
+				}
+				
+				if (search.firstBidLow < 0) {
+					$scope.searchFirstBidLow = "";
+					growl.info("searchFirstBidLow must be positive.", {title: "form check!"});
+				}
+				if (search.firstBidHigh < 0) {
+					$scope.searchFirstBidHigh = "";
+					growl.info("searchFirstBidHigh must be positive.", {title: "form check!"});
+				}
+				if (search.firstBidHigh < search.firstBidLow) {
+					$scope.searchFirstBidHigh = "";
+					$scope.searchFirstBidLow = "";
+					growl.info("searchFirstBidHigh must be greater than searchFirstBidLow.", {title: "form check!"});
+				}
+				
+				if (!search.buyPriceLow) {
+					search.buyPriceLow = -1.0;
+				}
+				if (!search.buyPriceHigh) {
+					search.buyPriceHigh = -1.0;
+				}
+				if (!search.firstBidLow) {
+					search.firstBidLow = -1.0;
+				}
+				if (!search.firstBidHigh) {
+					search.firstBidHigh = -1.0;
+				}
+				
+				if (correct) {
+					$rootScope.search = search;
+					$rootScope.searched = true;
+					$location.path('/auctions');
+					
+					$scope.searchProductName = "";
+					$scope.searchCategories = "";
+					$scope.searchBuyPriceLow = "";
+					$scope.searchBuyPriceHigh = "";
+					$scope.searchFirstBidLow = "";
+					$scope.searchFirstBidHigh = "";
+					$scope.searchDescription = "";
+					$scope.searchTown = "";
+					$scope.searchCountry = "";
+				}
 			}
 }]);
 
@@ -272,7 +382,7 @@ function dateCorrection(array, type) {
 			myDateArray = array[i].endTime.split(/[-: ]/);
 			array[i].endTime = new Date(myDateArray[2], myDateArray[1] - 1, myDateArray[0], myDateArray[3], myDateArray[4], myDateArray[5], 0);
 		}
-	} else if (type == "message") {
+	} else if (type == "message" || type == "bid") {
 		for (var i in array) {
 			myDateArray = array[i].time.split(/[-: ]/);
 			array[i].time = new Date(myDateArray[2], myDateArray[1] - 1, myDateArray[0], myDateArray[3], myDateArray[4], myDateArray[5], 0);

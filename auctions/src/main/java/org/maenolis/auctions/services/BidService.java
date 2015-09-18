@@ -1,8 +1,10 @@
 package org.maenolis.auctions.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -55,13 +57,20 @@ public class BidService {
 	@Path("/bids")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public ListWrapper<BidRetObject> getBidsForAuction(
 			final AuctionRetObject auction,
 			@Context final HttpServletRequest request) {
 
-		List<BidRetObject> list = Auction.getBids(auction.getId());
+		ListWrapper<BidRetObject> ret = null;
+		if (auction != null) {
+			List<BidRetObject> list = Auction.getBids(auction.getId());
+			ret = new ListWrapper<BidRetObject>(list);
+			return ret;
+		} else {
+			ret = new ListWrapper<BidRetObject>(new ArrayList<BidRetObject>());
+		}
 
-		ListWrapper<BidRetObject> ret = new ListWrapper<BidRetObject>(list);
 		return ret;
 
 	}

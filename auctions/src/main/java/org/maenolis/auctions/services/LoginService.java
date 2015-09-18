@@ -33,7 +33,6 @@ public class LoginService {
 				User.encryptSHA256(user.getPassword()))) {
 			User retUser = new User();
 			retUser.setUsername(confirmedUser.getUsername());
-			// retUser.setSessionId(request.getSession().getId());
 
 			loginRetObject.setStatus(PropertyProvider.OK);
 			loginRetObject.setUsername(confirmedUser.getUsername());

@@ -24,6 +24,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
+import org.maenolis.auctions.services.retObj.AuctionSearchObject;
 import org.maenolis.auctions.services.retObj.BidRetObject;
 
 @Entity(name = "Auction")
@@ -140,6 +141,8 @@ public class Auction {
 					+ auction.getOwner().getLastName());
 			ret.setProductName(auction.getProductName());
 			ret.setStartTime(auction.getStartTime());
+			ret.setLat(auction.getOwner().getLatitude());
+			ret.setLon(auction.getOwner().getLongtitude());
 			ret.setStatus(PropertyProvider.OK);
 			if (auction.getCurrentBid() != null) {
 				ret.setCurrentBid(auction.getCurrentBid().getAmmount());
@@ -175,6 +178,83 @@ public class Auction {
 		for (Bid bid : auction.getBids()) {
 			retList.add(Bid.transformToRetObject(bid));
 		}
+		return retList;
+	}
+
+	public static List<AuctionRetObject> searchAuctions(
+			final AuctionSearchObject search) {
+
+		List<AuctionRetObject> retList = new ArrayList<AuctionRetObject>();
+		if (search == null) {
+			return retList;
+		}
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx;
+		tx = session.beginTransaction();
+
+		String hql = "From Auction ";
+
+		Query query = session.createQuery(hql);
+		@SuppressWarnings("unchecked")
+		List<Auction> retAuctions = query.list();
+		tx.commit();
+		session.close();
+		factory.close();
+
+		for (Auction auction : retAuctions) {
+			boolean metCriteria = true;
+			if (search.getBuyPriceHigh() != -1.0f
+					&& search.getBuyPriceLow() != -1.0f) {
+				metCriteria = auction.getBuyPrice() < search.getBuyPriceHigh()
+						&& auction.getBuyPrice() > search.getBuyPriceLow();
+			}
+			if (metCriteria && search.getCategories() != null) {
+				String[] auctionCategories = auction.getCategories().split(",");
+				String[] searchCategories = search.getCategories().split(",");
+				for (String searchCategory : searchCategories) {
+					boolean contain = false;
+					for (String auctionCategory : auctionCategories) {
+						if (auctionCategory.equalsIgnoreCase(searchCategory)) {
+							contain = true;
+							break;
+						}
+					}
+					if (!contain) {
+						metCriteria = false;
+						break;
+					}
+				}
+			}
+			if (metCriteria && search.getCountry() != null) {
+				metCriteria = auction.getOwner().getCountry()
+						.contains(search.getCountry());
+			}
+			if (metCriteria && search.getDescription() != null) {
+				metCriteria = auction.getDescription().contains(
+						search.getDescription());
+			}
+			if (metCriteria && search.getFirstBidHigh() != -1.0f
+					&& search.getFirstBidLow() != -1.0f) {
+				metCriteria = auction.getFirstBid() < search.getFirstBidHigh()
+						&& auction.getFirstBid() > search.getFirstBidLow();
+			}
+			if (metCriteria && search.getProductName() != null) {
+				metCriteria = auction.getProductName().contains(
+						search.getProductName());
+			}
+			if (metCriteria && search.getTown() != null) {
+				metCriteria = auction.getOwner().getTown()
+						.contains(search.getTown());
+			}
+			if (metCriteria) {
+				retList.add(Auction.transformToRetObject(auction));
+			}
+		}
+
 		return retList;
 	}
 

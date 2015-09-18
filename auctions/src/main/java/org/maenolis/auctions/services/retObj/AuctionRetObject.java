@@ -32,12 +32,16 @@ public class AuctionRetObject {
 
 	private String description;
 
+	private float lat;
+
+	private float lon;
+
 	public AuctionRetObject(final String status, final int id,
 			final int ownerId, final String ownerName,
 			final String productName, final List<String> categories,
 			final float buyPrice, final float firstBid, final float currentBid,
 			final String startTime, final String endTime,
-			final String description) {
+			final String description, final float lat, final float lon) {
 		super();
 		this.status = status;
 		this.id = id;
@@ -51,6 +55,8 @@ public class AuctionRetObject {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.description = description;
+		this.lat = lat;
+		this.lon = lon;
 	}
 
 	public AuctionRetObject() {
@@ -154,6 +160,22 @@ public class AuctionRetObject {
 		this.currentBid = currentBid;
 	}
 
+	public float getLat() {
+		return lat;
+	}
+
+	public void setLat(final float lat) {
+		this.lat = lat;
+	}
+
+	public float getLon() {
+		return lon;
+	}
+
+	public void setLon(final float lon) {
+		this.lon = lon;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -181,6 +203,10 @@ public class AuctionRetObject {
 		builder.append(endTime);
 		builder.append(", description=");
 		builder.append(description);
+		builder.append(", lat=");
+		builder.append(lat);
+		builder.append(", lon=");
+		builder.append(lon);
 		builder.append("]");
 		return builder.toString();
 	}

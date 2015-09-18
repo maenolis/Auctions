@@ -1,7 +1,10 @@
 package org.maenolis.auctions.services;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -15,9 +18,37 @@ import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.Auction;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
+import org.maenolis.auctions.services.retObj.AuctionSearchObject;
+import org.maenolis.auctions.services.wrapper.ListWrapper;
 
 @Path("/Auction")
 public class AuctionService {
+
+	@Path("/all")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListWrapper<AuctionRetObject> getterAuctions() {
+
+		List<AuctionRetObject> list = Auction.getAllAuctions();
+		ListWrapper<AuctionRetObject> ret = new ListWrapper<AuctionRetObject>(
+				list);
+		return ret;
+
+	}
+
+	@Path("/search")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListWrapper<AuctionRetObject> searchAuctions(
+			final AuctionSearchObject search) {
+
+		List<AuctionRetObject> list = Auction.searchAuctions(search);
+		ListWrapper<AuctionRetObject> ret = new ListWrapper<AuctionRetObject>(
+				list);
+		return ret;
+
+	}
 
 	@Path("/new")
 	@POST

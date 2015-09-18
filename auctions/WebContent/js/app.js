@@ -5,7 +5,8 @@ var myApp = angular
 		'ngRoute',
 		'ngCookies',
 		'angular-growl',
-		'appCtrls'
+		'appCtrls',
+		'uiGmapgoogle-maps'
 	]).config(['$routeProvider', 'growlProvider',
 	function($routeProvider, growlProvider) {
 		$routeProvider.
@@ -44,6 +45,10 @@ var myApp = angular
 				templateUrl: 'templates/auction.html',
 				controller: 'auctionCtrl'
 			}).
+			when('/searchAuction', {
+				templateUrl: 'templates/searchAuction.html',
+				controller: 'auctionCtrl'
+			}).
 			when('/user', {
 				templateUrl: 'templates/user.html',
 				controller: 'userPageCtrl'
@@ -62,7 +67,7 @@ myApp.factory('Page', function () {
 	}
 });
 
-myApp.factory('User', function () {
+myApp.factory('User', function ($http) {
 	var user = 'no user';
 	var isLogged = false;
 	return {
@@ -71,7 +76,17 @@ myApp.factory('User', function () {
 		isLogged: function () { /*console.log("isLogged " + isLogged);*/ return isLogged; },
 		setIsLogged: function (newValue) { /*console.log("setIsLogged " + newValue);*/ isLogged = newValue; },
 		clear: function () { /*console.log("clear ");*/ user = 'no user';isLogged = false; },
-		name: function () { /*console.log("name " + user);*/ return user; }
+		name: function () { /*console.log("name " + user);*/ return user; },
+		userId: function () {
+			$http.get('/auctions/rest/User/get').success(function (response) {
+				console.log(response);
+				if (response.status == "ok") {
+					return response.id;
+				} else {
+					return -1;
+				}
+			});
+		}
 	}
 });
 
