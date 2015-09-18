@@ -2,39 +2,89 @@ package org.maenolis.auctions.services.retObj;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * The Class UserRetObject.
+ */
 @XmlRootElement
 public class UserRetObject {
 
+	/** The id. */
 	private int id;
 
+	/** The username. */
 	private String username;
 
+	/** The first name. */
 	private String firstName;
 
+	/** The last name. */
 	private String lastName;
 
+	/** The email. */
 	private String email;
 
+	/** The country. */
 	private String country;
 
+	/** The town. */
 	private String town;
 
+	/** The address. */
 	private String address;
 
+	/** The telephone. */
 	private String telephone;
 
+	/** The postal code. */
 	private String postalCode;
 
+	/** The tax registration number. */
 	private String taxRegistrationNumber;
 
+	/** The latitude. */
 	private float latitude;
 
+	/** The longtitude. */
 	private float longtitude;
 
+	/** The confirmed. */
 	private boolean confirmed;
 
+	/** The status. */
 	private String status;
 
+	/**
+	 * Instantiates a new user ret object.
+	 *
+	 * @param id
+	 *            the id
+	 * @param username
+	 *            the username
+	 * @param firstName
+	 *            the first name
+	 * @param lastName
+	 *            the last name
+	 * @param email
+	 *            the email
+	 * @param country
+	 *            the country
+	 * @param town
+	 *            the town
+	 * @param address
+	 *            the address
+	 * @param telephone
+	 *            the telephone
+	 * @param postalCode
+	 *            the postal code
+	 * @param taxRegistrationNumber
+	 *            the tax registration number
+	 * @param latitude
+	 *            the latitude
+	 * @param longtitude
+	 *            the longtitude
+	 * @param confirmed
+	 *            the confirmed
+	 */
 	public UserRetObject(final int id, final String username,
 			final String firstName, final String lastName, final String email,
 			final String country, final String town, final String address,
@@ -58,6 +108,9 @@ public class UserRetObject {
 		this.confirmed = confirmed;
 	}
 
+	/**
+	 * Instantiates a new user ret object.
+	 */
 	public UserRetObject() {
 		super();
 	}
@@ -174,6 +227,11 @@ public class UserRetObject {
 		this.confirmed = confirmed;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

@@ -2,27 +2,61 @@ package org.maenolis.auctions.services.retObj;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * The Class AuctionSearchObject.
+ */
 @XmlRootElement
 public class AuctionSearchObject {
 
+	/** The product name. */
 	private String productName;
 
+	/** The categories. */
 	private String categories;
 
+	/** The buy price low. */
 	private float buyPriceLow;
 
+	/** The buy price high. */
 	private float buyPriceHigh;
 
+	/** The first bid low. */
 	private float firstBidLow;
 
+	/** The first bid high. */
 	private float firstBidHigh;
 
+	/** The description. */
 	private String description;
 
+	/** The town. */
 	private String town;
 
+	/** The country. */
 	private String country;
 
+	/**
+	 * Instantiates a new auction search object.
+	 *
+	 * @param productName
+	 *            the product name
+	 * @param categories
+	 *            the categories
+	 * @param buyPriceLow
+	 *            the buy price low
+	 * @param buyPriceHigh
+	 *            the buy price high
+	 * @param firstBidLow
+	 *            the first bid low
+	 * @param firstBidHigh
+	 *            the first bid high
+	 * @param description
+	 *            the description
+	 * @param town
+	 *            the town
+	 * @param country
+	 *            the country
+	 */
 	public AuctionSearchObject(final String productName,
 			final String categories, final float buyPriceLow,
 			final float buyPriceHigh, final float firstBidLow,
@@ -40,6 +74,9 @@ public class AuctionSearchObject {
 		this.country = country;
 	}
 
+	/**
+	 * Instantiates a new auction search object.
+	 */
 	public AuctionSearchObject() {
 		super();
 	}
@@ -116,6 +153,11 @@ public class AuctionSearchObject {
 		this.country = country;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

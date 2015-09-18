@@ -17,9 +17,17 @@ import org.maenolis.auctions.services.retObj.MessageRetObject;
 import org.maenolis.auctions.services.retObj.UserRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
 
+/**
+ * The Class JerseyTests.
+ */
 @Path("/test")
-public class JerseyTesty {
+public class JerseyTests {
 
+	/**
+	 * Gets the auctions.
+	 *
+	 * @return the auctions
+	 */
 	@Path("/auctions")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -32,6 +40,11 @@ public class JerseyTesty {
 
 	}
 
+	/**
+	 * Gets the messages.
+	 *
+	 * @return the messages
+	 */
 	@Path("/messages")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -45,6 +58,11 @@ public class JerseyTesty {
 
 	}
 
+	/**
+	 * Gets the users.
+	 *
+	 * @return the users
+	 */
 	@Path("/users")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -76,6 +94,15 @@ public class JerseyTesty {
 
 	}
 
+	/**
+	 * Gets the bids for auction.
+	 *
+	 * @param auction
+	 *            the auction
+	 * @param request
+	 *            the request
+	 * @return the bids for auction
+	 */
 	@Path("/bids")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

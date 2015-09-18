@@ -27,45 +27,81 @@ import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.AuctionSearchObject;
 import org.maenolis.auctions.services.retObj.BidRetObject;
 
+/**
+ * The Class Auction.
+ */
 @Entity(name = "Auction")
 public class Auction {
 
+	/** The id. */
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
 	private int id;
 
+	/** The alive. */
 	@Column(name = "alive")
 	private boolean alive;
 
+	/** The product name. */
 	@Column(name = "productName")
 	private String productName;
 
+	/** The categories. */
 	@Column(name = "Categories")
 	private String categories;
 
+	/** The buy price. */
 	@Column(name = "buyPrice")
 	private float buyPrice;
 
+	/** The first bid. */
 	@Column(name = "firstBid")
 	private float firstBid;
 
+	/** The start time. */
 	@Column(name = "startTime")
 	private String startTime;
 
+	/** The end time. */
 	@Column(name = "endTime")
 	private String endTime;
 
+	/** The description. */
 	@Column(name = "description")
 	private String description;
 
+	/** The owner. */
 	@ManyToOne
 	@JoinColumn(name = "owner", referencedColumnName = "id", nullable = false)
 	private User owner;
 
+	/** The bids. */
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "auction")
 	private Set<Bid> bids;
 
+	/**
+	 * Instantiates a new auction.
+	 *
+	 * @param id
+	 *            the id
+	 * @param productName
+	 *            the product name
+	 * @param categories
+	 *            the categories
+	 * @param buyPrice
+	 *            the buy price
+	 * @param firstBid
+	 *            the first bid
+	 * @param startTime
+	 *            the start time
+	 * @param endTime
+	 *            the end time
+	 * @param description
+	 *            the description
+	 * @param owner
+	 *            the owner
+	 */
 	public Auction(final int id, final String productName,
 			final String categories, final float buyPrice,
 			final float firstBid, final String startTime, final String endTime,
@@ -83,10 +119,19 @@ public class Auction {
 		this.alive = true;
 	}
 
+	/**
+	 * Instantiates a new auction.
+	 */
 	public Auction() {
 
 	}
 
+	/**
+	 * Instantiates a new auction.
+	 *
+	 * @param auction
+	 *            the auction
+	 */
 	public Auction(final AuctionRetObject auction) {
 		if (auction != null) {
 			this.id = auction.getId();
@@ -107,6 +152,13 @@ public class Auction {
 		}
 	}
 
+	/**
+	 * Gets the auction.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the auction
+	 */
 	public static Auction getAuction(final int id) {
 
 		@SuppressWarnings("deprecation")
@@ -127,6 +179,13 @@ public class Auction {
 		return retAuction;
 	}
 
+	/**
+	 * Transform to ret object.
+	 *
+	 * @param auction
+	 *            the auction
+	 * @return the auction ret object
+	 */
 	public static AuctionRetObject transformToRetObject(final Auction auction) {
 		AuctionRetObject ret = new AuctionRetObject();
 		if (auction != null) {
@@ -151,6 +210,11 @@ public class Auction {
 		return ret;
 	}
 
+	/**
+	 * Gets the all auctions.
+	 *
+	 * @return the all auctions
+	 */
 	public static List<AuctionRetObject> getAllAuctions() {
 		List<AuctionRetObject> retList = new ArrayList<AuctionRetObject>();
 
@@ -162,8 +226,10 @@ public class Auction {
 		String hql = "From Auction";
 		Query query = session.createQuery(hql);
 
-		for (Object obj : query.list()) {
-			retList.add(transformToRetObject((Auction) obj));
+		if (query.list() != null) {
+			for (Object obj : query.list()) {
+				retList.add(transformToRetObject((Auction) obj));
+			}
 		}
 
 		session.close();
@@ -172,15 +238,32 @@ public class Auction {
 		return retList;
 	}
 
+	/**
+	 * Gets the bids.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the bids
+	 */
 	public static List<BidRetObject> getBids(final int id) {
 		Auction auction = Auction.getAuction(id);
 		List<BidRetObject> retList = new ArrayList<BidRetObject>();
-		for (Bid bid : auction.getBids()) {
-			retList.add(Bid.transformToRetObject(bid));
+		if (auction.getBids() != null) {
+			for (Bid bid : auction.getBids()) {
+				retList.add(Bid.transformToRetObject(bid));
+			}
 		}
+
 		return retList;
 	}
 
+	/**
+	 * Search auctions.
+	 *
+	 * @param search
+	 *            the search
+	 * @return the list
+	 */
 	public static List<AuctionRetObject> searchAuctions(
 			final AuctionSearchObject search) {
 
@@ -204,6 +287,10 @@ public class Auction {
 		tx.commit();
 		session.close();
 		factory.close();
+
+		if (retAuctions == null) {
+			return retList;
+		}
 
 		for (Auction auction : retAuctions) {
 			boolean metCriteria = true;
@@ -258,86 +345,201 @@ public class Auction {
 		return retList;
 	}
 
+	/**
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Sets the id.
+	 *
+	 * @param id
+	 *            the new id
+	 */
 	public void setId(final int id) {
 		this.id = id;
 	}
 
+	/**
+	 * Gets the product name.
+	 *
+	 * @return the product name
+	 */
 	public String getProductName() {
 		return productName;
 	}
 
+	/**
+	 * Sets the product name.
+	 *
+	 * @param productName
+	 *            the new product name
+	 */
 	public void setProductName(final String productName) {
 		this.productName = productName;
 	}
 
+	/**
+	 * Gets the categories.
+	 *
+	 * @return the categories
+	 */
 	public String getCategories() {
 		return categories;
 	}
 
+	/**
+	 * Sets the categories.
+	 *
+	 * @param categories
+	 *            the new categories
+	 */
 	public void setCategories(final String categories) {
 		this.categories = categories;
 	}
 
+	/**
+	 * Gets the buy price.
+	 *
+	 * @return the buy price
+	 */
 	public float getBuyPrice() {
 		return buyPrice;
 	}
 
+	/**
+	 * Sets the buy price.
+	 *
+	 * @param buyPrice
+	 *            the new buy price
+	 */
 	public void setBuyPrice(final float buyPrice) {
 		this.buyPrice = buyPrice;
 	}
 
+	/**
+	 * Gets the first bid.
+	 *
+	 * @return the first bid
+	 */
 	public float getFirstBid() {
 		return firstBid;
 	}
 
+	/**
+	 * Sets the first bid.
+	 *
+	 * @param firstBid
+	 *            the new first bid
+	 */
 	public void setFirstBid(final float firstBid) {
 		this.firstBid = firstBid;
 	}
 
+	/**
+	 * Gets the start time.
+	 *
+	 * @return the start time
+	 */
 	public String getStartTime() {
 		return startTime;
 	}
 
+	/**
+	 * Sets the start time.
+	 *
+	 * @param startTime
+	 *            the new start time
+	 */
 	public void setStartTime(final String startTime) {
 		this.startTime = startTime;
 	}
 
+	/**
+	 * Gets the end time.
+	 *
+	 * @return the end time
+	 */
 	public String getEndTime() {
 		return endTime;
 	}
 
+	/**
+	 * Sets the end time.
+	 *
+	 * @param endTime
+	 *            the new end time
+	 */
 	public void setEndTime(final String endTime) {
 		this.endTime = endTime;
 	}
 
+	/**
+	 * Gets the description.
+	 *
+	 * @return the description
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Sets the description.
+	 *
+	 * @param description
+	 *            the new description
+	 */
 	public void setDescription(final String description) {
 		this.description = description;
 	}
 
+	/**
+	 * Gets the owner.
+	 *
+	 * @return the owner
+	 */
 	public User getOwner() {
 		return owner;
 	}
 
+	/**
+	 * Sets the owner.
+	 *
+	 * @param owner
+	 *            the new owner
+	 */
 	public void setOwner(final User owner) {
 		this.owner = owner;
 	}
 
+	/**
+	 * Gets the bids.
+	 *
+	 * @return the bids
+	 */
 	public Set<Bid> getBids() {
 		return bids;
 	}
 
+	/**
+	 * Sets the bids.
+	 *
+	 * @param bids
+	 *            the new bids
+	 */
 	public void setBids(final Set<Bid> bids) {
 		this.bids = bids;
 	}
 
+	/**
+	 * Checks if is alive.
+	 *
+	 * @return true, if is alive
+	 */
 	public boolean isAlive() {
 
 		Calendar cal = Calendar.getInstance();
@@ -351,10 +553,21 @@ public class Auction {
 		return alive && isPassed;
 	}
 
+	/**
+	 * Sets the alive.
+	 *
+	 * @param alive
+	 *            the new alive
+	 */
 	public void setAlive(final boolean alive) {
 		this.alive = alive;
 	}
 
+	/**
+	 * Gets the current bid.
+	 *
+	 * @return the current bid
+	 */
 	public Bid getCurrentBid() {
 		if (getBids() != null && getBids().toArray().length > 0) {
 			Arrays.sort(getBids().toArray());
@@ -363,6 +576,11 @@ public class Auction {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

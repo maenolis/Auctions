@@ -18,28 +18,50 @@ import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.BidRetObject;
 
+/**
+ * The Class Bid.
+ */
 @Entity(name = "Bid")
 public class Bid implements Comparable<Bid> {
 
+	/** The id. */
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
 	private int id;
 
+	/** The bidder. */
 	@ManyToOne
 	@JoinColumn(name = "bidderId", referencedColumnName = "id", nullable = false)
 	private User bidder;
 
+	/** The auction. */
 	@ManyToOne
 	@JoinColumn(name = "auctionId", referencedColumnName = "id", nullable = false)
 	private Auction auction;
 
+	/** The time. */
 	@Column(name = "time")
 	private String time;
 
+	/** The ammount. */
 	@Column(name = "ammount")
 	private float ammount;
 
+	/**
+	 * Instantiates a new bid.
+	 *
+	 * @param id
+	 *            the id
+	 * @param bidder
+	 *            the bidder
+	 * @param auction
+	 *            the auction
+	 * @param time
+	 *            the time
+	 * @param ammount
+	 *            the ammount
+	 */
 	public Bid(final int id, final User bidder, final Auction auction,
 			final String time, final float ammount) {
 		super();
@@ -50,10 +72,20 @@ public class Bid implements Comparable<Bid> {
 		this.ammount = ammount;
 	}
 
+	/**
+	 * Instantiates a new bid.
+	 */
 	public Bid() {
 
 	}
 
+	/**
+	 * Gets the bid.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the bid
+	 */
 	public static Bid getBid(final int id) {
 
 		@SuppressWarnings("deprecation")
@@ -74,6 +106,13 @@ public class Bid implements Comparable<Bid> {
 		return retBid;
 	}
 
+	/**
+	 * Transform to ret object.
+	 *
+	 * @param bid
+	 *            the bid
+	 * @return the bid ret object
+	 */
 	public static BidRetObject transformToRetObject(final Bid bid) {
 		BidRetObject ret = new BidRetObject();
 		if (bid != null) {
@@ -129,6 +168,11 @@ public class Bid implements Comparable<Bid> {
 		this.auction = auction;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
 	@Override
 	public int compareTo(final Bid bid) {
 		SimpleDateFormat sdf = new SimpleDateFormat(PropertyProvider.DATEFORMAT);
@@ -145,6 +189,11 @@ public class Bid implements Comparable<Bid> {
 		return ret;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

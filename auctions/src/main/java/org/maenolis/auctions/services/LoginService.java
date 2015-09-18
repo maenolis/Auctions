@@ -16,9 +16,27 @@ import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.LoginRetObject;
 
+/**
+ * The Class LoginService.
+ */
 @Path("/Login")
 public class LoginService {
 
+	/**
+	 * Login.
+	 *
+	 * @param request
+	 *            the request
+	 * @param response
+	 *            the response
+	 * @param user
+	 *            the user
+	 * @return the login ret object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -37,7 +55,6 @@ public class LoginService {
 			loginRetObject.setStatus(PropertyProvider.OK);
 			loginRetObject.setUsername(confirmedUser.getUsername());
 			loginRetObject.setId(confirmedUser.getId());
-			System.out.println("retJson : " + loginRetObject);
 			request.getSession().setAttribute(PropertyProvider.USERID,
 					confirmedUser.getId());
 			request.getSession().setAttribute(PropertyProvider.USERNAME,

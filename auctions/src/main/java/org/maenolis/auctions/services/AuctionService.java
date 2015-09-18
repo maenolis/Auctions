@@ -21,9 +21,17 @@ import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.AuctionSearchObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
 
+/**
+ * The Class AuctionService.
+ */
 @Path("/Auction")
 public class AuctionService {
 
+	/**
+	 * Gets the auctions.
+	 *
+	 * @return the auctions
+	 */
 	@Path("/all")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -36,6 +44,13 @@ public class AuctionService {
 
 	}
 
+	/**
+	 * Search auctions.
+	 *
+	 * @param search
+	 *            the search
+	 * @return the list wrapper
+	 */
 	@Path("/search")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -50,6 +65,15 @@ public class AuctionService {
 
 	}
 
+	/**
+	 * New auction.
+	 *
+	 * @param auction
+	 *            the auction
+	 * @param request
+	 *            the request
+	 * @return the string
+	 */
 	@Path("/new")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -83,6 +107,15 @@ public class AuctionService {
 		return ret;
 	}
 
+	/**
+	 * Update auction.
+	 *
+	 * @param auction
+	 *            the auction
+	 * @param request
+	 *            the request
+	 * @return the string
+	 */
 	@Path("/update")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -114,6 +147,13 @@ public class AuctionService {
 		return ret;
 	}
 
+	/**
+	 * Delete auction.
+	 *
+	 * @param auction
+	 *            the auction
+	 * @return the string
+	 */
 	@Path("/delete")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

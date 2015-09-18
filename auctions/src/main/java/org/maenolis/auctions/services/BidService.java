@@ -23,9 +23,15 @@ import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.BidRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
 
+/**
+ * The Class BidService.
+ */
 @Path("/Bid")
 public class BidService {
 
+	/**
+	 * New bid.
+	 */
 	@Path("/new")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -54,6 +60,15 @@ public class BidService {
 		}
 	}
 
+	/**
+	 * Gets the bids for auction.
+	 *
+	 * @param auction
+	 *            the auction
+	 * @param request
+	 *            the request
+	 * @return the bids for auction
+	 */
 	@Path("/bids")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

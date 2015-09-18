@@ -12,9 +12,21 @@ import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.retObj.LogoutRetObject;
 import org.maenolis.auctions.userManagement.UserState;
 
+/**
+ * The Class LogoutService.
+ */
 @Path("/Logout")
 public class LogoutService {
 
+	/**
+	 * Logout.
+	 *
+	 * @param request
+	 *            the request
+	 * @param user
+	 *            the user
+	 * @return the logout ret object
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

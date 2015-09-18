@@ -5,37 +5,86 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * The Class AuctionRetObject.
+ */
 @XmlRootElement
 public class AuctionRetObject {
 
+	/** The status. */
 	private String status;
 
+	/** The id. */
 	private int id;
 
+	/** The owner id. */
 	private int ownerId;
 
+	/** The owner name. */
 	private String ownerName;
 
+	/** The product name. */
 	private String productName;
 
+	/** The categories. */
 	private List<String> categories;
 
+	/** The buy price. */
 	private float buyPrice;
 
+	/** The first bid. */
 	private float firstBid;
 
+	/** The current bid. */
 	private float currentBid;
 
+	/** The start time. */
 	private String startTime;
 
+	/** The end time. */
 	private String endTime;
 
+	/** The description. */
 	private String description;
 
+	/** The lat. */
 	private float lat;
 
+	/** The lon. */
 	private float lon;
 
+	/**
+	 * Instantiates a new auction ret object.
+	 *
+	 * @param status
+	 *            the status
+	 * @param id
+	 *            the id
+	 * @param ownerId
+	 *            the owner id
+	 * @param ownerName
+	 *            the owner name
+	 * @param productName
+	 *            the product name
+	 * @param categories
+	 *            the categories
+	 * @param buyPrice
+	 *            the buy price
+	 * @param firstBid
+	 *            the first bid
+	 * @param currentBid
+	 *            the current bid
+	 * @param startTime
+	 *            the start time
+	 * @param endTime
+	 *            the end time
+	 * @param description
+	 *            the description
+	 * @param lat
+	 *            the lat
+	 * @param lon
+	 *            the lon
+	 */
 	public AuctionRetObject(final String status, final int id,
 			final int ownerId, final String ownerName,
 			final String productName, final List<String> categories,
@@ -59,6 +108,9 @@ public class AuctionRetObject {
 		this.lon = lon;
 	}
 
+	/**
+	 * Instantiates a new auction ret object.
+	 */
 	public AuctionRetObject() {
 		super();
 		this.categories = new ArrayList<String>();
@@ -176,6 +228,11 @@ public class AuctionRetObject {
 		this.lon = lon;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

@@ -18,28 +18,50 @@ import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.MessageRetObject;
 
+/**
+ * The Class Message.
+ */
 @Entity(name = "Message")
 public class Message {
 
+	/** The id. */
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
 	private int id;
 
+	/** The message text. */
 	@Column(name = "messageText")
 	private String messageText;
 
+	/** The time. */
 	@Column(name = "time")
 	private String time;
 
+	/** The sender. */
 	@ManyToOne
 	@JoinColumn(name = "senderId", referencedColumnName = "id", nullable = false)
 	private User sender;
 
+	/** The receiver. */
 	@ManyToOne
 	@JoinColumn(name = "receiverId", referencedColumnName = "id", nullable = false)
 	private User receiver;
 
+	/**
+	 * Instantiates a new message.
+	 *
+	 * @param id
+	 *            the id
+	 * @param messageText
+	 *            the message text
+	 * @param time
+	 *            the time
+	 * @param sender
+	 *            the sender
+	 * @param receiver
+	 *            the receiver
+	 */
 	public Message(final int id, final String messageText, final String time,
 			final User sender, final User receiver) {
 		super();
@@ -50,6 +72,12 @@ public class Message {
 		this.receiver = receiver;
 	}
 
+	/**
+	 * Instantiates a new message.
+	 *
+	 * @param message
+	 *            the message
+	 */
 	public Message(final MessageRetObject message) {
 		if (message != null) {
 			this.messageText = message.getMessageText();
@@ -61,10 +89,20 @@ public class Message {
 		}
 	}
 
+	/**
+	 * Instantiates a new message.
+	 */
 	public Message() {
 
 	}
 
+	/**
+	 * Gets the message.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the message
+	 */
 	public static Message getMessage(final int id) {
 
 		@SuppressWarnings("deprecation")
@@ -85,6 +123,13 @@ public class Message {
 		return retMessage;
 	}
 
+	/**
+	 * Transform to ret object.
+	 *
+	 * @param message
+	 *            the message
+	 * @return the message ret object
+	 */
 	public static MessageRetObject transformToRetObject(final Message message) {
 		MessageRetObject ret = new MessageRetObject();
 		if (message != null) {
@@ -143,6 +188,11 @@ public class Message {
 		this.time = time;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

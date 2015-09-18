@@ -24,69 +24,133 @@ import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.MessageRetObject;
 import org.maenolis.auctions.services.retObj.UserRetObject;
 
+/**
+ * The Class User.
+ */
 @Entity
 @Table(name = "User")
 public class User {
 
+	/** The id. */
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "username")
+	/** The username. */
+	@Column(name = "username", unique = true)
 	private String username;
 
+	/** The first name. */
 	@Column(name = "firstName")
 	private String firstName;
 
+	/** The last name. */
 	@Column(name = "lastName")
 	private String lastName;
 
+	/** The email. */
 	@Column(name = "email")
 	private String email;
 
+	/** The password. */
 	@Column(name = "password")
 	private String password;
 
+	/** The country. */
 	@Column(name = "country")
 	private String country;
 
+	/** The town. */
 	@Column(name = "town")
 	private String town;
 
+	/** The address. */
 	@Column(name = "address")
 	private String address;
 
+	/** The telephone. */
 	@Column(name = "telephone")
 	private String telephone;
 
+	/** The postal code. */
 	@Column(name = "postalCode")
 	private String postalCode;
 
+	/** The tax registration number. */
 	@Column(name = "taxRegistrationNumber")
 	private String taxRegistrationNumber;
 
+	/** The latitude. */
 	@Column(name = "latitude")
 	private float latitude;
 
+	/** The longtitude. */
 	@Column(name = "longtitude")
 	private float longtitude;
 
+	/** The confirmed. */
 	@Column(name = "confirmed")
 	private boolean confirmed = false;
 
+	/** The sent messages. */
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sender")
 	private Set<Message> sentMessages;
 
+	/** The received messages. */
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "receiver")
 	private Set<Message> receivedMessages;
 
+	/** The owned auctions. */
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
 	private Set<Auction> ownedAuctions;
 
+	/** The bids. */
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "bidder")
 	private Set<Bid> bids;
 
+	/**
+	 * Instantiates a new user.
+	 *
+	 * @param id
+	 *            the id
+	 * @param username
+	 *            the username
+	 * @param firstName
+	 *            the first name
+	 * @param lastName
+	 *            the last name
+	 * @param email
+	 *            the email
+	 * @param password
+	 *            the password
+	 * @param country
+	 *            the country
+	 * @param town
+	 *            the town
+	 * @param address
+	 *            the address
+	 * @param telephone
+	 *            the telephone
+	 * @param postalCode
+	 *            the postal code
+	 * @param taxRegistrationNumber
+	 *            the tax registration number
+	 * @param latitude
+	 *            the latitude
+	 * @param longtitude
+	 *            the longtitude
+	 * @param confirmed
+	 *            the confirmed
+	 * @param sentMessages
+	 *            the sent messages
+	 * @param receivedMessages
+	 *            the received messages
+	 * @param ownedAuctions
+	 *            the owned auctions
+	 * @param bids
+	 *            the bids
+	 */
 	public User(final int id, final String username, final String firstName,
 			final String lastName, final String email, final String password,
 			final String country, final String town, final String address,
@@ -118,6 +182,12 @@ public class User {
 		this.bids = bids;
 	}
 
+	/**
+	 * Instantiates a new user.
+	 *
+	 * @param user
+	 *            the user
+	 */
 	public User(final UserRetObject user) {
 
 		if (user != null) {
@@ -138,10 +208,20 @@ public class User {
 
 	}
 
+	/**
+	 * Instantiates a new user.
+	 */
 	public User() {
 
 	}
 
+	/**
+	 * Gets the user.
+	 *
+	 * @param email
+	 *            the email
+	 * @return the user
+	 */
 	public static User getUser(final String email) {
 
 		@SuppressWarnings("deprecation")
@@ -162,6 +242,13 @@ public class User {
 		return retUser;
 	}
 
+	/**
+	 * Gets the user.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the user
+	 */
 	public static User getUser(final int id) {
 
 		@SuppressWarnings("deprecation")
@@ -182,6 +269,13 @@ public class User {
 		return retUser;
 	}
 
+	/**
+	 * Gets the user sent messages.
+	 *
+	 * @param userid
+	 *            the userid
+	 * @return the user sent messages
+	 */
 	public static List<Message> getUserSentMessages(final int userid) {
 		User user = getUser(userid);
 		List<Message> retList = new ArrayList<Message>();
@@ -195,6 +289,13 @@ public class User {
 
 	}
 
+	/**
+	 * Gets the user received messages.
+	 *
+	 * @param userid
+	 *            the userid
+	 * @return the user received messages
+	 */
 	public static List<MessageRetObject> getUserReceivedMessages(
 			final int userid) {
 		User user = getUser(userid);
@@ -208,6 +309,15 @@ public class User {
 		return retList;
 	}
 
+	/**
+	 * Gets the user received messages from.
+	 *
+	 * @param senderId
+	 *            the sender id
+	 * @param receiverId
+	 *            the receiver id
+	 * @return the user received messages from
+	 */
 	public static List<MessageRetObject> getUserReceivedMessagesFrom(
 			final int senderId, final int receiverId) {
 
@@ -230,6 +340,9 @@ public class User {
 		factory.close();
 
 		List<MessageRetObject> retList = new ArrayList<MessageRetObject>();
+		if (retMessages == null) {
+			return retList;
+		}
 		for (Message message : retMessages) {
 			retList.add(new MessageRetObject(message));
 		}
@@ -237,6 +350,13 @@ public class User {
 
 	}
 
+	/**
+	 * Gets the user auctions.
+	 *
+	 * @param userid
+	 *            the userid
+	 * @return the user auctions
+	 */
 	public static List<Auction> getUserAuctions(final int userid) {
 		User user = getUser(userid);
 		List<Auction> retList = new ArrayList<Auction>();
@@ -260,6 +380,10 @@ public class User {
 		String hql = "From User";
 		Query query = session.createQuery(hql);
 
+		if (query.list() == null) {
+			return retList;
+		}
+
 		for (Object obj : query.list()) {
 			retList.add(transformToRetObject((User) obj));
 		}
@@ -272,6 +396,13 @@ public class User {
 		return retList;
 	}
 
+	/**
+	 * Confirm.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the string
+	 */
 	public static String confirm(final int id) {
 
 		String ret = PropertyProvider.OK;
@@ -299,6 +430,13 @@ public class User {
 		return ret;
 	}
 
+	/**
+	 * Transform to ret object.
+	 *
+	 * @param user
+	 *            the user
+	 * @return the user ret object
+	 */
 	public static UserRetObject transformToRetObject(final User user) {
 		UserRetObject ret = new UserRetObject();
 		if (user != null) {
@@ -321,6 +459,17 @@ public class User {
 		return ret;
 	}
 
+	/**
+	 * Encrypt sh a256.
+	 *
+	 * @param key
+	 *            the key
+	 * @return the string
+	 * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
+	 * @throws UnsupportedEncodingException
+	 *             the unsupported encoding exception
+	 */
 	public static String encryptSHA256(final String key)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
@@ -494,6 +643,11 @@ public class User {
 		this.confirmed = confirmed;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

@@ -15,18 +15,34 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.User;
 
+/**
+ * The Class SignUpService.
+ */
 @Path("/SignUp")
 public class SignUpService {
-	
+
+	/**
+	 * Sign up.
+	 *
+	 * @param user
+	 *            the user
+	 * @return the user
+	 * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
+	 * @throws UnsupportedEncodingException
+	 *             the unsupported encoding exception
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User signUp(User user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		
+	public User signUp(final User user) throws NoSuchAlgorithmException,
+			UnsupportedEncodingException {
+
 		user.setPassword(User.encryptSHA256(user.getPassword()));
-		
+
 		@SuppressWarnings("deprecation")
-		SessionFactory factory = new Configuration().configure().buildSessionFactory();
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
 		Session session = factory.openSession();
 		Transaction tx;
 		tx = session.beginTransaction();

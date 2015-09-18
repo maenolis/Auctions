@@ -17,9 +17,19 @@ import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.UserRetObject;
 
+/**
+ * The Class UserService.
+ */
 @Path("/User")
 public class UserService {
 
+	/**
+	 * Confirm.
+	 *
+	 * @param user
+	 *            the user
+	 * @return the string
+	 */
 	@Path("/confirm")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -27,6 +37,15 @@ public class UserService {
 		return User.confirm(user.getId());
 	}
 
+	/**
+	 * Update user.
+	 *
+	 * @param user
+	 *            the user
+	 * @param request
+	 *            the request
+	 * @return the string
+	 */
 	@Path("/update")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -58,6 +77,13 @@ public class UserService {
 		return ret;
 	}
 
+	/**
+	 * Gets the user.
+	 *
+	 * @param request
+	 *            the request
+	 * @return the user
+	 */
 	@Path("/get")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

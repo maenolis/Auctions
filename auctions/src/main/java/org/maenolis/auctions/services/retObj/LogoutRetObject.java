@@ -2,17 +2,33 @@ package org.maenolis.auctions.services.retObj;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * The Class LogoutRetObject.
+ */
 @XmlRootElement
 public class LogoutRetObject {
 
+	/** The status. */
 	private String status;
 
+	/** The message. */
 	private String message;
 
+	/**
+	 * Instantiates a new logout ret object.
+	 */
 	public LogoutRetObject() {
 
 	}
 
+	/**
+	 * Instantiates a new logout ret object.
+	 *
+	 * @param status
+	 *            the status
+	 * @param message
+	 *            the message
+	 */
 	public LogoutRetObject(final String status, final String message) {
 
 		this.status = status;
@@ -35,6 +51,11 @@ public class LogoutRetObject {
 		this.message = message;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

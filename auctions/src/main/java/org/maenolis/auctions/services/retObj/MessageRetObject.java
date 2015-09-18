@@ -5,25 +5,56 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.maenolis.auctions.dao.Message;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 
+/**
+ * The Class MessageRetObject.
+ */
 @XmlRootElement
 public class MessageRetObject {
 
+	/** The status. */
 	private String status;
 
+	/** The id. */
 	private int id;
 
+	/** The sender id. */
 	private int senderId;
 
+	/** The sender name. */
 	private String senderName;
 
+	/** The receiver id. */
 	private int receiverId;
 
+	/** The receiver name. */
 	private String receiverName;
 
+	/** The message text. */
 	private String messageText;
 
+	/** The time. */
 	private String time;
 
+	/**
+	 * Instantiates a new message ret object.
+	 *
+	 * @param status
+	 *            the status
+	 * @param id
+	 *            the id
+	 * @param senderId
+	 *            the sender id
+	 * @param senderName
+	 *            the sender name
+	 * @param receiverId
+	 *            the receiver id
+	 * @param receiverName
+	 *            the receiver name
+	 * @param messageText
+	 *            the message text
+	 * @param time
+	 *            the time
+	 */
 	public MessageRetObject(final String status, final int id,
 			final int senderId, final String senderName, final int receiverId,
 			final String receiverName, final String messageText,
@@ -39,6 +70,12 @@ public class MessageRetObject {
 		this.time = time;
 	}
 
+	/**
+	 * Instantiates a new message ret object.
+	 *
+	 * @param message
+	 *            the message
+	 */
 	public MessageRetObject(final Message message) {
 		this.status = PropertyProvider.OK;
 		this.id = message.getId();
@@ -52,6 +89,9 @@ public class MessageRetObject {
 		this.time = message.getTime();
 	}
 
+	/**
+	 * Instantiates a new message ret object.
+	 */
 	public MessageRetObject() {
 		super();
 		this.status = PropertyProvider.NOK;
@@ -121,6 +161,11 @@ public class MessageRetObject {
 		this.time = time;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

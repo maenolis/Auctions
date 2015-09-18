@@ -6,16 +6,31 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-//@XmlSeeAlso({ AuctionRetObject.class })
+/**
+ * The Class ListWrapper.
+ *
+ * @param <T>
+ *            the generic type
+ */
 @XmlRootElement
 public class ListWrapper<T> {
 
+	/** The items. */
 	private List<T> items;
 
+	/**
+	 * Instantiates a new list wrapper.
+	 */
 	public ListWrapper() {
 		items = new ArrayList<T>();
 	}
 
+	/**
+	 * Instantiates a new list wrapper.
+	 *
+	 * @param items
+	 *            the items
+	 */
 	public ListWrapper(final List<T> items) {
 		this.items = items;
 	}

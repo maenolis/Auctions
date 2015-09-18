@@ -2,15 +2,31 @@ package org.maenolis.auctions.services.retObj;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * The Class LoginRetObject.
+ */
 @XmlRootElement
 public class LoginRetObject {
 
+	/** The status. */
 	private String status;
 
+	/** The username. */
 	private String username;
 
+	/** The id. */
 	private int id;
 
+	/**
+	 * Instantiates a new login ret object.
+	 *
+	 * @param status
+	 *            the status
+	 * @param username
+	 *            the username
+	 * @param id
+	 *            the id
+	 */
 	public LoginRetObject(final String status, final String username,
 			final int id) {
 
@@ -19,6 +35,9 @@ public class LoginRetObject {
 		this.id = id;
 	}
 
+	/**
+	 * Instantiates a new login ret object.
+	 */
 	public LoginRetObject() {
 
 	}
@@ -47,6 +66,11 @@ public class LoginRetObject {
 		this.id = id;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

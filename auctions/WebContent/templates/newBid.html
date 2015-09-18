@@ -10,7 +10,7 @@
 		<label for="bid" class="sr-only">bid</label>
 			<input ng-model="ammount" type="text" id="ammount" class="form-control" placeholder="Ammount" required autofocus>
 		<div class="container col-md-1">
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+			<button type="button" ng-really-message="Are you sure?" ng-really-click="newBid()"  class="btn btn-lg btn-primary btn-block">Submit</button>
 		</div>
 	</form>
 

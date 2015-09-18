@@ -21,9 +21,20 @@ import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.MessageRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
 
+/**
+ * The Class MessageService.
+ */
 @Path("/Message")
 public class MessageService {
 
+	/**
+	 * New message.
+	 *
+	 * @param message
+	 *            the message
+	 * @param request
+	 *            the request
+	 */
 	@Path("/new")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -52,6 +63,11 @@ public class MessageService {
 		}
 	}
 
+	/**
+	 * Gets the ter messages.
+	 *
+	 * @return the ter messages
+	 */
 	@Path("/all")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -65,6 +81,13 @@ public class MessageService {
 
 	}
 
+	/**
+	 * Gets the messages from user.
+	 *
+	 * @param message
+	 *            the message
+	 * @return the messages from user
+	 */
 	@Path("/from")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

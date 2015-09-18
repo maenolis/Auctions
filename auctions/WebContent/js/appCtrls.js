@@ -230,12 +230,12 @@ myApp.controller('auctionCtrl', ['$rootScope', '$scope', '$location', '$http', '
 			Page.setTitle("Auction");
 			
 			$scope.auction = $rootScope.auction;
-			$scope.map = { center: { latitude: 38, longitude: 23 }, zoom: 12 };
-				$scope.marker = {
+			$scope.map = { center: { latitude: $scope.auction.lat, longitude: $scope.auction.lon }, zoom: 14 };
+			$scope.marker = {
 				id: 0,
 				coords: {
-					latitude: auction.lat,
-					longitude: auction.lon
+					latitude: $scope.auction.lat,
+					longitude: $scope.auction.lon
 				},
 				options: { draggable: true },
 				events: {
@@ -255,6 +255,7 @@ myApp.controller('auctionCtrl', ['$rootScope', '$scope', '$location', '$http', '
 					}
 				}
 			};
+			
 			$scope.newBid = function (auction) {
 				console.log("bid worx.");
 				console.log(auction);
