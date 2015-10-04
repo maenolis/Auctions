@@ -17,6 +17,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.BooleanRetObject;
 import org.maenolis.auctions.services.retObj.UserRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
 
@@ -101,6 +102,16 @@ public class UserService {
 
 		return User.transformToRetObject(User.getUser((int) request
 				.getSession().getAttribute(PropertyProvider.USERID)));
+	}
+
+	@Path("/isLogged")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public BooleanRetObject isLogged(@Context final HttpServletRequest request) {
+		if (request.getSession().getAttribute(PropertyProvider.USERID) == null) {
+			return new BooleanRetObject(false);
+		}
+		return new BooleanRetObject(true);
 	}
 
 	/**

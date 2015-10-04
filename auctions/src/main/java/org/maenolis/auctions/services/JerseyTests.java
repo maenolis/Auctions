@@ -40,6 +40,17 @@ public class JerseyTests {
 
 	}
 
+	@Path("/auctionsXml")
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
+	public List<AuctionRetObject> getterAuctionsXml() {
+
+		List<AuctionRetObject> list = Auction.getAllAuctions();
+
+		return list;
+
+	}
+
 	/**
 	 * Gets the messages.
 	 *
