@@ -1,8 +1,10 @@
 package org.maenolis.auctions.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -22,6 +24,13 @@ import org.maenolis.auctions.services.wrapper.ListWrapper;
  */
 @Path("/test")
 public class JerseyTests {
+
+	@Path("/redirectMe")
+	@GET
+	public void redirectMe(@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+		response.sendRedirect("/auctions/#/login");
+	}
 
 	/**
 	 * Gets the auctions.
