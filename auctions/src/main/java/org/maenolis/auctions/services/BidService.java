@@ -1,9 +1,11 @@
 package org.maenolis.auctions.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -22,6 +24,7 @@ import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.BidRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
+import org.maenolis.auctions.userManagement.UserState;
 
 /**
  * The Class BidService.
@@ -31,11 +34,18 @@ public class BidService {
 
 	/**
 	 * New bid.
+	 * 
+	 * @throws IOException
 	 */
 	@Path("/new")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public void newBid() {
+	public void newBid(@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		UserState.checkState(request, response);
+
+		// TODO !!!!
 
 		Session session = null;
 		try {

@@ -1,9 +1,10 @@
 package org.maenolis.auctions.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -27,23 +28,23 @@ public class AdminService {
 	@GET
 	@Path("/isAdmin")
 	@Produces(MediaType.APPLICATION_JSON)
-	public BooleanRetObject isAdmin(@Context final HttpServletRequest request) {
+	public BooleanRetObject isAdmin(@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
 
-		HttpSession session = request.getSession();
+		UserState.checkState(request, response);
 
-		if (!UserState.isLogged(session)) {
-			return new BooleanRetObject(false);
-		} else {
-			return new BooleanRetObject(User.getUser(UserState.getId(session))
-					.isAdmin());
-		}
+		return new BooleanRetObject(User.getUser(
+				UserState.getId(request.getSession())).isAdmin());
 
 	}
 
 	@Path("/auctions")
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getAll() {
+	public Response getAll(@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		UserState.checkState(request, response);
 
 		List<AuctionRetObject> list = Auction.getAllAuctions();
 

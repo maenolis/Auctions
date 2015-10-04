@@ -32,4 +32,7 @@ public class PropertyProvider {
 	/** The Constant ADMINEMAIL. */
 	public static final String ADMINEMAIL = "admin@auctions.com";
 
+	/** The Constant REDIRECTIONURL. */
+	public static final String REDIRECTIONURL = "/auctions/#/auctions";
+
 }

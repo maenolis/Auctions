@@ -1,8 +1,10 @@
 package org.maenolis.auctions.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,6 +22,7 @@ import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.BooleanRetObject;
 import org.maenolis.auctions.services.retObj.UserRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
+import org.maenolis.auctions.userManagement.UserState;
 
 /**
  * The Class UserService.
@@ -89,7 +92,7 @@ public class UserService {
 	 *            the request
 	 * @return the user
 	 */
-	@Path("/get")
+	@Path("/getUser")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public UserRetObject getUser(@Context final HttpServletRequest request) {
@@ -104,6 +107,7 @@ public class UserService {
 				.getSession().getAttribute(PropertyProvider.USERID)));
 	}
 
+	// TODO: remove!!
 	@Path("/isLogged")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -118,11 +122,17 @@ public class UserService {
 	 * Gets the users.
 	 *
 	 * @return the users
+	 * @throws IOException
 	 */
 	@Path("/users")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ListWrapper<UserRetObject> getterUsers() {
+	public ListWrapper<UserRetObject> getterUsers(
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		UserState.checkState(request, response);
+		// TODO: Admin check!!
 
 		List<UserRetObject> list = User.getAllUsers();
 

@@ -1,6 +1,9 @@
 package org.maenolis.auctions.userManagement;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.maenolis.auctions.services.literals.PropertyProvider;
@@ -10,6 +13,13 @@ import org.maenolis.auctions.services.retObj.LogoutRetObject;
  * The Class UserState.
  */
 public class UserState {
+
+	public static void checkState(final HttpServletRequest request,
+			final HttpServletResponse response) throws IOException {
+		if (!isLogged(request.getSession())) {
+			response.sendRedirect(PropertyProvider.REDIRECTIONURL);
+		}
+	}
 
 	/**
 	 * Checks if is logged.

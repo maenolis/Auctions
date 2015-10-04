@@ -1,8 +1,10 @@
 package org.maenolis.auctions.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,6 +22,7 @@ import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.AuctionSearchObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
+import org.maenolis.auctions.userManagement.UserState;
 
 /**
  * The Class AuctionService.
@@ -73,13 +76,17 @@ public class AuctionService {
 	 * @param request
 	 *            the request
 	 * @return the string
+	 * @throws IOException
 	 */
 	@Path("/new")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String newAuction(final AuctionRetObject auction,
-			@Context final HttpServletRequest request) {
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		UserState.checkState(request, response);
 
 		String ret = PropertyProvider.NOK;
 		System.out.println("newAuction received : " + auction);
@@ -115,13 +122,17 @@ public class AuctionService {
 	 * @param request
 	 *            the request
 	 * @return the string
+	 * @throws IOException
 	 */
 	@Path("/update")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String updateAuction(final AuctionRetObject auction,
-			@Context final HttpServletRequest request) {
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		UserState.checkState(request, response);
 
 		String ret = PropertyProvider.NOK;
 		System.out.println("updateAuction received : " + auction);
@@ -153,12 +164,17 @@ public class AuctionService {
 	 * @param auction
 	 *            the auction
 	 * @return the string
+	 * @throws IOException
 	 */
 	@Path("/delete")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteAuction(final AuctionRetObject auction) {
+	public String deleteAuction(final AuctionRetObject auction,
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		UserState.checkState(request, response);
 
 		String ret = PropertyProvider.NOK;
 		System.out.println("deleteAuction received : " + auction);

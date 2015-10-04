@@ -1,8 +1,10 @@
 package org.maenolis.auctions.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,6 +22,7 @@ import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.MessageRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
+import org.maenolis.auctions.userManagement.UserState;
 
 /**
  * The Class MessageService.
@@ -34,13 +37,17 @@ public class MessageService {
 	 *            the message
 	 * @param request
 	 *            the request
+	 * @throws IOException
 	 */
 	@Path("/new")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void newMessage(final MessageRetObject message,
-			@Context final HttpServletRequest request) {
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		UserState.checkState(request, response);
 
 		Session session = null;
 		try {
@@ -67,11 +74,16 @@ public class MessageService {
 	 * Gets the ter messages.
 	 *
 	 * @return the ter messages
+	 * @throws IOException
 	 */
 	@Path("/all")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ListWrapper<MessageRetObject> getterMessages() {
+	public ListWrapper<MessageRetObject> getterMessages(
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		UserState.checkState(request, response);
 
 		List<MessageRetObject> list = User.getUserReceivedMessages(4);
 
@@ -87,13 +99,18 @@ public class MessageService {
 	 * @param message
 	 *            the message
 	 * @return the messages from user
+	 * @throws IOException
 	 */
 	@Path("/from")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListWrapper<MessageRetObject> getMessagesFromUser(
-			final MessageRetObject message) {
+			final MessageRetObject message,
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		UserState.checkState(request, response);
 
 		List<MessageRetObject> list = User.getUserReceivedMessagesFrom(
 				message.getSenderId(), message.getReceiverId());
