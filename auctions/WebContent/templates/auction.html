@@ -1,62 +1,81 @@
 
 <div data-ng-include data-src="'templates/header.html'"></div>
 
-<div class="container-fluid  col-md-8" ng-controller="auctionCtrl">
+<div class="container-fluid  col-md-6">
+
+	<div class="page-header">
+		<h3>Auction</h3>
+	</div>
 
 	<!-- Auction -->
 	<table class="table table-striped table-hover">
 		<thead>
-			<tr class="row">
+			<tr>
 				<td>Auction: {{auction.productName}}</td>
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="row">
+			<tr>
 				<td>id: {{auction.id}}</td>
 			</tr>
-			<tr class="row">
-				<td>ownerName: {{auction.ownerName}}</td>
+			<tr>
+				<td>ownerName: {{auction.ownerName}} <button ng-click="sendMessage(auction)">sendMessage</button></td>
 			</tr>
-			<tr class="row">
+			<tr>
 				<td>productName: {{auction.productName}}</td>
 			</tr>
-			<tr class="row">
+			<tr>
 				<td>categories: {{auction.categories}}</td>
 			</tr>
-			<tr class="row">
+			<tr>
 				<td>buyPrice: {{auction.buyPrice}}</td>
 			</tr>
-			<tr class="row">
+			<tr>
 				<td>firstBid: {{auction.firstBid}}</td>
 			</tr>
-			<tr class="row">
+			<tr>
 				<td>currentBid: {{auction.currentBid}}</td>
 			</tr>
-			<tr class="row">
+			<tr>
 				<td>startTime: {{auction.startTime | date:'shortDate'}}</td>
 			</tr>
-			<tr class="row">
+			<tr>
 				<td>endTime: {{auction.endTime | date:'shortDate'}}</td>
 			</tr>
-			<tr class="row">
+			<tr>
 				<td>description: {{auction.description}}</td>
+			</tr>
+			<tr>
+				<td><input ng-model="auction.ammount" type="text" id="ammount" placeholder="Bid ammount" required autofocus>
+				<button ng-really-message="Are you sure?" ng-really-click="placeBid(auction)">Place bid</button></td>
 			</tr>
 		</tbody>
 	</table>
+</div>
 	
-	<style>
-		.angular-google-map-container { height: 400px; }
-	</style>
+	<div class="container-fluid  col-md-4">
+		<div class="page-header">
+			<h3>Location</h3>
+		</div>
+		<style>
+			.angular-google-map-container { height: 400px; }
+		</style>
+		
+		<ui-gmap-google-map center='map.center' zoom='map.zoom'>
+		
+			<ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
+			</ui-gmap-marker>
+		
+		</ui-gmap-google-map>
 	
-	<ui-gmap-google-map center='map.center' zoom='map.zoom'>
-	
-		<ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
-        </ui-gmap-marker>
-	
-	</ui-gmap-google-map>
+	</div>
 	
 	
 	<!-- Bids -->
+	<div class="container-fluid  col-md-8">
+	<div class="page-header">
+		<h3>Bids</h3>
+	</div>
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr class="row">
@@ -73,5 +92,5 @@
 				<td>ammount: {{bid.ammount}}</td>
 			</tr>
 	</table>
-	
-</div>
+	</div>
+

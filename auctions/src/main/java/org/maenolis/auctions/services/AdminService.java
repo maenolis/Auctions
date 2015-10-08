@@ -15,7 +15,8 @@ import javax.ws.rs.core.Response;
 
 import org.maenolis.auctions.dao.Auction;
 import org.maenolis.auctions.dao.User;
-import org.maenolis.auctions.services.retObj.AuctionRetObject;
+import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.AdminAuctionRetObject;
 import org.maenolis.auctions.services.retObj.BooleanRetObject;
 import org.maenolis.auctions.userManagement.UserState;
 
@@ -29,9 +30,11 @@ public class AdminService {
 	@Path("/isAdmin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public BooleanRetObject isAdmin(@Context final HttpServletRequest request,
-			@Context final HttpServletResponse response) throws IOException {
+			@Context final HttpServletResponse response) {
 
-		UserState.checkState(request, response);
+		if (!UserState.isLogged(request.getSession())) {
+			return new BooleanRetObject(false);
+		}
 
 		return new BooleanRetObject(User.getUser(
 				UserState.getId(request.getSession())).isAdmin());
@@ -44,11 +47,14 @@ public class AdminService {
 	public Response getAll(@Context final HttpServletRequest request,
 			@Context final HttpServletResponse response) throws IOException {
 
-		UserState.checkState(request, response);
+		if (!UserState.checkAdmin(request, response)) {
+			response.sendRedirect(PropertyProvider.REDIRECTIONURL);
+			return null;
+		}
 
-		List<AuctionRetObject> list = Auction.getAllAuctions();
+		List<AdminAuctionRetObject> list = Auction.transformForAdminList();
 
-		GenericEntity<List<AuctionRetObject>> ret = new GenericEntity<List<AuctionRetObject>>(
+		GenericEntity<List<AdminAuctionRetObject>> ret = new GenericEntity<List<AdminAuctionRetObject>>(
 				list) {
 		};
 

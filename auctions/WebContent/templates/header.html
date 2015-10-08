@@ -1,4 +1,4 @@
-<div class="container" ng-controller="userCtrl">
+<div class="container">
 
 	<!-- Static navbar -->
 	<nav class="navbar navbar-default">
@@ -13,31 +13,33 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse" ng-controller="getClassCtrl">
 				<ul class="nav navbar-nav">
-					<li ng-hide={{!User.isLogged()}} ng-class="{active: isActive('/') || isActive('/home')}">
+					<li ng-class="{active: isActive('/') || isActive('/home')}">
 						<a href="#/home">Home</a>
 					</li>
 					<li ng-class="{active: isActive('/auctions')}">
 						<a href="#/auctions">Auctions</a>
 					</li>
-					<li ng-hide={{!User.isLogged()}} ng-class="{active: isActive('/messages')}">
+					<li ng-class="{active: isActive('/messages')}">
 						<a href="#/messages">Messages</a>
 					</li>
 					<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Menu
 						<span class="caret"></span>
 					</a>
-						<ul ng-hide={{!User.isLogged()}} class="dropdown-menu" role="menu" ng-controller="logoutCtrl">
+						<ul class="dropdown-menu" role="menu" ng-controller="logoutCtrl">
 							<li>
 								<a href="#/newAuction">New auction</a>
 							</li>
 							<li>
-									<button type="button" class="btn btn-link" ng-click="logout()">logout</button>
+								<a href="#/login">Login/Sign up</a>
 							</li>
-							
-							<!-- <li>
-								<a href="#">Something else here</a>
+							<li>
+								<a href="#" ng-click="logout()">Logout</a>
 							</li>
-							<li class="divider"></li>
+							<li>
+								<a href="#/adminPanel">Admin Panel</a>
+							</li>
+							<!--<li class="divider"></li>
 							<li class="dropdown-header">Nav header</li>
 							<li>
 								<a href="#">Separated link</a>

@@ -33,6 +33,6 @@ public class PropertyProvider {
 	public static final String ADMINEMAIL = "admin@auctions.com";
 
 	/** The Constant REDIRECTIONURL. */
-	public static final String REDIRECTIONURL = "/auctions/#/auctions";
+	public static final String REDIRECTIONURL = "http://localhost:8080/auctions/#/auctions";
 
 }

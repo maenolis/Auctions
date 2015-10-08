@@ -1,18 +1,25 @@
 package org.maenolis.auctions.services;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.Auction;
 import org.maenolis.auctions.dao.User;
+import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.BidRetObject;
 import org.maenolis.auctions.services.retObj.MessageRetObject;
@@ -25,6 +32,15 @@ import org.maenolis.auctions.services.wrapper.ListWrapper;
 @Path("/test")
 public class JerseyTests {
 
+	@Path("/printer")
+	@POST
+	public void printer(@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response, final BidRetObject bid)
+			throws IOException {
+		System.out.println(bid);
+		response.sendRedirect("/auctions/#/login");
+	}
+
 	@Path("/redirectMe")
 	@GET
 	public void redirectMe(@Context final HttpServletRequest request,
@@ -36,11 +52,12 @@ public class JerseyTests {
 	 * Gets the auctions.
 	 *
 	 * @return the auctions
+	 * @throws ParseException
 	 */
 	@Path("/auctions")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ListWrapper<AuctionRetObject> getterAuctions() {
+	public ListWrapper<AuctionRetObject> getterAuctions() throws ParseException {
 
 		List<AuctionRetObject> list = Auction.getAllAuctions();
 		ListWrapper<AuctionRetObject> ret = new ListWrapper<AuctionRetObject>(
@@ -52,7 +69,7 @@ public class JerseyTests {
 	@Path("/auctionsXml")
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public List<AuctionRetObject> getterAuctionsXml() {
+	public List<AuctionRetObject> getterAuctionsXml() throws ParseException {
 
 		List<AuctionRetObject> list = Auction.getAllAuctions();
 
@@ -82,11 +99,20 @@ public class JerseyTests {
 	 * Gets the users.
 	 *
 	 * @return the users
+	 * @throws IOException
 	 */
 	@Path("/users")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ListWrapper<UserRetObject> getterUsers() {
+	public ListWrapper<UserRetObject> getterUsers(
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) throws IOException {
+
+		response.sendRedirect(PropertyProvider.REDIRECTIONURL);
+		System.out.println("Continued!!!");
+		if (true)
+			return null;
+		System.out.println("Continued 2!!!");
 
 		List<UserRetObject> list = User.getAllUsers();
 
@@ -136,5 +162,33 @@ public class JerseyTests {
 		ListWrapper<BidRetObject> ret = new ListWrapper<BidRetObject>(list);
 		return ret;
 
+	}
+
+	@Path("/updateUser")
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String updateUser() {
+
+		Session session = null;
+		try {
+			@SuppressWarnings("deprecation")
+			SessionFactory factory = new Configuration().configure()
+					.buildSessionFactory();
+			session = factory.openSession();
+			Transaction tx;
+			tx = session.beginTransaction();
+
+			User persistedUser = (User) session.load(User.class, 4);
+			persistedUser.setFirstName("alpha!!");
+			session.save(persistedUser);
+			tx.commit();
+		} catch (Exception e) {
+			System.err.print("During transaction received error : "
+					+ e.getMessage());
+		} finally {
+			session.close();
+		}
+
+		return "ok";
 	}
 }

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.servlet.http.HttpSession;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -23,9 +25,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.properties.PropertyHelper;
+import org.maenolis.auctions.services.retObj.AdminAuctionRetObject;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.AuctionSearchObject;
 import org.maenolis.auctions.services.retObj.BidRetObject;
+import org.maenolis.auctions.userManagement.UserState;
 
 /**
  * The Class Auction.
@@ -179,6 +184,44 @@ public class Auction {
 		return retAuction;
 	}
 
+	public static Auction getAuctionWithHistory(final int id,
+			final HttpSession httpSession) {
+
+		Auction retAuction = null;
+
+		try {
+			@SuppressWarnings("deprecation")
+			SessionFactory factory = new Configuration().configure()
+					.buildSessionFactory();
+			Session session = factory.openSession();
+			Transaction tx;
+			tx = session.beginTransaction();
+
+			String hql = "From Auction Where id=:id";
+			Query query = session.createQuery(hql).setParameter("id", id);
+			retAuction = (Auction) query.uniqueResult();
+
+			if (UserState.isLogged(httpSession)) {
+				User user = User.getUser((int) httpSession
+						.getAttribute(PropertyProvider.USERID));
+				AuctionUser auctionUser = new AuctionUser();
+				auctionUser.setAuction_id(retAuction.getId());
+				auctionUser.setUser_id(user.getId());
+				session.save(auctionUser);
+			}
+
+			session.save(retAuction);
+
+			tx.commit();
+			session.close();
+			factory.close();
+		} catch (Exception ex) {
+			System.err.println("Duplicate SQL exception ignored!!");
+		}
+
+		return retAuction;
+	}
+
 	/**
 	 * Transform to ret object.
 	 *
@@ -214,8 +257,9 @@ public class Auction {
 	 * Gets the all auctions.
 	 *
 	 * @return the all auctions
+	 * @throws ParseException
 	 */
-	public static List<AuctionRetObject> getAllAuctions() {
+	public static List<AuctionRetObject> getAllAuctions() throws ParseException {
 		List<AuctionRetObject> retList = new ArrayList<AuctionRetObject>();
 
 		@SuppressWarnings("deprecation")
@@ -228,7 +272,38 @@ public class Auction {
 
 		if (query.list() != null) {
 			for (Object obj : query.list()) {
-				retList.add(transformToRetObject((Auction) obj));
+				Auction auction = (Auction) obj;
+				SimpleDateFormat sdf = new SimpleDateFormat(
+						PropertyProvider.DATEFORMAT);
+				if (sdf.parse(auction.getEndTime()).after(new Date())) {
+					retList.add(transformToRetObject(auction));
+				}
+
+			}
+		}
+
+		session.close();
+		factory.close();
+
+		return retList;
+	}
+
+	public static List<AuctionRetObject> getAllAuctionsForAdmin() {
+		List<AuctionRetObject> retList = new ArrayList<AuctionRetObject>();
+
+		@SuppressWarnings("deprecation")
+		SessionFactory factory = new Configuration().configure()
+				.buildSessionFactory();
+		Session session = factory.openSession();
+
+		String hql = "From Auction";
+		Query query = session.createQuery(hql);
+
+		if (query.list() != null) {
+			for (Object obj : query.list()) {
+				Auction auction = (Auction) obj;
+				retList.add(transformToRetObject(auction));
+
 			}
 		}
 
@@ -342,6 +417,117 @@ public class Auction {
 			}
 		}
 
+		return retList;
+	}
+
+	public static void updateAuction(final AuctionRetObject auctionJs) {
+		Session session = null;
+		try {
+			@SuppressWarnings("deprecation")
+			SessionFactory factory = new Configuration().configure()
+					.buildSessionFactory();
+			session = factory.openSession();
+			Transaction tx;
+			tx = session.beginTransaction();
+
+			Auction persistedAuction = (Auction) session.load(Auction.class,
+					auctionJs.getId());
+
+			SimpleDateFormat sdf = new SimpleDateFormat(
+					PropertyProvider.DATEFORMAT);
+			Date auctionDate = sdf.parse(persistedAuction.getStartTime());
+			if (auctionDate.after(new Date())) {
+				updateAuctionProperties(persistedAuction, auctionJs);
+				session.save(persistedAuction);
+				tx.commit();
+			}
+
+		} catch (Exception e) {
+			System.err.print("During transaction received error : "
+					+ e.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
+	public static boolean deleteAuction(final AuctionRetObject auctionJs) {
+
+		boolean ret = false;
+		Session session = null;
+		try {
+			@SuppressWarnings("deprecation")
+			SessionFactory factory = new Configuration().configure()
+					.buildSessionFactory();
+			session = factory.openSession();
+			Transaction tx;
+			tx = session.beginTransaction();
+
+			Auction persistedAuction = (Auction) session.load(Auction.class,
+					auctionJs.getId());
+
+			SimpleDateFormat sdf = new SimpleDateFormat(
+					PropertyProvider.DATEFORMAT);
+			Date auctionDate = sdf.parse(persistedAuction.getStartTime());
+			if (auctionDate.after(new Date())) {
+				ret = true;
+				persistedAuction.setAlive(false);
+				session.save(persistedAuction);
+			}
+			tx.commit();
+		} catch (Exception e) {
+			System.err.print("During transaction received error : "
+					+ e.getMessage());
+		} finally {
+			session.close();
+		}
+
+		return ret;
+	}
+
+	private static void updateAuctionProperties(final Auction auction,
+			final AuctionRetObject auctionJs) {
+		if (PropertyHelper.checkProperty(auction.getProductName(),
+				auctionJs.getProductName())) {
+			auction.setProductName(auctionJs.getProductName());
+		}
+		if (auctionJs.getCategories() != null
+				&& auctionJs.getCategories().size() > 0) {
+			auction.setCategories(auctionJs.getCategoriesAsString());
+		}
+		if (String.valueOf(auctionJs.getBuyPrice()) != null
+				&& !String.valueOf(auctionJs.getBuyPrice()).isEmpty()) {
+			auction.setBuyPrice(auctionJs.getBuyPrice());
+		}
+		if (String.valueOf(auctionJs.getFirstBid()) != null
+				&& !String.valueOf(auctionJs.getFirstBid()).isEmpty()) {
+			auction.setFirstBid(auctionJs.getFirstBid());
+		}
+		if (PropertyHelper.checkProperty(auction.getStartTime(),
+				auctionJs.getStartTime())) {
+			auction.setStartTime(auctionJs.getStartTime());
+		}
+		if (PropertyHelper.checkProperty(auction.getEndTime(),
+				auctionJs.getEndTime())) {
+			auction.setEndTime(auctionJs.getEndTime());
+		}
+		if (PropertyHelper.checkProperty(auction.getDescription(),
+				auctionJs.getDescription())) {
+			auction.setDescription(auctionJs.getDescription());
+		}
+
+	}
+
+	public static AdminAuctionRetObject transformForAdmin(
+			final AuctionRetObject auction) {
+		AdminAuctionRetObject ret = new AdminAuctionRetObject(auction);
+		return ret;
+	}
+
+	public static List<AdminAuctionRetObject> transformForAdminList() {
+		List<AdminAuctionRetObject> retList = new ArrayList<AdminAuctionRetObject>();
+		for (AuctionRetObject auction : Auction.getAllAuctionsForAdmin()) {
+			retList.add(transformForAdmin(auction));
+		}
 		return retList;
 	}
 
@@ -570,10 +756,23 @@ public class Auction {
 	 */
 	public Bid getCurrentBid() {
 		if (getBids() != null && getBids().toArray().length > 0) {
-			Arrays.sort(getBids().toArray());
-			return (Bid) getBids().toArray()[getBids().toArray().length - 1];
+			float ammount = 0.0f;
+			Bid retBid = null;
+			for (Bid bid : getBids()) {
+				if (bid.getAmmount() > ammount) {
+					ammount = bid.getAmmount();
+					retBid = bid;
+				}
+			}
+
+			return retBid;
 		}
 		return null;
+	}
+
+	public List<String> getCategoriesAsList() {
+		String[] array = categories.split(",");
+		return Arrays.asList(array);
 	}
 
 	/*

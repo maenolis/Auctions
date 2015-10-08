@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.maenolis.auctions.services.literals.PropertyProvider;
+
 /**
  * The Class AuctionRetObject.
  */
@@ -108,6 +110,24 @@ public class AuctionRetObject {
 		this.lon = lon;
 	}
 
+	public AuctionRetObject(final AuctionRetObject auction) {
+		super();
+		this.status = PropertyProvider.OK;
+		this.id = auction.getId();
+		this.ownerId = auction.getOwnerId();
+		this.ownerName = auction.getOwnerName();
+		this.productName = auction.getProductName();
+		this.categories = auction.getCategories();
+		this.buyPrice = auction.getBuyPrice();
+		this.firstBid = auction.getFirstBid();
+		this.currentBid = auction.getCurrentBid();
+		this.startTime = auction.getStartTime();
+		this.endTime = auction.getEndTime();
+		this.description = auction.getDescription();
+		this.lat = auction.getLat();
+		this.lon = auction.getLon();
+	}
+
 	/**
 	 * Instantiates a new auction ret object.
 	 */
@@ -142,6 +162,19 @@ public class AuctionRetObject {
 
 	public List<String> getCategories() {
 		return categories;
+	}
+
+	public String getCategoriesAsString() {
+		String ret = "";
+		for (String str : categories) {
+			if (categories.indexOf(str) != categories.size() - 1) {
+				ret = ret + str + ", ";
+			} else {
+				ret = ret + str;
+			}
+		}
+
+		return ret;
 	}
 
 	public void setCategories(final List<String> categories) {

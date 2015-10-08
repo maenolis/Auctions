@@ -2,9 +2,9 @@
 <div data-ng-include data-src="'templates/header.html'"></div>
 
 <div class="container">
-	<form class="form-new-message" ng-submit="newMessage()" ng-controller="newMessageCtrl">
+	<form class="form-new-message" ng-submit="newMessage(message)">
 		<label for="message" class="sr-only">description</label>
-			<textarea ng-model="messageText" id="messageText" class="form-control" placeholder="Message" rows="6" required autofocus></textarea>
+			<textarea ng-model="message.messageText" id="messageText" class="form-control" placeholder="Message" rows="6" required autofocus></textarea>
 		<div class="container col-md-1">
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
 		</div>

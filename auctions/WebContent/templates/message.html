@@ -1,31 +1,17 @@
 
 <div data-ng-include data-src="'templates/header.html'"></div>
 
-<div class="container" ng-controller="messageCtrl">
+<div class="container-fluid  col-md-5">
 
-	<p>from : {{message.senderName}}</p>
-	<p>message: {{message.messageText}}</p>
-	<button ng-click="send(message)">reply</button>
-		
-</div>
 
-<div class="container-fluid  col-md-5" ng-controller="messageCtrl">
-	<table class="table table-striped table-hover">
-		<thead>
-			<tr class="row">
-				<td>From</td>
-				<td>{{message.senderName}}</td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="row">
-				<td>{{message.messageText}}</td>
-				<td>{{message.time | date:'shortDate'}}</td>
-				
-			</tr>
-			<tr class="row">
-				<td><button ng-click="reply(message)">reply</button></td>
-			</tr>
-		</tbody>
-	</table>
+
+
+	<div class="page-header">
+		<h3>Message from {{message.senderName}} @ {{message.time | date:'shortDate'}}</h3>
+	</div>
+	
+	<pre>{{message.messageText}}</pre>
+    
+    <button ng-click="reply(message)">reply</button>
+
 </div>

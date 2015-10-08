@@ -1,6 +1,5 @@
 package org.maenolis.auctions.services;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +36,6 @@ public class MessageService {
 	 *            the message
 	 * @param request
 	 *            the request
-	 * @throws IOException
 	 */
 	@Path("/new")
 	@POST
@@ -45,9 +43,11 @@ public class MessageService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void newMessage(final MessageRetObject message,
 			@Context final HttpServletRequest request,
-			@Context final HttpServletResponse response) throws IOException {
+			@Context final HttpServletResponse response) {
 
-		UserState.checkState(request, response);
+		if (!UserState.isLogged(request.getSession())) {
+			return;
+		}
 
 		Session session = null;
 		try {
@@ -58,6 +58,9 @@ public class MessageService {
 			Transaction tx;
 			tx = session.beginTransaction();
 
+			System.out.println(message);
+
+			message.setReceiverId(message.getSenderId());
 			message.setSenderId((int) request.getSession().getAttribute(
 					PropertyProvider.USERID));
 			session.save(new Message(message));
@@ -74,21 +77,24 @@ public class MessageService {
 	 * Gets the ter messages.
 	 *
 	 * @return the ter messages
-	 * @throws IOException
 	 */
 	@Path("/all")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListWrapper<MessageRetObject> getterMessages(
 			@Context final HttpServletRequest request,
-			@Context final HttpServletResponse response) throws IOException {
+			@Context final HttpServletResponse response) {
 
-		UserState.checkState(request, response);
-
-		List<MessageRetObject> list = User.getUserReceivedMessages(4);
+		if (!UserState.isLogged(request.getSession())) {
+			return new ListWrapper<MessageRetObject>();
+		}
+		List<MessageRetObject> list = User
+				.getUserReceivedMessages((int) request.getSession()
+						.getAttribute(PropertyProvider.USERID));
 
 		ListWrapper<MessageRetObject> ret = new ListWrapper<MessageRetObject>(
 				list);
+
 		return ret;
 
 	}
@@ -99,7 +105,6 @@ public class MessageService {
 	 * @param message
 	 *            the message
 	 * @return the messages from user
-	 * @throws IOException
 	 */
 	@Path("/from")
 	@POST
@@ -108,9 +113,11 @@ public class MessageService {
 	public ListWrapper<MessageRetObject> getMessagesFromUser(
 			final MessageRetObject message,
 			@Context final HttpServletRequest request,
-			@Context final HttpServletResponse response) throws IOException {
+			@Context final HttpServletResponse response) {
 
-		UserState.checkState(request, response);
+		if (!UserState.isLogged(request.getSession())) {
+			return new ListWrapper<MessageRetObject>();
+		}
 
 		List<MessageRetObject> list = User.getUserReceivedMessagesFrom(
 				message.getSenderId(), message.getReceiverId());

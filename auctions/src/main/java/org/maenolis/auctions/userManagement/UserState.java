@@ -1,24 +1,28 @@
 package org.maenolis.auctions.userManagement;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
-import org.maenolis.auctions.services.retObj.LogoutRetObject;
 
 /**
  * The Class UserState.
  */
 public class UserState {
 
-	public static void checkState(final HttpServletRequest request,
-			final HttpServletResponse response) throws IOException {
+	public static boolean checkAdmin(final HttpServletRequest request,
+			final HttpServletResponse response) {
 		if (!isLogged(request.getSession())) {
-			response.sendRedirect(PropertyProvider.REDIRECTIONURL);
+			return false;
 		}
+		if (!User.getUser(
+				(int) request.getSession()
+						.getAttribute(PropertyProvider.USERID)).isAdmin()) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -33,6 +37,10 @@ public class UserState {
 				|| session.getAttribute(PropertyProvider.USERNAME) == null) {
 			return false;
 		}
+		if (!User.getUser((int) session.getAttribute(PropertyProvider.USERID))
+				.isConfirmed()) {
+			return false;
+		}
 		return true;
 	}
 
@@ -43,20 +51,12 @@ public class UserState {
 	 *            the request
 	 * @return the logout ret object
 	 */
-	public static LogoutRetObject logoutUser(final HttpServletRequest request) {
+	public static void logoutUser(final HttpServletRequest request,
+			final HttpServletResponse response) {
 		HttpSession session = request.getSession(false);
-
-		LogoutRetObject logoutRetObject = new LogoutRetObject();
-
-		logoutRetObject.setMessage("Nobody is logged in.");
-		logoutRetObject.setStatus(PropertyProvider.NOK);
-		if (session != null && isLogged(request.getSession())) {
+		if (isLogged(request.getSession())) {
 			session.invalidate();
-			logoutRetObject.setMessage("User logged out.");
-			logoutRetObject.setStatus(PropertyProvider.OK);
 		}
-
-		return logoutRetObject;
 	}
 
 	public static int getId(final HttpSession session) {

@@ -21,6 +21,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.properties.PropertyHelper;
+import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.MessageRetObject;
 import org.maenolis.auctions.services.retObj.UserRetObject;
 
@@ -369,6 +371,19 @@ public class User {
 		return retList;
 	}
 
+	public static List<AuctionRetObject> getUserAuctionsRetObj(final int userId) {
+		User user = getUser(userId);
+		List<Auction> auctionList = getUserAuctions(userId);
+		List<AuctionRetObject> retList = new ArrayList<AuctionRetObject>();
+		if (user.getOwnedAuctions() == null) {
+			return retList;
+		}
+		for (Auction auctionObj : auctionList) {
+			retList.add(Auction.transformToRetObject(auctionObj));
+		}
+		return retList;
+	}
+
 	public static List<UserRetObject> getAllUsers() {
 		List<UserRetObject> retList = new ArrayList<UserRetObject>();
 
@@ -457,6 +472,74 @@ public class User {
 			ret.setStatus(PropertyProvider.OK);
 		}
 		return ret;
+	}
+
+	/**
+	 * Update user.
+	 *
+	 * @param userJs
+	 *            the user js
+	 */
+	public static void updateUser(final UserRetObject userJs) {
+		Session session = null;
+		try {
+			@SuppressWarnings("deprecation")
+			SessionFactory factory = new Configuration().configure()
+					.buildSessionFactory();
+			session = factory.openSession();
+			Transaction tx;
+			tx = session.beginTransaction();
+
+			User persistedUser = (User) session
+					.load(User.class, userJs.getId());
+			updateUserProperties(persistedUser, userJs);
+			session.save(persistedUser);
+			tx.commit();
+		} catch (Exception e) {
+			System.err.print("During transaction received error : "
+					+ e.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
+	/**
+	 * Update user properties.
+	 *
+	 * @param user
+	 *            the user
+	 * @param userJs
+	 *            the user js
+	 */
+	private static void updateUserProperties(final User user,
+			final UserRetObject userJs) {
+		if (PropertyHelper.checkProperty(user.getFirstName(),
+				userJs.getFirstName())) {
+			user.setFirstName(userJs.getFirstName());
+		}
+		if (PropertyHelper.checkProperty(user.getLastName(),
+				userJs.getLastName())) {
+			user.setLastName(userJs.getLastName());
+		}
+		if (PropertyHelper
+				.checkProperty(user.getCountry(), userJs.getCountry())) {
+			user.setCountry(userJs.getCountry());
+		}
+		if (PropertyHelper.checkProperty(user.getTown(), userJs.getTown())) {
+			user.setTown(userJs.getTown());
+		}
+		if (PropertyHelper
+				.checkProperty(user.getAddress(), userJs.getAddress())) {
+			user.setAddress(userJs.getAddress());
+		}
+		if (PropertyHelper.checkProperty(user.getTelephone(),
+				userJs.getTelephone())) {
+			user.setTelephone(userJs.getTelephone());
+		}
+		if (PropertyHelper.checkProperty(user.getPostalCode(),
+				userJs.getPostalCode())) {
+			user.setPostalCode(userJs.getPostalCode());
+		}
 	}
 
 	/**

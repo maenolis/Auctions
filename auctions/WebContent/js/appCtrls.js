@@ -1,16 +1,15 @@
 'use strict';
 
-var myApp = angular.module('appCtrls', [])
+var myApp = angular.module('appCtrls', []);
 
 myApp.controller('titleCtrl', ['$scope', 'Page',
 	function($scope, Page){
 		$scope.Page = Page;
 }]);
 
-myApp.controller('loginCtrl', ['$scope', 'Page', 'LoginService', 'User',
-	function($scope, Page, LoginService, User){
+myApp.controller('loginCtrl', ['$scope', 'Page', 'LoginService',
+	function($scope, Page, LoginService){
 		Page.setTitle("signIn/signUp");
-		$scope.User = User;
 		$scope.login = function () {
 			var user = {
 				email: $scope.email,
@@ -22,20 +21,16 @@ myApp.controller('loginCtrl', ['$scope', 'Page', 'LoginService', 'User',
 		}
 }]);
 
-myApp.controller('logoutCtrl', ['$scope', 'Page', 'LogoutService', 'User',
-	function($scope, Page, LogoutService, User){
-		$scope.User = User;
+myApp.controller('logoutCtrl', ['$scope', 'Page', 'LogoutService',
+	function($scope, Page, LogoutService){
 		$scope.logout = function () {
-			var user = {
-				
-			}
-			LogoutService.login(user);
+			
+			LogoutService.logout();
 		}
 }]);
 
-myApp.controller('signupCtrl', ['$scope', 'Page', 'SignupService', 'User', 'growl',
-	function($scope, Page, SignupService, User, growl){
-		$scope.User = User;
+myApp.controller('signupCtrl', ['$scope', 'Page', 'SignupService', 'growl',
+	function($scope, Page, SignupService, growl){
 		$scope.signup = function () {
 			var correct = true;
 			var user = {
@@ -84,39 +79,91 @@ myApp.controller('signupCtrl', ['$scope', 'Page', 'SignupService', 'User', 'grow
 		}
 }]);
 
-myApp.controller('userCtrl', ['$rootScope', '$scope', '$http', 'User',
-	function($rootScope, $scope, $http, User){
-		$scope.User = User;
-		$http.get("/auctions/rest/User/get")
-			.success(function (response) {
-				console.log(response);
-				if (response.status == "nok") {
-					console.log("not a user.");
-				} else {
-					$scope.user = response;
-				}
-			});
-		$scope.update = function (user) {
-			console.log("update worx.");	
+myApp.controller('userCtrl', ['$rootScope', '$scope', '$http', 'User', 'Page', '$location',
+	function($rootScope, $scope, $http, User, Page, $location){
+		Page.setTitle("User");
+		User.isLogged();
+		
+		$http.get('/auctions/rest/User/getUser').success(function (response){
+			if (response.status == "ok") {
+				$scope.user = response;
+			}
+		});
+		
+		$scope.update = function () {
+			if ($scope.newFirstName) {
+				$scope.user.firstName = $scope.newFirstName;
+				$scope.newFirstName = null;
+			}
+			if ($scope.newLastName) {
+				$scope.user.lastName = $scope.newLastName;
+				$scope.newLastName = null;
+			}
+			if ($scope.newCountry) {
+				$scope.user.country = $scope.newCountry;
+				$scope.newCountry = null;
+			}
+			if ($scope.newTown) {
+				$scope.user.town = $scope.newTown;
+				$scope.newTown = null;
+			}
+			if ($scope.newAddress) {
+				$scope.user.address = $scope.newAddress;
+				$scope.newAddress = null;
+			}
+			if ($scope.newTelephone) {
+				$scope.user.telephone = $scope.newTelephone;
+				$scope.newTelephone = null;
+			}
+			if ($scope.newPostalCode) {
+				$scope.user.postalCode = $scope.newPostalCode;
+				$scope.newPostalCode = null;
+			}
+			User.update($scope.user);
 		}
 }]);
 
-myApp.controller('homeCtrl', ['$scope', 'Page', 'User',
-	function($scope, Page, User){
+myApp.controller('homeCtrl', ['$rootScope', '$scope', '$http', 'Page', 'User', '$location' , 'growl',
+	function($rootScope, $scope, $http, Page, User, $location, growl){
 		Page.setTitle("home");
-		User.setUser("maenolis");
-		User.setIsLogged(true);
-		$scope.User = User;
+		User.isLogged();
+		
+		$http.get('/auctions/rest/Auction/myAuctions')
+			.then(function(response) {
+				$scope.auctions = response.data.auctionRetObject;
+				dateCorrection($scope.auctions, "auction");
+			}, function(response){
+				console.log(response);
+		});
+			
+		$scope.manage = function (auction) {
+			$http.post('/auctions/rest/Auction/getAuction', auction).success(function (response){
+				if (response.status == "ok") {
+					$rootScope.auction = response;
+					$location.path('manageAuction');
+				}
+				else {
+					growl.info("Something went wrong!.", {title: "auction management!"});
+				}
+			});
+		}
+		
+		$scope.updateUser = function () {
+			$location.path('/user');
+		}
+		
+		$scope.createAuction = function () {
+			$location.path('/newAuction');
+		}
 }]);
 
 myApp.controller('auctionsCtrl', ['$rootScope', '$scope', '$http', '$location', 'Page', 'User',
 	function ($rootScope, $scope, $http, $location, Page, User) {
-		$scope.User = User;
+		
 		Page.setTitle("auctions");
 		
 		if ($rootScope.search && $rootScope.searched && $rootScope.searched == true) {
 			$http.post('/auctions/rest/Auction/search', $rootScope.search).success(function (response) {
-				console.log(response);
 				$scope.auctions = response.auctionRetObject;
 				dateCorrection($scope.auctions, "auction");
 			});
@@ -125,7 +172,6 @@ myApp.controller('auctionsCtrl', ['$rootScope', '$scope', '$http', '$location', 
 		} else {
 			$http.get('/auctions/rest/Auction/all')
 			.then(function(response) {
-				console.log(response);
 				$scope.auctions = response.data.auctionRetObject;
 				dateCorrection($scope.auctions, "auction");
 			}, function(response){
@@ -133,56 +179,79 @@ myApp.controller('auctionsCtrl', ['$rootScope', '$scope', '$http', '$location', 
 			});
 		}
 		
-		
-			$scope.openAuction = function (auction) {
-				console.log("openAuction worx");
-				console.log(auction);
-				$rootScope.auction = auction;
-				$location.path("/auction");
-			}
+		$scope.openAuction = function (auction) {
+			$rootScope.auction = auction;
+			$location.path('/auction');
+			/*for (var i = 0; i < $scope.auctions.length; i++) {
+				if (auction.id === $scope.auctions[i].id) {
+					$rootScope.auction = $scope.auctions[i];
+					console.log("auction found!! " + i);
+					
+				}
+			}*/
+			
+		}
 		
 	}
 ]);
 
 myApp.controller('messagesCtrl', ['$rootScope', '$scope', '$http', 'Page', 'User', '$location',
 	function ($rootScope, $scope, $http, Page, User, $location) {
-		$scope.User = User;
+		
 		Page.setTitle("messages");
+		User.isLogged();
 		
 		$http.get('/auctions/rest/Message/all')
 		.then(function(response) {
-				console.log("RESPONSE");
-				console.log(response);
 				$scope.messages = response.data.messageRetObject;
+				console.log("response: " + response);
 				dateCorrection($scope.messages, "message");
-				console.log($scope.messages);
 			}, function(response){
-				console.log(response);
+				console.log("No messages for you.");
 			});
 		
 		$scope.reply = function (message) {
 			$rootScope.message = message;
-			$location.path("/message");
+			$location.path('/message');
 		}
 	}
 ]);
 
-myApp.controller('newMessageCtrl', ['$scope', '$http', 'Page', 'NewMessageService',
-	function ($scope, $http, Page, NewMessageService) {
+myApp.controller('messageCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User',
+		function($rootScope, $scope, $location, Page, User){
+	
+	Page.setTitle("Message");
+	User.isLogged();
+	$scope.User = User;$scope.message
+	$scope.message = $rootScope.message;
+	$scope.reply = function (message) {
+		console.log("reply worx");
+		message.messageText = "";
+		$rootScope.message = message;
+		console.log(message);
+		$location.path('/newMessage');
+	}
+}]);
+
+myApp.controller('newMessageCtrl', ['$rootScope', '$scope', '$http', 'Page', 'NewMessageService', 'User',
+	function ($rootScope, $scope, $http, Page, NewMessageService, User) {
 		Page.setTitle("New Message");
-		$scope.newMessage = function () {
-			var message = {
-				messageText: $scope.messageText
-			}
-			NewMessageService.newMessage(message);
-			$scope.messageText = "";
+		User.isLogged();
+		$scope.message = $rootScope.message;
+		$scope.newMessage = function (message) {
+			$http.post('/auctions/rest/Message/new', message)
+					.success(function (data) {
+						console.log("newMessage called succesfully!");
+						$scope.message.messageText = "";
+					});
 		}
 	}
 ]);
 
-myApp.controller('newAuctionCtrl', ['$scope', '$http', 'Page', 'NewAuctionService',
-	function ($scope, $http, Page, NewAuctionService) {
+myApp.controller('newAuctionCtrl', ['$scope', '$http', 'Page', 'AuctionService', 'User',
+	function ($scope, $http, Page, AuctionService, User) {
 		Page.setTitle("newAuction");
+		User.isLogged();
 		$scope.newAuction = function () {
 			var auction = {
 				productName: $scope.productName,
@@ -193,27 +262,14 @@ myApp.controller('newAuctionCtrl', ['$scope', '$http', 'Page', 'NewAuctionServic
 				endTime: $scope.endTime,
 				description: $scope.description
 			}
-			NewAuctionService.newAuction(auction);
+			AuctionService.newAuction(auction);
 			$scope.productName = "";
 			$scope.categories = "";
 			$scope.buyPrice = "";
 			$scope.firstBid = "";
-			$scope.startTime = "";
+			$scope.startTime = "";$scope.message
 			$scope.endTime = "";
 			$scope.description = "";
-		}
-	}
-]);
-
-myApp.controller('newBidCtrl', ['$scope', '$http', 'Page', 'NewBidService',
-	function ($scope, $http, Page, NewBidService) {
-		Page.setTitle("newBid");
-		$scope.newBid = function () {
-			var bid = {
-				ammount: $scope.ammount
-			}
-			NewBidService.newBid(bid);
-			$scope.bid = "";
 		}
 	}
 ]);
@@ -224,12 +280,17 @@ myApp.controller('getClassCtrl', ['$scope', '$location', 'Page', function($scope
 	}
 }]);
 
-myApp.controller('auctionCtrl', ['$rootScope', '$scope', '$location', '$http', 'Page', 'User', 'growl',
+myApp.controller('auctionCtrl', ['$rootScope', '$scope', '$location', '$http', 'Page', 'User', 'growl', 
 		function($rootScope, $scope, $location, $http, Page, User, growl){
-			console.log("Auction ctrl!");
+			//console.log("Auction ctrl!");
 			Page.setTitle("Auction");
 			
-			$scope.auction = $rootScope.auction;
+			$http.post('/auctions/rest/Auction/getAuction', $rootScope.auction).success(function (response){
+				if (response.status == "ok") {
+					$scope.auction = response;
+				}
+			});
+			
 			$scope.map = { center: { latitude: $scope.auction.lat, longitude: $scope.auction.lon }, zoom: 14 };
 			$scope.marker = {
 				id: 0,
@@ -256,12 +317,7 @@ myApp.controller('auctionCtrl', ['$rootScope', '$scope', '$location', '$http', '
 				}
 			};
 			
-			$scope.newBid = function (auction) {
-				console.log("bid worx.");
-				console.log(auction);
-			}
 			$http.post('/auctions/rest/Bid/bids', $scope.auction).success(function (response) {
-				console.log(response);
 				$scope.bids = response.bidRetObject;
 				dateCorrection($scope.bids, "bid");
 			});
@@ -336,26 +392,73 @@ myApp.controller('auctionCtrl', ['$rootScope', '$scope', '$location', '$http', '
 					$scope.searchCountry = "";
 				}
 			}
+			
+			$scope.placeBid = function (auction) {
+				console.log(auction);
+				if (auction.ammount < auction.currentBid) {
+					console.log("NO");
+					growl.info("Bid must be higher than current bid!!!.", {title: "new bid check!"});
+					auction.ammount = "";
+				} else {
+					$http.post('/auctions/rest/Bid/new', auction)
+					.success(function (data) {
+						$location.path('/auctions');
+					});
+				}
+				
+			}
+			
+			$scope.sendMessage = function (auction) {
+				$rootScope.message = {};
+				$rootScope.message.senderId = auction.ownerId;
+				$location.path('/newMessage');
+			}
 }]);
 
-myApp.controller('messageCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User',
-		function($rootScope, $scope, $location, Page, User){
-	console.log("Message ctrl!");
-	Page.setTitle("Message");
-	$scope.User = User;
-	$scope.User.setUser("Manolis message");
-	$scope.message = $rootScope.message;
-	$scope.send = function (message) {
-		console.log("send");
-		console.log(message);
+myApp.controller('manageAuctionCtrl', ['$rootScope', '$scope', '$http', 'Page', 'User', 'AuctionService',
+	function ($rootScope, $scope, $http, Page, User, AuctionService) {
+		Page.setTitle("manageAuction");
+		User.ownsAuction($rootScope.auction);
+		$scope.auction = $rootScope.auction;
+		
+		$scope.update = function() {
+			if ($scope.newProductName) {
+				$scope.auction.productName = $scope.newProductName;
+				$scope.newProductName = null;
+			}
+			if ($scope.newCategories) {
+				$scope.auction.categories = $scope.newCategories;
+				$scope.newCategories = null;
+			}
+			if ($scope.newBuyPrice) {
+				$scope.auction.buyPrice = $scope.newBuyPrice;
+				$scope.newBuyPrice = null;
+			}
+			if ($scope.newFirstBid) {
+				$scope.auction.firstBid = $scope.newFirstBid;
+				$scope.newFirstBid = null;
+			}
+			if ($scope.newStartTime) {
+				$scope.auction.startTime = $scope.newStartTime;
+				$scope.newStartTime = null;
+			}
+			if ($scope.newEndTime) {
+				$scope.auction.endTime = $scope.newEndTime;
+				$scope.newEndTime = null;
+			}
+			if ($scope.newDescription) {
+				$scope.auction.description = $scope.newDescription;
+				$scope.newDescription = null;
+			}
+			AuctionService.updateAuction($scope.auction);
+		}
+		
+		$scope.delete = function() {
+			console.log("deleteAuction");
+			AuctionService.deleteAuction($scope.auction);
+		}
 	}
-}]);
-
-myApp.controller('userPageCtrl', ['$scope', '$location', 'Page', 'User', function($scope, $location, Page, User){
-	console.log("UserPage ctrl!");
-	Page.setTitle("User");
-	$scope.User = User;
-}]);
+]);
 
 myApp.controller('notifyCtrl', ['$scope', 'growl',
 	function($scope, growl){
@@ -364,29 +467,23 @@ myApp.controller('notifyCtrl', ['$scope', 'growl',
 		}
 }]);
 
-myApp.controller('adminPanelCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User', '$http',
-	function($rootScope, $scope, $location, Page, User, $http){
-		
-		$http.get('/auctions/rest/Admin/isAdmin').success(function (response) {
-			console.log(response);
-			if (response.flag == false) {
-				$location.path('/auctions');
-			}
-		});
+myApp.controller('adminPanelCtrl', ['$rootScope', '$scope', '$location', 'Page', 'User', '$http', '$window',
+	function($rootScope, $scope, $location, Page, User, $http, $window){
 		
 		Page.setTitle("Admin panel");
-		console.log("adminCtrl");
+		User.isAdmin();
 		$scope.confirmUser = function (user) {
-			console.log(user);
 			$http.post('/auctions/rest/User/confirm', user).success(function (response) {
 				console.log(response);
 			});
 		}
-		
 		$http.get('/auctions/rest/User/users').success(function (response) {
-			console.log(response);
 			$scope.users = response.userRetObject;
 		});
+		
+		$scope.getXmlAuctions = function () {
+			$window.open('/auctions/rest/Admin/auctions');
+		}
 }]);
 
 function toArray(jsonObj) {

@@ -51,11 +51,15 @@ var myApp = angular
 			}).
 			when('/user', {
 				templateUrl: 'templates/user.html',
-				controller: 'userPageCtrl'
+				controller: 'userCtrl'
 			}).
 			when('/adminPanel', {
 				templateUrl: 'templates/adminPanel.html',
 				controller: 'adminPanelCtrl'
+			}).
+			when('/manageAuction', {
+				templateUrl: 'templates/manageAuction.html',
+				controller: 'manageAuctionCtrl'
 			}).
 			otherwise({
 				redirectTo: '/home'
@@ -71,39 +75,62 @@ myApp.factory('Page', function () {
 	}
 });
 
-myApp.factory('User', function ($http) {
-	var user = 'no user';
-	var isLogged = false;
+myApp.factory('User', function ($http, $location, growl) {
 	return {
-		user: function () { /*console.log("user " + user);*/ return user; },
-		setUser: function (newUser) { /*console.log("setUser " + newUser);*/ user = newUser; },
-		isLogged: function () { /*console.log("isLogged " + isLogged);*/ return isLogged; },
-		setIsLogged: function (newValue) { /*console.log("setIsLogged " + newValue);*/ isLogged = newValue; },
-		clear: function () { /*console.log("clear ");*/ user = 'no user';isLogged = false; },
-		name: function () { /*console.log("name " + user);*/ return user; },
-		userId: function () {
-			$http.get('/auctions/rest/User/get').success(function (response) {
+		isLogged: function () {
+			$http.get('/auctions/rest/User/isLogged').success(function (response) {
 				console.log(response);
-				if (response.status == "ok") {
-					return response.id;
+				if (response.flag == true) {
+					console.log("true " + response);
 				} else {
-					return -1;
+					console.log("false " + response);
+					growl.info("Not logged in!", {title: "Access"});
+					$location.path('/auctions');
+				}
+			});
+		},
+		isAdmin: function () {
+			$http.get('/auctions/rest/Admin/isAdmin').success(function (response) {
+				console.log(response);
+				if (response.flag == true) {
+					console.log("true " + response);
+				} else {
+					console.log("false " + response);
+					growl.info("You are not admin!", {title: "Access"});
+					$location.path('/auctions');
+				}
+			});
+		},
+		update: function (user) {
+			$http.post("/auctions/rest/User/update", user).success(function(response) {
+				console.log("update returned");
+			});
+		},
+		ownsAuction: function (auction) {
+			$http.post("/auctions/rest/User/owsAuction", auction).success(function(response) {
+				console.log("owsAuction returned");
+				if (response.flag == true) {
+					console.log("true " + response);
+				} else {
+					console.log("false " + response);
+					growl.info("This auction is not yours!", {title: "Access"});
+					$location.path('/auctions');
 				}
 			});
 		}
 	}
 });
 
-myApp.factory('LoginService', function ($http, $cookieStore, $location, User) {
+myApp.factory('LoginService', function ($http, $location) {
 	return {
 		login: function(user) {
 			console.log("LoginService!!! " + user.email + " " + user.password);
 			$http.post('/auctions/rest/Login', user)
-				.success(function (data) {
-					
-					if (data) {
+				.success(function (response) {
+					if (response.status == "ok") {
 						console.log("success");
-						console.log(data);
+						console.log(response);
+						$location.path('/auctions');
 					} else {
 						console.log("login failure!");
 					}
@@ -114,19 +141,12 @@ myApp.factory('LoginService', function ($http, $cookieStore, $location, User) {
 
 myApp.factory('LogoutService', function ($http, $cookies, $location, User) {
 	return {
-		login: function() {
-			console.log("LogoutService!!!");
-			User.clear();
-			$cookies.skata = "aposkata";
-			$http.post('/auctions/rest/Logout')
+		logout: function() {
+			$http.get('/auctions/rest/Logout')
 				.success(function (data) {
-					
 					if (data) {
-						console.log("logout not null!!");
-						console.log("logout success 1!");
 						console.log(data);
 					} else {
-						console.log("logout success 2!");
 					}
 					var path = $location.path();
 					console.log(path);
@@ -139,19 +159,6 @@ myApp.factory('LogoutService', function ($http, $cookies, $location, User) {
 myApp.factory('SignupService', function ($http, $cookieStore, $location, User) {
 	return {
 		signup: function(user) {
-			console.log("SignupService!!! " + user.email + " " + user.password);
-			/*var storedUser = $http.get('jsons/users.json')
-				.success(function (data) {
-					if (user.email === data.email && user.password === data.password) {
-						$cookieStore.put("userEmail", user.email);
-						$cookieStore.put("userPassword", user.password);
-						User.setIsLogged(true);
-						User.setUser(user.email);
-						$state.go('http://www.google.gr', {});
-					} else {
-						location.path('../welcome.html');
-					}
-				});*/
 			$http.get("https://maps.googleapis.com/maps/api/geocode/json?address=" +
 				user.address + ", " + user.town + " " + user.postalCode + ", " + user.country)
 				.success(function (data) {
@@ -159,26 +166,39 @@ myApp.factory('SignupService', function ($http, $cookieStore, $location, User) {
 					user.latitude = data["results"][0]["geometry"]["location"]["lat"];
 					$http.post('/auctions/rest/SignUp', user)
 						.success(function (data2) {
-							console.log("signup called succesfully!");
-							console.log(user);
-							console.log(data2);
-							User.setUser(data2.username);
-							User.setIsLogged(true);
+							$location.path('/home');
 						});
 				});
 		}
 	}
 });
 
-myApp.factory('NewAuctionService', function ($http, $cookieStore, $location) {
+myApp.factory('AuctionService', function ($http, $cookieStore, $location, growl) {
 	return {
-		newAuction: function(auction) {
-			console.log("NewAuctionService!!! " + auction.productName);
-				$http.post('/auctions/rest/NewAuction', auction)
-					.success(function (data2) {
-						console.log("newAuction called succesfully!");
-						console.log(data2);
+		updateAuction: function(auction) {
+			$http.post('/auctions/rest/Auction/update', auction)
+					.success(function (response) {
+						console.log("update returned");
+						$location.path('/auctions');
 					});
+		},
+		deleteAuction: function(auction) {
+			$http.post('/auctions/rest/Auction/delete', auction)
+					.success(function (response) {
+						console.log("delete returned");
+						$location.path('/auctions');
+					});
+		},
+		newAuction: function(auction) {
+			$http.post('/auctions/rest/Auction/new', auction)
+				.success(function (data2) {
+					console.log(data2);
+					if (data2 === "ok") {
+						$location.path('/auctions');
+					} else {
+						growl.info("Something went wrong!", {title: "Form"});
+					}
+				});
 		}
 	}
 });
@@ -186,24 +206,9 @@ myApp.factory('NewAuctionService', function ($http, $cookieStore, $location) {
 myApp.factory('NewMessageService', function ($http, $cookieStore, $location) {
 	return {
 		newMessage: function(message) {
-			console.log("NewMessageService!!! " + message.messageText);
 				$http.post('/auctions/rest/Message/new', message)
 					.success(function (data) {
-						console.log("newMessage called succesfully!");
-						console.log(data);
-					});
-		}
-	}
-});
-
-myApp.factory('NewBidService', function ($http, $cookieStore, $location) {
-	return {
-		newBid: function(bid) {
-			console.log("NewBidService!!! " + bid.ammount);
-				$http.post('/auctions/rest/NewBid', bid)
-					.success(function (data) {
-						console.log("newBid called succesfully!");
-						console.log(data);
+						$location.path('/auctions');
 					});
 		}
 	}

@@ -1,13 +1,13 @@
 package org.maenolis.auctions.services;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.maenolis.auctions.services.retObj.LogoutRetObject;
 import org.maenolis.auctions.userManagement.UserState;
 
 /**
@@ -27,10 +27,12 @@ public class LogoutService {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public LogoutRetObject logout(@Context final HttpServletRequest request) {
+	public void logout(@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) {
 
-		LogoutRetObject logoutRetObject = UserState.logoutUser(request);
-
-		return logoutRetObject;
+		if (!UserState.isLogged(request.getSession())) {
+			return;
+		}
+		UserState.logoutUser(request, response);
 	}
 }

@@ -1,7 +1,43 @@
 
 <div data-ng-include data-src="'templates/header.html'"></div>
 
-<div class="container" ng-controller="userCtrl">
-		<p>Hello {{User.user()}}</p>
-		
+<div class="container-fluid">
+	<button class="btn btn-primary" ng-click="updateUser()">updateUser</button>   
+	<button class="btn btn-primary" ng-click="createAuction()">createAuction</button>
+</div>
+
+<div class="container">
+		<p>Your auctions:</p>
+</div>
+
+<div class="container-fluid  col-md-8">
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr class="row">
+				<td>#</td>
+				<td>By</td>
+				<td>Category</td>
+				<td>Product</td>
+				<td>Start Date</td>
+				<td>End Date</td>
+				<td>Buy Price</td>
+				<td>First Bid</td>
+				<td>Current bid</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="row" ng-repeat="auction in auctions | orderBy:'-endDate'">
+				<td>{{$index + 1}}</a></td>
+				<td>{{auction.ownerName}}</a></td>
+				<td>{{auction.categories}}</a></td>
+				<td>{{auction.productName}}</a></td>
+				<td>{{auction.startTime | date:'shortDate'}}</a></td>
+				<td>{{auction.endTime | date:'shortDate'}}</a></td>
+				<td>{{auction.buyPrice}}</a></td>
+				<td>{{auction.firstBid}}</a></td>
+				<td>{{auction.currentBid}}</a></td>
+				<td><button ng-click="manage(auction)">manage</button></td>
+			</tr>
+		</tbody>
+	</table>
 </div>

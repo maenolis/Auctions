@@ -1,13 +1,11 @@
 package org.maenolis.auctions.services;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -20,7 +18,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.Auction;
 import org.maenolis.auctions.dao.Bid;
-import org.maenolis.auctions.dao.User;
+import org.maenolis.auctions.services.literals.PropertyProvider;
 import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.BidRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
@@ -34,18 +32,18 @@ public class BidService {
 
 	/**
 	 * New bid.
-	 * 
-	 * @throws IOException
 	 */
 	@Path("/new")
-	@GET
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void newBid(@Context final HttpServletRequest request,
-			@Context final HttpServletResponse response) throws IOException {
+	public void newBid(final BidRetObject bidJs,
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) {
 
-		UserState.checkState(request, response);
-
-		// TODO !!!!
+		if (!UserState.isLogged(request.getSession())) {
+			return;
+		}
 
 		Session session = null;
 		try {
@@ -55,11 +53,9 @@ public class BidService {
 			session = factory.openSession();
 			Transaction tx;
 			tx = session.beginTransaction();
-			User c1 = new User();
-			c1.setFirstName("kostasmarinamazi");
-			session.save(c1);
-			Bid bid = new Bid();
-			bid.setBidder(c1);
+			bidJs.setBidder_id((int) request.getSession().getAttribute(
+					PropertyProvider.USERID));
+			Bid bid = new Bid(bidJs);
 			session.save(bid);
 			tx.commit();
 		} catch (Exception e) {

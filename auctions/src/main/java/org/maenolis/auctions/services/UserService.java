@@ -1,6 +1,5 @@
 package org.maenolis.auctions.services;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +12,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.maenolis.auctions.dao.User;
 import org.maenolis.auctions.services.literals.PropertyProvider;
+import org.maenolis.auctions.services.retObj.AuctionRetObject;
 import org.maenolis.auctions.services.retObj.BooleanRetObject;
 import org.maenolis.auctions.services.retObj.UserRetObject;
 import org.maenolis.auctions.services.wrapper.ListWrapper;
@@ -40,7 +36,12 @@ public class UserService {
 	@Path("/confirm")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public UserRetObject confirm(final UserRetObject user) {
+	public UserRetObject confirm(final UserRetObject user,
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) {
+		if (!UserState.checkAdmin(request, response)) {
+			return new UserRetObject();
+		}
 		User.confirm(user.getId());
 		return user;
 	}
@@ -58,31 +59,20 @@ public class UserService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateUser(final UserRetObject user,
-			@Context final HttpServletRequest request) {
+	public UserRetObject updateUser(final UserRetObject user,
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) {
 
-		String ret = PropertyProvider.NOK;
-		System.out.println("updateUserereceived : " + user);
+		UserRetObject ret = new UserRetObject();
+		ret.setStatus(PropertyProvider.NOK);
 
-		Session session = null;
-		try {
-			@SuppressWarnings("deprecation")
-			SessionFactory factory = new Configuration().configure()
-					.buildSessionFactory();
-			session = factory.openSession();
-			Transaction tx;
-			tx = session.beginTransaction();
-
-			session.save(new User(user));
-			tx.commit();
-			ret = PropertyProvider.OK;
-		} catch (Exception e) {
-			System.err.print("During transaction received error : "
-					+ e.getMessage());
-		} finally {
-			session.close();
+		if (!UserState.isLogged(request.getSession())) {
+			return ret;
 		}
-		return ret;
+
+		System.out.println("updateUserereceived : " + user);
+		User.updateUser(user);
+		return User.transformToRetObject(User.getUser(user.getId()));
 	}
 
 	/**
@@ -95,44 +85,33 @@ public class UserService {
 	@Path("/getUser")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public UserRetObject getUser(@Context final HttpServletRequest request) {
+	public UserRetObject getUser(@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) {
 
-		if (request.getSession().getAttribute(PropertyProvider.USERID) == null) {
-			UserRetObject ret = new UserRetObject();
-			ret.setStatus(PropertyProvider.NOK);
-			return ret;
+		if (!UserState.isLogged(request.getSession())) {
+			return new UserRetObject();
 		}
 
 		return User.transformToRetObject(User.getUser((int) request
 				.getSession().getAttribute(PropertyProvider.USERID)));
 	}
 
-	// TODO: remove!!
-	@Path("/isLogged")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public BooleanRetObject isLogged(@Context final HttpServletRequest request) {
-		if (request.getSession().getAttribute(PropertyProvider.USERID) == null) {
-			return new BooleanRetObject(false);
-		}
-		return new BooleanRetObject(true);
-	}
-
 	/**
 	 * Gets the users.
 	 *
 	 * @return the users
-	 * @throws IOException
 	 */
 	@Path("/users")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListWrapper<UserRetObject> getterUsers(
 			@Context final HttpServletRequest request,
-			@Context final HttpServletResponse response) throws IOException {
+			@Context final HttpServletResponse response) {
 
-		UserState.checkState(request, response);
-		// TODO: Admin check!!
+		if (!UserState.checkAdmin(request, response)) {
+
+			return new ListWrapper<UserRetObject>();
+		}
 
 		List<UserRetObject> list = User.getAllUsers();
 
@@ -141,4 +120,30 @@ public class UserService {
 		return ret;
 
 	}
+
+	@Path("/isLogged")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public BooleanRetObject isLogged(@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) {
+		return new BooleanRetObject(UserState.isLogged(request.getSession()));
+	}
+
+	@Path("/owsAuction")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public BooleanRetObject ownsAuction(final AuctionRetObject auctionJs,
+			@Context final HttpServletRequest request,
+			@Context final HttpServletResponse response) {
+
+		if (!UserState.isLogged(request.getSession())) {
+			return new BooleanRetObject(false);
+		}
+		System.out.println(auctionJs);
+		return new BooleanRetObject(auctionJs.getOwnerId() == (int) request
+				.getSession().getAttribute(PropertyProvider.USERID));
+
+	}
+
 }

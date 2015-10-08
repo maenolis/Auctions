@@ -2,6 +2,7 @@ package org.maenolis.auctions.dao;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -77,6 +78,15 @@ public class Bid implements Comparable<Bid> {
 	 */
 	public Bid() {
 
+	}
+
+	public Bid(final BidRetObject bid) {
+		this.bidder = User.getUser(bid.getBidder_id());
+		this.auction = Auction.getAuction(bid.getId());
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss");
+		this.time = sdf.format(new Date());
+		this.ammount = bid.getAmmount();
 	}
 
 	/**
